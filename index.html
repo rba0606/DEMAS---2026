@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel DEMAS 2026</title>
+    <style>
+        :root {
+            --ms-blue: #004b82;
+            --ms-green: #00a54f;
+            --ms-light-blue: #eef6fc;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --bg-gray: #f1f5f9;
+            --white: #ffffff;
+            --radius: 20px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+
+        body { 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            background-color: var(--bg-gray); 
+            color: var(--text-dark); 
+            margin: 0; 
+            padding: 15px; /* Reduzido para mobile */
+            line-height: 1.5;
+        }
+
+        .container { max-width: 1440px; margin: auto; }
+
+        /* Header Adaptável */
+        .header { 
+            background: linear-gradient(135deg, var(--ms-blue) 0%, #00335a 100%);
+            color: white; 
+            padding: 25px 20px; 
+            border-radius: var(--radius); 
+            margin-bottom: 20px; 
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .header h1 { margin: 0; font-size: 22px; font-weight: 800; }
+        .header p { margin: 5px 0 0; opacity: 0.8; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Grid de KPIs - Stacked no Mobile */
+        .kpi-grid { 
+            display: grid; 
+            grid-template-columns: 1fr; /* Coluna única por padrão */
+            gap: 15px; 
+            margin-bottom: 20px; 
+        }
+
+        /* Desktop Grid */
+        @media (min-width: 768px) {
+            .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+            .header { text-align: left; padding: 40px; }
+            .header h1 { font-size: 28px; }
+            body { padding: 30px; }
+        }
+
+        .kpi-card { 
+            background: var(--white); 
+            padding: 20px; 
+            border-radius: var(--radius); 
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .kpi-card h3 { 
+            margin: 0; 
+            font-size: 11px; 
+            color: var(--text-muted); 
+            text-transform: uppercase; 
+            font-weight: 700;
+        }
+
+        .kpi-card .value { 
+            font-size: 24px; 
+            font-weight: 800; 
+            margin: 8px 0; 
+            color: var(--ms-blue);
+        }
+
+        .kpi-card.total { background: var(--ms-light-blue); border: 2px solid var(--ms-blue); }
+
+        /* Layout de Tabelas */
+        .main-layout { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        
+        @media (min-width: 1024px) {
+            .main-layout { grid-template-columns: 1fr 1fr; }
+        }
+
+        .card { 
+            background: var(--white); 
+            padding: 20px; 
+            border-radius: var(--radius); 
+            box-shadow: var(--shadow);
+        }
+
+        .card h2 { 
+            margin-top: 0; 
+            font-size: 18px; 
+            color: var(--ms-blue); 
+            margin-bottom: 20px; 
+        }
+
+        /* Scroll Horizontal em tabelas pequenas no mobile */
+        .table-container {
+            border-radius: 15px;
+            overflow-x: auto; /* Permite scroll se os dados forem largos */
+            border: 1px solid #e2e8f0;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table { width: 100%; border-collapse: collapse; min-width: 300px; }
+        
+        th { 
+            text-align: left; 
+            padding: 12px; 
+            background: #f8fafc; 
+            color: var(--text-muted); 
+            font-size: 10px; 
+            text-transform: uppercase; 
+        }
+
+        td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+
+        .num { text-align: right; font-weight: 700; }
+        
+        .row-accent { background-color: #f8fafc; font-weight: 700; color: var(--ms-blue); }
+        .total-row-green { background: var(--ms-green); color: white; font-weight: bold; }
+        .total-row-blue { background: var(--ms-blue); color: white; font-weight: bold; }
+
+        /* Alerta Mobile-Friendly */
+        .alert-box { 
+            background: #fffbeb; 
+            border: 1px solid #fef3c7;
+            padding: 15px; 
+            border-radius: 15px; 
+            margin-top: 20px; 
+            font-size: 13px; 
+            color: #92400e;
+            display: flex;
+            gap: 10px;
+        }
+
+        .footer { 
+            text-align: center; 
+            margin-top: 40px; 
+            padding: 20px; 
+            font-size: 11px; 
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <p>Ministério da Saúde | Governo Federal</p>
+            <h1>DEMAS 2026</h1>
+        </header>
+
+        <section class="kpi-grid">
+            <div class="kpi-card">
+                <h3>Saldo Ação 8753</h3>
+                <div class="value">R$ 11.676.317,81</div>
+            </div>
+            <div class="kpi-card">
+                <h3>Saldo Ação 20YN</h3>
+                <div class="value">R$ 11.827.801,45</div>
+            </div>
+            <div class="kpi-card total">
+                <h3>Somatório Geral</h3>
+                <div class="value">R$ 23.504.119,26</div>
+            </div>
+        </section>
+
+        <div class="main-layout">
+            <div class="card">
+                <h2>Recursos</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Instrumento</th><th>Ação</th><th class="num">Valor</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>CO/10 Serviços</td><td>20YN</td><td class='num'>2.119.384,50</td></tr>
+                            <tr><td>CO/41 Materiais</td><td>20YN</td><td class='num'>1.742.814,05</td></tr>
+                            <tr><td>TED FIOCRUZ RJ</td><td>8753</td><td class='num'>602.779,96</td></tr>
+                            <tr><td>TED FAVELAS</td><td>8753</td><td class='num'>919.431,23</td></tr>
+                            <tr><td>TED FIOCRUZ DF</td><td>8753</td><td class='num'>350.000,00</td></tr>
+                            <tr class="total-row-green">
+                                <td colspan="2">TOTAL</td>
+                                <td class="num">5.734.409,74</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Pendências</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Destino</th><th class="num">Valor Pendente</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:#f1f5f9;"><td colspan="2" style="font-weight:800; color:var(--ms-blue); font-size:10px;">AÇÃO 8753</td></tr>
+                            <tr><td>TED UFG</td><td class='num'>8.000.000,00</td></tr>
+                            <tr><td>TED UFMG</td><td class='num'>1.921.000,00</td></tr>
+                            <tr><td>TED FIOCRUZ RIO</td><td class='num'>1.700.000,00</td></tr>
+                            <tr><td>TED FIOCRUZ DF</td><td class='num'>1.000.000,00</td></tr>
+                            <tr><td>TED FAVELAS</td><td class='num'>1.375.122,77</td></tr>
+                            <tr class="row-accent"><td>Subtotal 8753</td><td class="num">13.996.122,77</td></tr>
+                            
+                            <tr style="background:#f1f5f9;"><td colspan="2" style="font-weight:800; color:var(--ms-blue); font-size:10px;">AÇÃO 20YN</td></tr>
+                            <tr><td>CO/41 Materiais</td><td class='num'>2.250.439,35</td></tr>
+                            <tr><td>CO/10 Serviços</td><td class='num'>2.119.384,50</td></tr>
+                            <tr class="row-accent"><td>Subtotal 20YN</td><td class="num">4.369.823,85</td></tr>
+                            
+                            <tr class="total-row-blue">
+                                <td style="padding: 12px;">TOTAL GERAL</td>
+                                <td class="num" style="padding: 12px;">18.365.946,62</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="alert-box">
+                    <span>⚠️</span>
+                    <span><strong>Atenção:</strong> Remanejamento de <strong>R$ 2.261.471,00</strong> para 8753.</span>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            DEMAS | Ministério da Saúde | 2026
+        </footer>
+    </div>
+
+    <script>
+        setTimeout(function() { location.reload(); }, 300000);
+    </script>
+</body>
+</html>
