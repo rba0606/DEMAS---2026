@@ -130,6 +130,12 @@
                 <h2>PLOA 2027</h2>
                 <p>Projeções e Planejamento Orçamentário</p>
             </div>
+            <!-- No seu HTML, dentro da div id="mainMenu" -->
+            <div class="menu-card" onclick="showSection('instrumentos', 'INSTRUMENTOS')">
+                <span class="icon">📜</span>
+                <h2>INSTRUMENTOS</h2>
+                <p>Gestão de TEDs e Contratos Administrativos</p>
+            </div>
         </div>
 
         <section id="execucao" class="content-section">
@@ -144,7 +150,7 @@
                     </div>
                     <div class="data-row">
                         <div class="label-box"><span>TED 27/2023 (FIOCRUZ RJ)</span><small>Movimentação</small></div>
-                        <div class="value-box"><span class="val negativo">- 602.779,96</span></div>
+                        <div class="value-box"><span class="val negativo">- 1.282.779,96</span></div>
                     </div>
                     <div class="data-row">
                         <div class="label-box"><span>TED 41/2025 (PERIFERIAS)</span><small>Movimentação</small></div>
@@ -156,7 +162,7 @@
                     </div>
                     <div class="data-row" style="background: #f8fafc; margin-top: 5px;">
                         <div class="label-box"><span style="color:var(--ms-blue)">SALDO ATUAL DISPONÍVEL</span></div>
-                        <div class="value-box"><span class="val" style="color:var(--ms-blue)">11.676.317,81</span></div>
+                        <div class="value-box"><span class="val" style="color:var(--ms-blue)">10.996.317,81</span></div>
                     </div>
                 </div>
 
@@ -189,7 +195,7 @@
                     
                     <div class="data-row row-balance-ref">
                         <div class="label-box"><span>SALDO ATUAL</span><small>Saldo Atual em Conta</small></div>
-                        <div class="value-box"><span class="val">11.676.317,81</span></div>
+                        <div class="value-box"><span class="val">10.996.317,81</span></div>
                     </div>
 
                     <div class="data-row">
@@ -202,15 +208,20 @@
                     </div>
                     <div class="data-row">
                         <div class="label-box"><span>TED 27/2023 (FIOCRUZ RJ)</span><small>Compromisso</small></div>
-                        <div class="value-box"><span class="val negativo">- 1.700.000,00</span><br><span class="status-pill ok">OK</span></div>
+                        <div class="value-box"><span class="val negativo">- 1.020.000,00</span><br><span class="status-pill ok">OK</span></div>
                     </div>
-                    
+                    <div class="data-row" style="background: #f8fafc; margin-top: 5px;">
+                        <div class="label-box"><span style="color:var(--ms-blue)">SALDO ATUAL DISPONÍVEL</span></div>
+                        <div class="value-box"><span class="val" style="color:var(--ms-blue)">56.817,81</span></div>
+                    </div>
+                                        
                     <div class="row-alert">⚠ BLOQUEIO SEIDIGI: AGUARDANDO CRÉDITO ADICIONAL</div>
                     
                     <div class="data-row" style="opacity: 0.5;">
                         <div class="label-box"><span>TED 39/2023 (FIOCRUZ DF)</span><small>Em Suspenso</small></div>
                         <div class="value-box"><span class="val">- 1.000.000,00</span><br><span class="status-pill hold">HOLD</span></div>
                     </div>
+                    
                     <div class="data-row" style="opacity: 0.5;">
                         <div class="label-box"><span>TED 41/2025 (PERIFERIAS)</span><small>Em Suspenso</small></div>
                         <div class="value-box"><span class="val">- 1.318.288,81</span><br><span class="status-pill hold">HOLD</span></div>
@@ -304,6 +315,131 @@
                 </div>
             </div>
         </section>
+        <!-- Adicione abaixo da section id="planejamento" -->
+        <section id="instrumentos" class="content-section">
+            <div class="menu-grid">
+                <!-- Subcard TEDs -->
+                <div class="menu-card" onclick="showSection('teds_detalhe', 'GESTÃO DE TEDs')">
+                    <span class="icon">🤝</span>
+                    <h2>TEDs</h2>
+                    <p>Termos de Execução Descentralizada</p>
+                </div>
+
+                <!-- Subcard Contratos -->
+                <div class="menu-card" onclick="showSection('contratos_detalhe', 'CONTRATOS ADM')">
+                    <span class="icon">📑</span>
+                    <h2>CONTRATOS</h2>
+                    <p>Contratos Administrativos e Atas</p>
+                </div>
+            </div>
+        </section>
+        <!-- Seção Detalhada de TEDs -->
+        <section id="teds_detalhe" class="content-section">
+            <div class="unified-card">
+                <div class="card-header-main">🤝 TEDs EM EXECUÇÃO E PLANEJADOS</div>
+                
+                <div class="action-group">
+                    <div class="action-tag">UFG</div>
+                    <div class="data-row">
+                        <div class="label-box">
+                            <span>TED 04/2026</span>
+                            <small>PROCESSO: 25000.060280/2026-83</small>
+                        </div>
+                        <div class="value-box">
+                            <span class="val">R$ 80.000.000,00</span>
+                            <span class="status-pill ok">Vigência: 30/05/2031</span>
+                        </div>
+                    </div>
+                    <div class="data-row" style="border-top: 1px dashed #e2e8f0; margin-top: 5px; padding-top: 8px;">
+                        <div class="label-box"><small>COORDENAÇÃO: (CGGIE)</small></div>
+                    </div>
+                </div>
+
+                <div class="action-group">
+                    <div class="action-tag">FIOCRUZ RJ</div>
+                    <div class="data-row">
+                        <div class="label-box">
+                            <span>TED 27/2023</span>
+                            <small>PROCESSO: 25000.124230/2023-14</small>
+                        </div>
+                        <div class="value-box">
+                            <span class="val">R$ 14.182.317,88</span>
+                            <span class="status-pill ok">Vigência: 22/10/2028</span>
+                        </div>
+                    </div>
+                    <div class="data-row" style="border-top: 1px dashed #e2e8f0; margin-top: 5px; padding-top: 8px;">
+                        <div class="label-box"><small>COORDENAÇÃO: (CGMA)</small></div>
+                    </div>
+                </div>
+
+                <div class="action-group">
+                    <div class="action-tag">UFMG</div>
+                    <div class="data-row">
+                        <div class="label-box">
+                            <span>TED 34/2023</span>
+                            <small>PROCESSO: 25000.141541/2023-45</small>
+                        </div>
+                        <div class="value-box">
+                            <span class="val">R$ 3.290.000,00</span>
+                            <span class="status-pill ok">Vigência: 12/09/2028</span>
+                        </div>
+                    </div>
+                    <div class="data-row" style="border-top: 1px dashed #e2e8f0; margin-top: 5px; padding-top: 8px;">
+                        <div class="label-box"><small>COORDENAÇÃO: (CGMA)</small></div>
+                    </div>
+                </div>
+
+                <div class="action-group">
+                    <div class="action-tag">FIOCRUZ DF</div>
+                    <div class="data-row">
+                        <div class="label-box">
+                            <span>TED 39/2023</span>
+                            <small>PROCESSO: 25000.156555/2023-83</small>
+                        </div>
+                        <div class="value-box">
+                            <span class="val">R$ 5.000.000,00</span>
+                            <span class="status-pill ok">Vigência: 14/11/2027</span>
+                        </div>
+                    </div>
+                    <div class="data-row" style="border-top: 1px dashed #e2e8f0; margin-top: 5px; padding-top: 8px;">
+                        <div class="label-box"><small>COORDENAÇÃO: (CGGIE)</small></div>
+                    </div>
+                </div>
+
+                <div class="action-group">
+                    <div class="action-tag">FIOCRUZ RJ (PERIFERIAS)</div>
+                    <div class="data-row">
+                        <div class="label-box">
+                            <span>TED 41/2025</span>
+                            <small>PROCESSO: 25000.155708/2025-45</small>
+                        </div>
+                        <div class="value-box">
+                            <span class="val">R$ 3.758.800,00</span>
+                            <span class="status-pill ok">Vigência: 15/10/2028</span>
+                        </div>
+                    </div>
+                    <div class="data-row" style="border-top: 1px dashed #e2e8f0; margin-top: 5px; padding-top: 8px;">
+                        <div class="label-box"><small>COORDENAÇÃO: (CGDID)</small></div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+<!-- Seção Detalhada de Contratos -->
+<section id="contratos_detalhe" class="content-section">
+    <div class="unified-card">
+        <div class="card-header-main">📝 Contratos Administrativos</div>
+        
+        <div class="action-group">
+            <div class="action-tag">TI & SOFTWARE</div>
+            <div class="data-row">
+                <div class="label-box"><span>Contrato Qlik 2026</span><small>Empresa: Tech Solutions</small></div>
+                <div class="value-box"><span class="val">Ativo</span></div>
+            </div>
+        </div>
+    </div>
+</section>
 
         <div class="footer-info">
             DEMAS | Ministério da Saúde | 2026<br>
@@ -322,10 +458,18 @@
         }
 
         function goBack() {
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
-            document.getElementById('mainMenu').style.display = 'grid';
-            document.getElementById('btnBack').style.display = 'none';
-            document.getElementById('mainTitle').innerText = 'DEMAS ESTRATÉGICO';
+            // Se estivermos em uma subseção (TED ou Contrato), volta para a tela de Instrumentos
+            const currentTitle = document.getElementById('mainTitle').innerText;
+            
+            if (currentTitle === 'GESTÃO DE TEDs' || currentTitle === 'CONTRATOS ADM') {
+                showSection('instrumentos', 'INSTRUMENTOS');
+            } else {
+                // Caso contrário, volta para o menu principal
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
+                document.getElementById('mainMenu').style.display = 'grid';
+                document.getElementById('btnBack').style.display = 'none';
+                document.getElementById('mainTitle').innerText = 'PAINEL DEMAS';
+            }
         }
     </script>
 </body>
