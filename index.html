@@ -436,17 +436,19 @@
             let total2Aditivo = 0;
 
             if (partes.length > 8 && partes[8].trim() !== '') {
+                // Criamos uma div com rolagem forçada e largura controlada
                 tabelaOSHTML = `
-                    <table class="cron-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
-                        <thead>
-                            <tr style="background: #f1f3f5; text-align: left;">
-                                <th style="padding: 8px;">Ordem de Serviço (OS)</th>
-                                <th style="padding: 8px;">Processo SEI da OS</th>
-                                <th style="padding: 8px; text-align: right;">Valor da OS</th>
-                                <th style="padding: 8px; text-align: right;">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <div style="width: 100%; overflow-x: auto !important; display: block; -webkit-overflow-scrolling: touch; margin-top: 5px; border-radius: 8px;">
+                        <table class="cron-table" style="width: 100%; min-width: 580px !important; border-collapse: collapse; font-size: 13px;">
+                            <thead>
+                                <tr style="background: #f1f3f5; text-align: left;">
+                                    <th style="padding: 10px 8px; width: 30%;">Ordem de Serviço (OS)</th>
+                                    <th style="padding: 10px 8px; width: 35%;">Processo SEI da OS</th>
+                                    <th style="padding: 10px 8px; text-align: right; width: 20%;">Valor da OS</th>
+                                    <th style="padding: 10px 8px; text-align: right; width: 15%;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
                 `;
 
                 const todasAsOSs = partes.slice(8).join('|').split(';');
@@ -479,7 +481,7 @@
                     }
 
                     // 2. Acumuladores de Aditivos e Atribuição de Peso para Ordenação
-                    let pesoAditivo = 0; // 0 = Inicial, 1 = 1º Aditivo, 2 = 2º Aditivo, etc.
+                    let pesoAditivo = 0; 
                     const nomeLower = osNome.toLowerCase();
                     
                     if (nomeLower.includes('1º') || nomeLower.includes('1o') || nomeLower.includes('1_')) {
@@ -493,7 +495,6 @@
                         pesoAditivo = 0;
                     }
 
-                    // Extrai apenas os números do nome da OS para ordenar numericamente (evita que a OS 10 venha antes da OS 2)
                     const apenasNumeros = osNome.match(/\d+/);
                     const numeroOS = apenasNumeros ? parseInt(apenasNumeros[0], 10) : 0;
 
@@ -507,17 +508,13 @@
                     });
                 });
 
-                // --- MOTOR DE ORDENAÇÃO CRONOLÓGICA E CONTRATUAL ---
+                // Motor de ordenação cronológica estável
                 listaOSsProcessadas.sort((a, b) => {
-                    // Primeiro compara pelo Aditivo (Contrato Inicial -> 1º Aditivo -> 2º Aditivo)
-                    if (a.pesoAditivo !== b.pesoAditivo) {
-                        return a.pesoAditivo - b.pesoAditivo;
-                    }
-                    // Se forem do mesmo aditivo, ordena pelo número da OS (OS 01 -> OS 02 -> OS 12)
+                    if (a.pesoAditivo !== b.pesoAditivo) return a.pesoAditivo - b.pesoAditivo;
                     return a.numeroOS - b.numeroOS;
                 });
 
-                // Renderiza as linhas ordenadas na linha do tempo exata
+                // Renderiza as linhas ordenadas
                 listaOSsProcessadas.forEach(os => {
                     let classeBadge = 'execucao';
                     if (os.status.toLowerCase().includes('pago')) classeBadge = 'pago';
@@ -525,15 +522,15 @@
 
                     tabelaOSHTML += `
                         <tr>
-                            <td style="padding: 8px; font-weight: 700; color: var(--text-main);">📌 ${os.nome}</td>
-                            <td style="padding: 8px; font-family: 'JetBrains Mono', monospace; color: var(--ms-blue); font-size: 12px; font-weight:600;">${os.sei}</td>
-                            <td style="padding: 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight:700; color: #334155;">${formatarBRL(os.valor)}</td>
-                            <td style="padding: 8px; text-align: right;"><span class="status-pill ${classeBadge}">${os.status}</span></td>
+                            <td style="padding: 10px 8px; font-weight: 700; color: var(--text-main); white-space: nowrap;">📌 ${os.nome}</td>
+                            <td style="padding: 10px 8px; font-family: 'JetBrains Mono', monospace; color: var(--ms-blue); font-size: 12px; font-weight:600; white-space: nowrap;">${os.sei}</td>
+                            <td style="padding: 10px 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight:700; color: #334155; white-space: nowrap;">${formatarBRL(os.valor)}</td>
+                            <td style="padding: 10px 8px; text-align: right; white-space: nowrap;"><span class="status-pill ${classeBadge}">${os.status}</span></td>
                         </tr>
                     `;
                 });
                 
-                tabelaOSHTML += `</tbody></table>`;
+                tabelaOSHTML += `</tbody></table></div>`; 
                 
                 let saldoContratual = vGlobal - totalPago;
 
@@ -560,18 +557,18 @@
 
                 // --- PAINEL 2: EXTRATO EXECUTIVO DE FLUXO DE CAIXA ---
                 tabelaOSHTML += `
-                    <div style="margin-top: 10px; padding: 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
-                        <div style="border-right: 1px solid #f1f5f9; padding-right: 10px;">
+                    <div style="margin-top: 10px; padding: 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px;">
+                        <div style="border-right: 1px solid #f1f5f9; padding-right: 5px;">
                             <small style="display:block; font-size:9px; color:var(--text-muted); font-weight:700; text-transform:uppercase;">🟢 Total Pago</small>
-                            <span style="font-family:'JetBrains Mono', monospace; font-weight:700; font-size:13px; color:#16a34a;">${formatarBRL(totalPago)}</span>
+                            <span style="font-family:'JetBrains Mono', monospace; font-weight:700; font-size:12px; color:#16a34a; white-space: nowrap;">${formatarBRL(totalPago)}</span>
                         </div>
-                        <div style="border-right: 1px solid #f1f5f9; padding-right: 10px;">
+                        <div style="border-right: 1px solid #f1f5f9; padding-right: 5px;">
                             <small style="display:block; font-size:9px; color:var(--text-muted); font-weight:700; text-transform:uppercase;">🟡 Total a Pagar</small>
-                            <span style="font-family:'JetBrains Mono', monospace; font-weight:700; font-size:13px; color:#d97706;">${formatarBRL(totalAPagar)}</span>
+                            <span style="font-family:'JetBrains Mono', monospace; font-weight:700; font-size:12px; color:#d97706; white-space: nowrap;">${formatarBRL(totalAPagar)}</span>
                         </div>
                         <div>
                             <small style="display:block; font-size:9px; color:var(--text-muted); font-weight:700; text-transform:uppercase;">🔵 Saldo Restante</small>
-                            <span style="font-family:'JetBrains Mono', monospace; font-weight:700; font-size:13px; color:#0284c7;">${formatarBRL(saldoContratual)}</span>
+                            <span style="font-family:'JetBrains Mono', monospace; font-weight:700; font-size:12px; color:#0284c7; white-space: nowrap;">${formatarBRL(saldoContratual)}</span>
                         </div>
                     </div>
                 `;
@@ -615,7 +612,7 @@
                                     <span>${cronograma}</span>
                                 </div>
                                 
-                                <div class="ted-field full-width" style="background: #f8fafc; border: 1px solid #e2e8f0; margin-top: 5px;">
+                                <div class="ted-field full-width" style="background: #f8fafc; border: 1px solid #e2e8f0; margin-top: 5px; overflow-x: auto !important;">
                                     <small style="color: var(--ms-blue); margin-bottom: 8px;">📋 Detalhamento de Ordens de Serviço (OS)</small>
                                     ${tabelaOSHTML}
                                 </div>
