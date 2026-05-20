@@ -6,7 +6,7 @@
     <title>Painel Executivo DEMAS</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --ms-blue-dark: #00335a;
@@ -32,6 +32,7 @@
             line-height: 1.4; 
         }
 
+        /* HEADER */
         .header { 
             background: linear-gradient(135deg, var(--ms-blue-dark) 0%, var(--ms-blue) 100%); 
             color: white; padding: 45px 20px; border-radius: var(--radius-lg); 
@@ -46,8 +47,9 @@
             backdrop-filter: blur(10px); z-index: 10;
         }
 
+        /* MENU GRID */
         .menu-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        @media (min-width: 768px) { .menu-grid { grid-template-columns: 1fr 1fr; } }
+        @media (min-width: 768px) { .menu-grid { grid-template-columns: 1fr 1fr 1fr; } }
 
         .menu-card { 
             background: var(--bg-card); padding: 40px 20px; border-radius: var(--radius-lg); 
@@ -64,6 +66,7 @@
         .active-section { display: block; animation: slideIn 0.3s ease-out; }
         @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* CARDS UNIFICADOS */
         .unified-card { 
             background: var(--bg-card); border-radius: var(--radius-lg); 
             overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px;
@@ -76,19 +79,86 @@
         
         .action-group { padding: 15px; border-bottom: 8px solid #f1f5f9; }
         .action-group:last-child { border-bottom: none; }
+        
         .action-tag { 
             display: inline-block; padding: 5px 14px; background: var(--ms-blue-dark); 
             color: white; border-radius: 50px; font-size: 11px; font-weight: 700; margin-bottom: 15px;
         }
 
+        /* LINHAS DE DADOS */
         .data-row { 
             display: flex; justify-content: space-between; align-items: flex-start;
             padding: 12px 0; border-bottom: 1px solid #f1f5f9;
         }
         .data-row:last-child { border-bottom: none; }
+
+        /* CARDS DE CONTRATOS ANTIGOS (FALLBACK) */
+        .os-card {
+            background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px;
+            padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            display: flex; justify-content: space-between; align-items: flex-start;
+        }
+
+        /* ESTRUTURA DOS CARDS DE TED E CONTRATOS RETRAÍVEIS */
+        .ted-card {
+            background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius-lg);
+            margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            overflow: hidden; transition: border-color 0.2s;
+        }
+        .ted-card:hover { border-color: #cbd5e1; }
+        
+        .ted-trigger {
+            padding: 20px 24px; background: #ffffff; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+            user-select: none; transition: background 0.2s;
+        }
+        .ted-trigger:hover { background: #f8fafc; }
+        .ted-trigger-left { display: flex; flex-direction: column; gap: 4px; }
+        .ted-title { font-size: 1.15rem; font-weight: 800; color: var(--ms-blue-dark); margin: 0; }
+        .ted-subtitle { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+        .ted-trigger-right { display: flex; align-items: center; gap: 15px; }
+        .ted-quick-val { text-align: right; }
+        .ted-quick-val small { display: block; font-size: 9px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+        .ted-quick-val span { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; color: #004b82; }
+        .ted-arrow { font-size: 14px; color: var(--text-muted); transition: transform 0.2s; }
+        
+        .ted-content {
+            max-height: 0; overflow: hidden; transition: max-height 0.25s ease-out;
+            background: #ffffff;
+        }
+        .ted-content-inner { padding: 0 24px 24px 24px; border-top: 1px solid #f1f5f9; margin-top: 5px; padding-top: 20px; }
+
+        .ted-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        @media (min-width: 600px) { .ted-grid { grid-template-columns: 1fr 1fr; } }
+        
+        .ted-field { background: #f8fafc; padding: 10px 14px; border-radius: 12px; border: 1px solid #f1f5f9; }
+        .ted-field small { display: block; font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 2px; }
+        .ted-field span { display: block; font-size: 13px; color: var(--text-main); font-weight: 600; }
+        .ted-field .mono-val { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+        .ted-field.highlight { background: #e0f2fe; border-color: #bae6fd; }
+        .ted-field.highlight span { color: var(--ms-blue); }
+        .ted-field.success { background: #ecfdf5; border-color: #a7f3d0; }
+        .ted-field.success span { color: #065f46; }
+        .ted-field.full-width { grid-column: 1 / -1; }
+
+        /* TABELAS INTERNAS DE PROJEÇÃO E OSs */
+        .cron-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+        .cron-table th { padding: 8px; font-size: 11px; text-transform: uppercase; color: var(--text-muted); border-bottom: 2px solid #e2e8f0; text-align: left; }
+        .cron-table td { padding: 10px 8px; font-size: 13px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+        .cron-table tr:last-child td { border-bottom: none; }
+
+        /* SEÇÃO NOTAS DE CRÉDITO (TED) */
+        .nc-box { grid-column: 1 / -1; margin-top: 8px; background: #fafafa; border: 1px dashed #cbd5e1; border-radius: 16px; padding: 16px; }
+        .nc-title { font-size: 11px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 10px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; }
+        .nc-row { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 6px 0; border-bottom: 1px solid #f1f5f9; }
+        .nc-row:last-child { border-bottom: none; }
+        .nc-row .nc-num { color: var(--ms-blue); font-weight: 600; }
+        .nc-row .nc-val { color: var(--text-main); font-weight: 700; }
+
         .label-box { flex: 1; padding-right: 12px; }
         .label-box span { display: block; font-size: 13px; font-weight: 600; color: var(--text-main); line-height: 1.2; }
         .label-box small { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .label-box .sei-text { display: block; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ms-blue); margin-top: 4px; font-weight: 500; }
         
         .value-box { text-align: right; }
         .value-box .val { display: block; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; }
@@ -97,12 +167,12 @@
         .positivo { color: var(--ms-green); }
         .row-alert { background: #fff7ed; margin: 10px -15px; padding: 15px; border-left: 4px solid var(--ms-amber); color: var(--ms-amber); font-size: 12px; font-weight: 700; }
         
-        .status-pill { font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: 800; text-transform: uppercase; display: inline-block; margin-top: 4px; }
-        .ok { background: #dcfce7; color: #065f46; }
-        .hold { background: #fee2e2; color: #991b1b; }
-
-        .row-balance-ref { background: #f8fafc; margin: 0 -15px 10px -15px; padding: 14px 15px; border-bottom: 1px dashed #cbd5e1; }
-        .row-balance-ref .val { color: var(--ms-blue-dark) !important; }
+        /* BADGES */
+        .status-pill { font-size: 9px; padding: 3px 8px; border-radius: 6px; font-weight: 800; text-transform: uppercase; display: inline-block; text-align: center; }
+        .status-pill.execucao { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+        .status-pill.aguardando { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .status-pill.pago { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+        .status-pill.hold { background: #fee2e2; color: #ef4444; font-size: 10px; padding: 2px 8px; border-radius: 12px; font-weight: bold; border: 1px solid #fecaca; }
 
         .unified-footer { background: var(--ms-blue-dark); color: white; padding: 30px 20px; text-align: center; }
         .unified-footer span { font-size: 12px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
@@ -130,7 +200,6 @@
                 <h2>PLOA 2027</h2>
                 <p>Projeções e Planejamento Orçamentário</p>
             </div>
-            <!-- No seu HTML, dentro da div id="mainMenu" -->
             <div class="menu-card" onclick="showSection('instrumentos', 'INSTRUMENTOS')">
                 <span class="icon">📜</span>
                 <h2>INSTRUMENTOS</h2>
@@ -141,118 +210,71 @@
         <section id="execucao" class="content-section">
             <div class="unified-card">
                 <div class="card-header-main">📍 Recursos Descentralizados (Em Conta)</div>
-                
                 <div class="action-group">
                     <div class="action-tag">AÇÃO 8753</div>
                     <div class="data-row">
-                        <div class="label-box"><span>Dotação Inicial Total</span><small>PLOA 2026</small></div>
-                        <div class="value-box"><span class="val">13.548.529,00</span></div>
+                        <div class="label-box"><span>Dotação Inicial Total</span><small>LOA 2026</small></div>
+                        <div class="value-box"><span class="val" id="exe_8753_dotacao">...</span></div>
                     </div>
-                    <div class="data-row">
-                        <div class="label-box"><span>TED 27/2023 (FIOCRUZ RJ)</span><small>Movimentação</small></div>
-                        <div class="value-box"><span class="val negativo">- 1.282.779,96</span></div>
-                    </div>
-                    <div class="data-row">
-                        <div class="label-box"><span>TED 41/2025 (PERIFERIAS)</span><small>Movimentação</small></div>
-                        <div class="value-box"><span class="val negativo">- 919.431,23</span></div>
-                    </div>
-                    <div class="data-row">
-                        <div class="label-box"><span>TED 39/2023 (FIOCRUZ DF)</span><small>Movimentação</small></div>
-                        <div class="value-box"><span class="val negativo">- 350.000,00</span></div>
-                    </div>
-                    <div class="data-row" style="background: #f8fafc; margin-top: 5px;">
-                        <div class="label-box"><span style="color:var(--ms-blue)">SALDO ATUAL DISPONÍVEL</span></div>
-                        <div class="value-box"><span class="val" style="color:var(--ms-blue)">10.996.317,81</span></div>
+                    <div id="container_8753"></div> 
+                    <div class="data-row" style="background: #f8fafc; margin-top: 8px; border-top: 2px solid #e2e8f0; padding: 8px 0;">
+                        <div class="label-box"><span style="color:var(--ms-blue)">SALDO ATUAL DISPONÍVEL 8753</span></div>
+                        <div class="value-box"><span class="val" id="exe_8753_disponivel">...</span></div>
                     </div>
                 </div>
-
-                <div class="action-group" style="background: #fcfcfc;">
+                <div class="action-group" style="margin-top: 25px; border-top: 1px dashed #e2e8f0; padding-top: 15px;">
                     <div class="action-tag" style="background: var(--ms-blue);">AÇÃO 20YN</div>
                     <div class="data-row">
-                        <div class="label-box"><span>Dotação Inicial Total</span><small>PLOA 2026</small></div>
-                        <div class="value-box"><span class="val">15.690.000,00</span></div>
+                        <div class="label-box"><span>Dotação Inicial Total</span><small>LOA 2026</small></div>
+                        <div class="value-box"><span class="val" id="exe_20yn_dotacao">...</span></div>
                     </div>
-                    <div class="data-row">
-                        <div class="label-box"><span>Contratos CO/10 (Serviços)</span><small>Execução</small></div>
-                        <div class="value-box"><span class="val negativo">- 2.155.593,25</span></div>
-                    </div>
-                    <div class="data-row">
-                        <div class="label-box"><span>Contratos CO/41 (Materiais)</span><small>Execução</small></div>
-                        <div class="value-box"><span class="val negativo">- 1.706.605,31</span></div>
-                    </div>
-                    <div class="data-row" style="background: #f8fafc; margin-top: 5px;">
-                        <div class="label-box"><span style="color:var(--ms-blue)">SALDO ATUAL DISPONÍVEL</span></div>
-                        <div class="value-box"><span class="val" style="color:var(--ms-blue)">11.827.801,44</span></div>
+                    <div id="container_20yn"></div> 
+                    <div class="data-row" style="background: #f8fafc; margin-top: 8px; border-top: 2px solid #e2e8f0; padding: 8px 0;">
+                        <div class="label-box"><span style="color:var(--ms-blue)">SALDO ATUAL DISPONÍVEL 20YN</span></div>
+                        <div class="value-box"><span class="val" id="exe_20yn_disponivel">...</span></div>
                     </div>
                 </div>
             </div>
 
             <div class="unified-card">
                 <div class="card-header-main">📉 Planejamento de Saídas (Projeção)</div>
-                
                 <div class="action-group">
                     <div class="action-tag">AÇÃO 8753</div>
-                    
-                    <div class="data-row row-balance-ref">
-                        <div class="label-box"><span>SALDO ATUAL</span><small>Saldo Atual em Conta</small></div>
-                        <div class="value-box"><span class="val">10.996.317,81</span></div>
+                    <div class="data-row" style="background: #f1f5f9; padding: 10px; border-radius: 4px; margin-bottom: 8px;">
+                        <div class="label-box"><span style="color: #475569;">Saldo Atual Base</span><small>Recurso em Conta</small></div>
+                        <div class="value-box"><span class="val" id="proj_8753_saldo" style="color: #475569;">...</span></div>
                     </div>
-
-                    <div class="data-row">
-                        <div class="label-box"><span>TED 04/2026 (UFG)</span><small>Compromisso</small></div>
-                        <div class="value-box"><span class="val negativo">- 8.000.000,00</span><br><span class="status-pill ok">OK</span></div>
+                    <div id="container_proj_8753"></div>
+                    <div class="data-row" style="background: #f8fafc; border-top: 1px solid #cbd5e1; border-bottom: 1px solid #cbd5e1; margin: 10px 0; padding: 8px 0;">
+                        <div class="label-box"><span style="color: #64748b; font-weight: bold;">Saldo após Movimentações</span><small>Subtotal</small></div>
+                        <div class="value-box"><span class="val" id="proj_8753_subtotal" style="color: #64748b;">...</span></div>
                     </div>
-                    <div class="data-row">
-                        <div class="label-box"><span>TED 34/2023 (UFMG)</span><small>Compromisso</small></div>
-                        <div class="value-box"><span class="val negativo">- 1.919.500,00</span><br><span class="status-pill ok">OK</span></div>
+                    <div class="row-alert" style="margin: 8px 0;">⚠ BLOQUEIO SEIDIGI: AGUARDANDO CRÉDITO ADICIONAL</div>
+                    <div class="data-row" style="background: #ecfdf5; border-left: 4px solid var(--ms-green); padding: 10px; margin-bottom: 12px;">
+                        <div class="label-box"><span style="color: #065f46; font-weight: bold;">Remanejamento Previsto</span><small>Aporte de Crédito</small></div>
+                        <div class="value-box"><span class="val positivo" id="proj_8753_reman">...</span></div>
                     </div>
-                    <div class="data-row">
-                        <div class="label-box"><span>TED 27/2023 (FIOCRUZ RJ)</span><small>Compromisso</small></div>
-                        <div class="value-box"><span class="val negativo">- 1.020.000,00</span><br><span class="status-pill ok">OK</span></div>
-                    </div>
-                    <div class="data-row" style="background: #f8fafc; margin-top: 5px;">
-                        <div class="label-box"><span style="color:var(--ms-blue)">SALDO ATUAL DISPONÍVEL</span></div>
-                        <div class="value-box"><span class="val" style="color:var(--ms-blue)">56.817,81</span></div>
-                    </div>
-                                        
-                    <div class="row-alert">⚠ BLOQUEIO SEIDIGI: AGUARDANDO CRÉDITO ADICIONAL</div>
-                    
-                    <div class="data-row" style="opacity: 0.5;">
-                        <div class="label-box"><span>TED 39/2023 (FIOCRUZ DF)</span><small>Em Suspenso</small></div>
-                        <div class="value-box"><span class="val">- 1.000.000,00</span><br><span class="status-pill hold">HOLD</span></div>
-                    </div>
-                    
-                    <div class="data-row" style="opacity: 0.5;">
-                        <div class="label-box"><span>TED 41/2025 (PERIFERIAS)</span><small>Em Suspenso</small></div>
-                        <div class="value-box"><span class="val">- 1.318.288,81</span><br><span class="status-pill hold">HOLD</span></div>
-                    </div>
-                    <div class="data-row" style="background: #ecfdf5; margin: 0 -15px; padding: 12px 15px;">
-                        <div class="label-box"><span>Remanejamento Previsto</span><small>Aporte de Crédito</small></div>
-                        <div class="value-box"><span class="val positivo">+ 2.261.471,00</span></div>
+                    <div id="container_holds_8753"></div>
+                    <div class="data-row" style="background: #f8fafc; border-top: 2px solid var(--ms-blue); padding: 10px 0; margin-top: 10px;">
+                        <div class="label-box"><span style="color:var(--ms-blue); font-weight: bold;">SALDO FINAL PROJETADO 8753</span></div>
+                        <div class="value-box"><span class="val" id="proj_8753_final">...</span></div>
                     </div>
                 </div>
-
-                <div class="action-group">
+                <div class="action-group" style="margin-top: 25px; border-top: 1px dashed #e2e8f0; padding-top: 15px;">
                     <div class="action-tag" style="background: var(--ms-blue);">AÇÃO 20YN</div>
-                    
-                    <div class="data-row row-balance-ref">
-                        <div class="label-box"><span>SALDO ATUAL</span><small>Saldo Atual em Conta</small></div>
-                        <div class="value-box"><span class="val">11.827.801,44</span></div>
+                    <div class="data-row" style="background: #f1f5f9; padding: 10px; border-radius: 4px; margin-bottom: 8px;">
+                        <div class="label-box"><span style="color: #475569;">Saldo Atual Base</span><small>Recurso em Conta</small></div>
+                        <div class="value-box"><span class="val" id="proj_20yn_saldo" style="color: #475569;">...</span></div>
                     </div>
-
-                    <div class="data-row">
-                        <div class="label-box"><span>CO/41 Materiais (Info)</span><small>Planejado</small></div>
-                        <div class="value-box"><span class="val negativo">- 2.250.439,35</span><br><span class="status-pill ok">OK</span></div>
-                    </div>
-                    <div class="data-row">
-                        <div class="label-box"><span>CO/10 Serviços (TI)</span><small>Planejado</small></div>
-                        <div class="value-box"><span class="val negativo">- 2.119.384,50</span><br><span class="status-pill ok">OK</span></div>
+                    <div id="container_proj_20yn"></div>
+                    <div class="data-row" style="background: #f8fafc; border-top: 2px solid #e2e8f0; padding: 8px 0;">
+                        <div class="label-box"><span style="color:var(--ms-blue); font-weight: bold;">SALDO FINAL PROJETADO 20YN</span></div>
+                        <div class="value-box"><span class="val" id="proj_20yn_final">...</span></div>
                     </div>
                 </div>
-
                 <div class="unified-footer">
-                    <span>Saldo Final Projetado 2026</span>
-                    <strong>R$ 7.457.977,60</strong>
+                    <span>SALDO FINAL PROJETADO 2026</span>
+                    <strong id="proj_final_geral" style="font-size: 18px;">...</strong>
                 </div>
             </div>
         </section>
@@ -260,72 +282,36 @@
         <section id="planejamento" class="content-section">
             <div class="unified-card">
                 <div class="card-header-main">📈 Projeção Orçamentária 2027</div>
-                
                 <div class="action-group">
                     <div class="action-tag">AÇÃO 8753 - PLOA 2027</div>
-                    <div class="data-row">
-                        <div class="label-box"><span>TED 04/2026 (UFG)</span><small>Previsão</small></div>
-                        <div class="value-box"><span class="val">14.000.000,00</span></div>
-                    </div>
-                    <div class="data-row">
-                        <div class="label-box"><span>TED 27/2023 (FIOCRUZ-RJ)</span><small>Previsão</small></div>
-                        <div class="value-box"><span class="val">3.000.000,00</span></div>
-                    </div>
-                    <div class="data-row">
-                        <div class="label-box"><span>TED 34/2023 (UFMG)</span><small>Previsão</small></div>
-                        <div class="value-box"><span class="val">1.080.500,00</span></div>
-                    </div>
-                    <div class="data-row">
-                        <div class="label-box"><span>TED 39/2023 (FIOCRUZ-DF)</span><small>Previsão</small></div>
-                        <div class="value-box"><span class="val">1.000.000,00</span></div>
-                    </div>
-                    <div class="data-row">
-                        <div class="label-box"><span>TED 41/2025 (FIOCRUZ-RJ)</span><small>Previsão</small></div>
-                        <div class="value-box"><span class="val">963.248,00</span></div>
-                    </div>
+                    <div id="container_ploa_8753"></div> 
                     <div class="data-row" style="background:#f8fafc; border-top: 1px solid #e2e8f0;">
                         <div class="label-box"><span>TOTAL ESTIMADO 8753</span></div>
-                        <div class="value-box"><span class="val">20.043.748,00</span></div>
+                        <div class="value-box"><span class="val" id="ploa_8753_total">...</span></div>
                     </div>
                 </div>
-
                 <div class="action-group">
                     <div class="action-tag" style="background: var(--ms-blue);">AÇÃO 20YN - PLOA 2027</div>
-                    <div class="data-row">
-                        <div class="label-box"><span>Contratos 10 - Qlik (Manutenção)</span><small>Previsão</small></div>
-                        <div class="value-box"><span class="val">4.662.645,95</span></div>
-                    </div>
-                    <div class="data-row">
-                        <div class="label-box"><span>Contratos 41 - Qlik (Manutenção)</span><small>Previsão</small></div>
-                        <div class="value-box"><span class="val">6.293.606,05</span></div>
-                    </div>
-                    <div class="data-row">
-                        <div class="label-box"><span>Iniciativas IA e Inovação</span><small>Previsão</small></div>
-                        <div class="value-box"><span class="val">5.000.000,00</span></div>
-                    </div>
+                    <div id="container_ploa_20yn"></div> 
                     <div class="data-row" style="background:#f8fafc; border-top: 1px solid #e2e8f0;">
                         <div class="label-box"><span>TOTAL ESTIMADO 20YN</span></div>
-                        <div class="value-box"><span class="val">15.956.252,00</span></div>
+                        <div class="value-box"><span class="val" id="ploa_20yn_total">...</span></div>
                     </div>
                 </div>
-
                 <div class="unified-footer" style="background: #064e3b;">
                     <span>Teto Geral Projetado 2027</span>
-                    <strong>R$ 36.000.000,00</strong>
+                    <strong id="ploa_teto_geral">...</strong>
                 </div>
             </div>
         </section>
-        <!-- Adicione abaixo da section id="planejamento" -->
+
         <section id="instrumentos" class="content-section">
             <div class="menu-grid">
-                <!-- Subcard TEDs -->
                 <div class="menu-card" onclick="showSection('teds_detalhe', 'GESTÃO DE TEDs')">
                     <span class="icon">🤝</span>
                     <h2>TEDs</h2>
                     <p>Termos de Execução Descentralizada</p>
                 </div>
-
-                <!-- Subcard Contratos -->
                 <div class="menu-card" onclick="showSection('contratos_detalhe', 'CONTRATOS ADM')">
                     <span class="icon">📑</span>
                     <h2>CONTRATOS</h2>
@@ -333,113 +319,14 @@
                 </div>
             </div>
         </section>
-        <!-- Seção Detalhada de TEDs -->
+
         <section id="teds_detalhe" class="content-section">
-            <div class="unified-card">
-                <div class="card-header-main">🤝 TEDs EM EXECUÇÃO E PLANEJADOS</div>
-                
-                <div class="action-group">
-                    <div class="action-tag">UFG</div>
-                    <div class="data-row">
-                        <div class="label-box">
-                            <span>TED 04/2026</span>
-                            <small>PROCESSO: 25000.060280/2026-83</small>
-                        </div>
-                        <div class="value-box">
-                            <span class="val">R$ 80.000.000,00</span>
-                            <span class="status-pill ok">Vigência: 30/05/2031</span>
-                        </div>
-                    </div>
-                    <div class="data-row" style="border-top: 1px dashed #e2e8f0; margin-top: 5px; padding-top: 8px;">
-                        <div class="label-box"><small>COORDENAÇÃO: (CGGIE)</small></div>
-                    </div>
-                </div>
-
-                <div class="action-group">
-                    <div class="action-tag">FIOCRUZ RJ</div>
-                    <div class="data-row">
-                        <div class="label-box">
-                            <span>TED 27/2023</span>
-                            <small>PROCESSO: 25000.124230/2023-14</small>
-                        </div>
-                        <div class="value-box">
-                            <span class="val">R$ 14.182.317,88</span>
-                            <span class="status-pill ok">Vigência: 22/10/2028</span>
-                        </div>
-                    </div>
-                    <div class="data-row" style="border-top: 1px dashed #e2e8f0; margin-top: 5px; padding-top: 8px;">
-                        <div class="label-box"><small>COORDENAÇÃO: (CGMA)</small></div>
-                    </div>
-                </div>
-
-                <div class="action-group">
-                    <div class="action-tag">UFMG</div>
-                    <div class="data-row">
-                        <div class="label-box">
-                            <span>TED 34/2023</span>
-                            <small>PROCESSO: 25000.141541/2023-45</small>
-                        </div>
-                        <div class="value-box">
-                            <span class="val">R$ 3.290.000,00</span>
-                            <span class="status-pill ok">Vigência: 12/09/2028</span>
-                        </div>
-                    </div>
-                    <div class="data-row" style="border-top: 1px dashed #e2e8f0; margin-top: 5px; padding-top: 8px;">
-                        <div class="label-box"><small>COORDENAÇÃO: (CGMA)</small></div>
-                    </div>
-                </div>
-
-                <div class="action-group">
-                    <div class="action-tag">FIOCRUZ DF</div>
-                    <div class="data-row">
-                        <div class="label-box">
-                            <span>TED 39/2023</span>
-                            <small>PROCESSO: 25000.156555/2023-83</small>
-                        </div>
-                        <div class="value-box">
-                            <span class="val">R$ 5.000.000,00</span>
-                            <span class="status-pill ok">Vigência: 14/11/2027</span>
-                        </div>
-                    </div>
-                    <div class="data-row" style="border-top: 1px dashed #e2e8f0; margin-top: 5px; padding-top: 8px;">
-                        <div class="label-box"><small>COORDENAÇÃO: (CGGIE)</small></div>
-                    </div>
-                </div>
-
-                <div class="action-group">
-                    <div class="action-tag">FIOCRUZ RJ (PERIFERIAS)</div>
-                    <div class="data-row">
-                        <div class="label-box">
-                            <span>TED 41/2025</span>
-                            <small>PROCESSO: 25000.155708/2025-45</small>
-                        </div>
-                        <div class="value-box">
-                            <span class="val">R$ 3.758.800,00</span>
-                            <span class="status-pill ok">Vigência: 15/10/2028</span>
-                        </div>
-                    </div>
-                    <div class="data-row" style="border-top: 1px dashed #e2e8f0; margin-top: 5px; padding-top: 8px;">
-                        <div class="label-box"><small>COORDENAÇÃO: (CGDID)</small></div>
-                    </div>
-                </div>
-
-            </div>
+            <div id="container_inst_teds"></div>
         </section>
 
-<!-- Seção Detalhada de Contratos -->
-<section id="contratos_detalhe" class="content-section">
-    <div class="unified-card">
-        <div class="card-header-main">📝 Contratos Administrativos</div>
-        
-        <div class="action-group">
-            <div class="action-tag">TI & SOFTWARE</div>
-            <div class="data-row">
-                <div class="label-box"><span>Contrato Qlik 2026</span><small>Empresa: Tech Solutions</small></div>
-                <div class="value-box"><span class="val">Ativo</span></div>
-            </div>
-        </div>
-    </div>
-</section>
+        <section id="contratos_detalhe" class="content-section">
+            <div id="container_inst_contratos"></div>
+        </section>
 
         <div class="footer-info">
             DEMAS | Ministério da Saúde | 2026<br>
@@ -448,29 +335,529 @@
     </div>
 
     <script>
+        const URL_API = "https://script.google.com/macros/s/AKfycbwboDwFK6V8k7bFPHVmstsjnOhBIuNfXWDZsZGz5fBRMvqQprKXrxiYDYyW2hFeUhRM/exec";
+        let navigationHistory = [];
+        const formatarBRL = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+        async function sincronizarPainel() {
+            try {
+                const response = await fetch(URL_API);
+                const dados = await response.json();
+
+                const containers = {
+                    exec8753: document.getElementById('container_8753'),
+                    exec20yn: document.getElementById('container_20yn'),
+                    proj8753: document.getElementById('container_proj_8753'),
+                    hold8753: document.getElementById('container_holds_8753'),
+                    proj20yn: document.getElementById('container_proj_20yn'),
+                    ploa8753: document.getElementById('container_ploa_8753'),
+                    ploa20yn: document.getElementById('container_ploa_20yn'),
+                    instTeds: document.getElementById('container_inst_teds'),
+                    instContratos: document.getElementById('container_inst_contratos')
+                };
+
+                Object.values(containers).forEach(c => { if(c) c.innerHTML = ''; });
+                let acumularHolds8753 = '';
+
+                Object.keys(dados).forEach(id => {
+                    const item = dados[id];
+
+                    // 1. PROCESSAMENTO DE CONTRATOS ADMINISTRATIVOS
+                    if (item.categoria === 'INST_CONTRATO') {
+                        if(containers.instContratos) {
+                            containers.instContratos.innerHTML += gerarCardContratoHTML(id, item.titulo, item.valor, item.status);
+                        }
+                    } 
+                    
+                    // 2. PROCESSAMENTO DE CARDS DE TED
+                    else if (item.categoria === 'INST_TED') {
+                        if (item.status && item.status.includes('|')) {
+                            if(containers.instTeds) {
+                                containers.instTeds.innerHTML += gerarCardTEDHTML(id, item.titulo, item.valor, item.status);
+                            }
+                        } else {
+                            if(containers.instTeds) {
+                                containers.instTeds.innerHTML += `
+                                    <div class="unified-card" style="padding:15px;">
+                                        ${gerarLinhaHTML(item.titulo, item.valor, item.status)}
+                                    </div>`;
+                            }
+                        }
+                    }
+                    
+                    // 3. MENUS DE EXECUÇÃO / PLOA
+                    else {
+                        const htmlLinhaComum = gerarLinhaHTML(item.titulo, item.valor, item.status);
+                        if (item.categoria === 'EXEC_8753') containers.exec8753.innerHTML += htmlLinhaComum;
+                        else if (item.categoria === 'EXEC_20YN') containers.exec20yn.innerHTML += htmlLinhaComum;
+                        else if (item.categoria === 'PROJ_8753') {
+                            if (item.titulo.toLowerCase().includes('hold') || item.titulo.toLowerCase().includes('suspenso')) {
+                                acumularHolds8753 += htmlLinhaComum;
+                            } else {
+                                containers.proj8753.innerHTML += htmlLinhaComum;
+                            }
+                        }
+                        else if (item.categoria === 'PROJ_20YN') containers.proj20yn.innerHTML += htmlLinhaComum;
+                        else if (item.categoria === 'PLOA_8753') containers.ploa8753.innerHTML += htmlLinhaComum;
+                        else if (item.categoria === 'PLOA_20YN') containers.ploa20yn.innerHTML += htmlLinhaComum;
+                        else if (item.categoria === 'FIXO') {
+                            const elFixo = document.getElementById(id);
+                            if (elFixo) formatarValor(elFixo, item.valor);
+                        }
+                    }
+                });
+
+                if(containers.hold8753) containers.hold8753.innerHTML = acumularHolds8753;
+
+            } catch (e) { console.error("Erro geral na carga do painel:", e); }
+        }
+
+        // RECALIBRAÇÃO FINAL E SUPORTE A SÍMBOLOS ESPECIAIS EM CONTRATOS ADM
+        function gerarCardContratoHTML(idContrato, tituloContrato, valorGlobal, statusTexto) {
+            const partes = statusTexto.split('|');
+            
+            // Mapeamento padrão estável
+            const areaTecnica    = partes[1] ? partes[1].trim() : '---';
+            const vigencia       = partes[2] ? partes[2].trim() : '---';
+            const aditPrazo      = partes[3] ? partes[3].trim() : '---';
+            const aditValor      = partes[4] ? partes[4].trim() : '---';
+            const cronograma     = partes[7] ? partes[7].trim() : '---';
+
+            let vGlobal = parseFloat(valorGlobal) || 0;
+
+            // --- VARIÁVEIS ACUMULADORAS FINANCEIRAS GERAIS ---
+            let tabelaOSHTML = "";
+            let totalPago = 0;
+            let totalAPagar = 0;
+
+            // --- VARIÁVEIS EXCLUSIVAS PARA SEPARAÇÃO DOS ADITIVOS ---
+            let totalContratoInicial = 0;
+            let total1Aditivo = 0;
+            let total2Aditivo = 0;
+
+            if (partes.length > 8 && partes[8].trim() !== '') {
+                tabelaOSHTML = `
+                    <table class="cron-table" style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                        <thead>
+                            <tr style="background: #f1f3f5; text-align: left;">
+                                <th style="padding: 8px;">Ordem de Serviço (OS)</th>
+                                <th style="padding: 8px;">Processo SEI da OS</th>
+                                <th style="padding: 8px; text-align: right;">Valor da OS</th>
+                                <th style="padding: 8px; text-align: right;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                const todasAsOSs = partes.slice(8).join('|').split(';');
+                let listaOSsProcessadas = [];
+                
+                todasAsOSs.forEach(osTexto => {
+                    if (osTexto.trim() === '' || !osTexto.includes('|')) return;
+                    const dadosOS = osTexto.split('|');
+                    
+                    const osNome  = dadosOS[0] ? dadosOS[0].trim() : 'OS';
+                    const osSei   = dadosOS[1] ? dadosOS[1].trim() : '---';
+                    const osValRaw = dadosOS[2] ? dadosOS[2].trim() : '0';
+                    const osStat  = dadosOS[3] ? dadosOS[3].trim() : '---';
+
+                    // Tratamento de valor seguro
+                    let valorLimpo = osValRaw.replace(/[R$\s]/g, '');
+                    if (valorLimpo.includes(',') && valorLimpo.includes('.')) {
+                        valorLimpo = valorLimpo.replace(/\./g, '').replace(',', '.');
+                    } else if (valorLimpo.includes(',')) {
+                        valorLimpo = valorLimpo.replace(',', '.');
+                    }
+                    const osValor = parseFloat(valorLimpo) || 0;
+
+                    // 1. Acumuladores de Execução (Pago vs A Pagar)
+                    const statusLower = osStat.toLowerCase();
+                    if (statusLower.includes('pago')) {
+                        totalPago += osValor;
+                    } else {
+                        totalAPagar += osValor;
+                    }
+
+                    // 2. Acumuladores de Aditivos e Atribuição de Peso para Ordenação
+                    let pesoAditivo = 0; // 0 = Inicial, 1 = 1º Aditivo, 2 = 2º Aditivo, etc.
+                    const nomeLower = osNome.toLowerCase();
+                    
+                    if (nomeLower.includes('1º') || nomeLower.includes('1o') || nomeLower.includes('1_')) {
+                        total1Aditivo += osValor;
+                        pesoAditivo = 1;
+                    } else if (nomeLower.includes('2º') || nomeLower.includes('2o') || nomeLower.includes('2_')) {
+                        total2Aditivo += osValor;
+                        pesoAditivo = 2;
+                    } else {
+                        totalContratoInicial += osValor;
+                        pesoAditivo = 0;
+                    }
+
+                    // Extrai apenas os números do nome da OS para ordenar numericamente (evita que a OS 10 venha antes da OS 2)
+                    const apenasNumeros = osNome.match(/\d+/);
+                    const numeroOS = apenasNumeros ? parseInt(apenasNumeros[0], 10) : 0;
+
+                    listaOSsProcessadas.push({
+                        nome: osNome,
+                        sei: osSei,
+                        valor: osValor,
+                        status: osStat,
+                        pesoAditivo: pesoAditivo,
+                        numeroOS: numeroOS
+                    });
+                });
+
+                // --- MOTOR DE ORDENAÇÃO CRONOLÓGICA E CONTRATUAL ---
+                listaOSsProcessadas.sort((a, b) => {
+                    // Primeiro compara pelo Aditivo (Contrato Inicial -> 1º Aditivo -> 2º Aditivo)
+                    if (a.pesoAditivo !== b.pesoAditivo) {
+                        return a.pesoAditivo - b.pesoAditivo;
+                    }
+                    // Se forem do mesmo aditivo, ordena pelo número da OS (OS 01 -> OS 02 -> OS 12)
+                    return a.numeroOS - b.numeroOS;
+                });
+
+                // Renderiza as linhas ordenadas na linha do tempo exata
+                listaOSsProcessadas.forEach(os => {
+                    let classeBadge = 'execucao';
+                    if (os.status.toLowerCase().includes('pago')) classeBadge = 'pago';
+                    if (os.status.toLowerCase().includes('aguardando')) classeBadge = 'aguardando';
+
+                    tabelaOSHTML += `
+                        <tr>
+                            <td style="padding: 8px; font-weight: 700; color: var(--text-main);">📌 ${os.nome}</td>
+                            <td style="padding: 8px; font-family: 'JetBrains Mono', monospace; color: var(--ms-blue); font-size: 12px; font-weight:600;">${os.sei}</td>
+                            <td style="padding: 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight:700; color: #334155;">${formatarBRL(os.valor)}</td>
+                            <td style="padding: 8px; text-align: right;"><span class="status-pill ${classeBadge}">${os.status}</span></td>
+                        </tr>
+                    `;
+                });
+                
+                tabelaOSHTML += `</tbody></table>`;
+                
+                let saldoContratual = vGlobal - totalPago;
+
+                // --- PAINEL 1: DISTRIBUIÇÃO DAS ORIGENS (CONTRATO VS ADITIVOS) ---
+                tabelaOSHTML += `
+                    <div style="margin-top: 15px; padding: 12px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px;">
+                        <small style="display:block; font-size:9px; color:var(--ms-blue); font-weight:800; text-transform:uppercase; margin-bottom:8px; letter-spacing:0.5px;">📋 Distribuição do Gasto por Origem (Valor de OS Emitida)</small>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px;">
+                            <div>
+                                <small style="display:block; font-size:9px; color:var(--text-muted);">Contrato Inicial</small>
+                                <span style="font-family:'JetBrains Mono', monospace; font-weight:700; font-size:12px; color:var(--text-main);">${formatarBRL(totalContratoInicial)}</span>
+                            </div>
+                            <div>
+                                <small style="display:block; font-size:9px; color:var(--text-muted);">1º Termo Aditivo</small>
+                                <span style="font-family:'JetBrains Mono', monospace; font-weight:700; font-size:12px; color:var(--ms-amber);">${formatarBRL(total1Aditivo)}</span>
+                            </div>
+                            <div>
+                                <small style="display:block; font-size:9px; color:var(--text-muted);">2º Termo Aditivo</small>
+                                <span style="font-family:'JetBrains Mono', monospace; font-weight:700; font-size:12px; color:var(--ms-red);">${formatarBRL(total2Aditivo)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // --- PAINEL 2: EXTRATO EXECUTIVO DE FLUXO DE CAIXA ---
+                tabelaOSHTML += `
+                    <div style="margin-top: 10px; padding: 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+                        <div style="border-right: 1px solid #f1f5f9; padding-right: 10px;">
+                            <small style="display:block; font-size:9px; color:var(--text-muted); font-weight:700; text-transform:uppercase;">🟢 Total Pago</small>
+                            <span style="font-family:'JetBrains Mono', monospace; font-weight:700; font-size:13px; color:#16a34a;">${formatarBRL(totalPago)}</span>
+                        </div>
+                        <div style="border-right: 1px solid #f1f5f9; padding-right: 10px;">
+                            <small style="display:block; font-size:9px; color:var(--text-muted); font-weight:700; text-transform:uppercase;">🟡 Total a Pagar</small>
+                            <span style="font-family:'JetBrains Mono', monospace; font-weight:700; font-size:13px; color:#d97706;">${formatarBRL(totalAPagar)}</span>
+                        </div>
+                        <div>
+                            <small style="display:block; font-size:9px; color:var(--text-muted); font-weight:700; text-transform:uppercase;">🔵 Saldo Restante</small>
+                            <span style="font-family:'JetBrains Mono', monospace; font-weight:700; font-size:13px; color:#0284c7;">${formatarBRL(saldoContratual)}</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                tabelaOSHTML = `<span style="font-size: 13px; color: var(--text-muted); padding: 8px; display:block;">Nenhuma OS detectada ou formatação incorreta na base.</span>`;
+            }
+
+            return `
+                <div class="ted-card" id="card_${idContrato}">
+                    <div class="ted-trigger" onclick="toggleElemento('content_${idContrato}', this)">
+                        <div class="ted-trigger-left">
+                            <h3 class="ted-title">📄 ${tituloContrato}</h3>
+                            <span class="ted-subtitle" style="color: var(--ms-blue); font-family: 'JetBrains Mono', monospace; font-weight:700;">ÁREA RESPONSÁVEL: ${areaTecnica}</span>
+                        </div>
+                        <div class="ted-trigger-right">
+                            <div class="ted-quick-val">
+                                <small>Valor Global</small>
+                                <span style="color: var(--ms-blue-dark); font-size:15px; font-weight:700;">${formatarBRL(vGlobal)}</span>
+                            </div>
+                            <span class="ted-arrow">▼</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ted-content" id="content_${idContrato}">
+                        <div class="ted-content-inner">
+                            <div class="ted-grid">
+                                <div class="ted-field highlight full-width">
+                                    <small>🗓️ Fim da Vigência Contratual</small>
+                                    <span style="font-size:15px; font-weight:700;">${vigencia}</span>
+                                </div>
+                                <div class="ted-field">
+                                    <small>Aditivos de Prazo</small>
+                                    <span>${aditPrazo}</span>
+                                </div>
+                                <div class="ted-field">
+                                    <small>Aditivos de Valor</small>
+                                    <span>${aditValor}</span>
+                                </div>
+                                <div class="ted-field full-width">
+                                    <small>Cronograma / Observações</small>
+                                    <span>${cronograma}</span>
+                                </div>
+                                
+                                <div class="ted-field full-width" style="background: #f8fafc; border: 1px solid #e2e8f0; margin-top: 5px;">
+                                    <small style="color: var(--ms-blue); margin-bottom: 8px;">📋 Detalhamento de Ordens de Serviço (OS)</small>
+                                    ${tabelaOSHTML}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // INTEGRAÇÃO TOTAL DA GESTÃO DE TEDs (SOMA DE TETO + ADITIVO DE VALOR)
+        function gerarCardTEDHTML(idTED, tituloOriginal, valorTotal, statusTexto) {
+            const partes = statusTexto.split('|');
+            
+            const instituicao   = partes[0] ? partes[0].trim() : '---';
+            const areaTecnica   = partes[1] ? partes[1].trim() : '---';
+            const vigencia      = partes[2] ? partes[2].trim() : '---';
+            const aditPrazo     = partes[3] ? partes[3].trim() : '---';
+            const aditValorRaw  = partes[4] ? partes[4].trim() : ''; 
+            const cronogramaRaw = partes[7] ? partes[7].trim() : '---';
+
+            // Realiza o cálculo integrado da soma do Aditivo de Valor
+            let vOriginal = parseFloat(valorTotal) || 0;
+            let vAditivo = 0;
+
+            if (aditValorRaw && aditValorRaw !== '---' && aditValorRaw.toLowerCase() !== 'sem aditivos') {
+                let limpo = aditValorRaw.replace(/[R$\s.]/g, '').replace(',', '.');
+                vAditivo = parseFloat(limpo) || 0;
+            }
+
+            let valorTotalProjeto = vOriginal + vAditivo;
+
+            let tituloExibivel = tituloOriginal;
+            const tUpper = tituloOriginal.toUpperCase();
+            if (tUpper.includes("UFG")) {
+                tituloExibivel = tUpper.includes("2022") ? "TED 11/2022 - UFG" : "TED 04/2026 - UFG";
+            } else if (tUpper.includes("FIOCRUZ") && tUpper.includes("DF")) {
+                tituloExibivel = "TED 39/2023 - FIOCRUZ/DF";
+            } else if (tUpper.includes("UFMG")) {
+                tituloExibivel = "TED 34/2023 - UFMG";
+            } else if (tUpper.includes("FIOCRUZ") && (tUpper.includes("RJ") || tUpper.includes("MANGUINHOS") || tUpper.includes("BIO"))) {
+                tituloExibivel = tUpper.includes("2025") ? "TED 41/2025 - FIOCRUZ/RJ" : "TED 27/2023 - FIOCRUZ/RJ";
+            }
+
+            let ncsHTML = '';
+            let totalNCsEmitidas = 0;
+
+            if (partes.length > 8 && partes[8].trim() !== '') {
+                const todasAsNCs = partes.slice(8).join('|').split(';');
+                todasAsNCs.forEach(ncTexto => {
+                    if (ncTexto.trim() === '' || !ncTexto.includes('|')) return;
+                    const dadosNC = ncTexto.split('|');
+                    const numNC = dadosNC[0] ? dadosNC[0].trim() : 'NC';
+                    const valNC = dadosNC[1] ? parseFloat(dadosNC[1].trim()) : 0;
+
+                    if(!isNaN(valNC)) {
+                        totalNCsEmitidas += valNC;
+                        ncsHTML += `<div class="nc-row"><span class="nc-num">📄 ${numNC}</span><span class="nc-val">${formatarBRL(valNC)}</span></div>`;
+                    }
+                });
+            }
+            
+            let vSaldoRestante = valorTotalProjeto - totalNCsEmitidas;
+
+            let cronogramaHTML = "";
+            if (cronogramaRaw.includes(":")) {
+                cronogramaHTML = `<table class="cron-table"><thead><tr><th>Ano Planejado</th><th style="text-align: right;">Valor Previsto</th></tr></thead><tbody>`;
+                const anosDeRepasse = cronogramaRaw.split(";");
+                anosDeRepasse.forEach(linha => {
+                    if(!linha.includes(":")) return;
+                    const subPartes = linha.split(":");
+                    const sampleAno = subPartes[0].trim();
+                    const vAnoRaw = parseFloat(subPartes[1].replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+                    cronogramaHTML += `<tr><td style="font-weight: 600; color: var(--text-main);">${sampleAno}</td><td style="text-align: right; font-weight: 700; color: var(--ms-blue-dark); font-family: 'JetBrains Mono', monospace;">${formatarBRL(vAnoRaw)}</td></tr>`;
+                });
+                cronogramaHTML += `</tbody></table>`;
+            } else {
+                cronogramaHTML = `<span>${cronogramaRaw}</span>`;
+            }
+
+            return `
+                <div class="ted-card" id="card_${idTED}">
+                    <div class="ted-trigger" onclick="toggleElemento('content_${idTED}', this)">
+                        <div class="ted-trigger-left">
+                            <h3 class="ted-title">🤝 ${tituloExibivel}</h3>
+                            <span class="ted-subtitle">${instituicao} | ${areaTecnica}</span>
+                        </div>
+                        <div class="ted-trigger-right">
+                            <div class="ted-quick-val">
+                                <small>Saldo Real</small>
+                                <span>${formatarBRL(vSaldoRestante)}</span>
+                            </div>
+                            <span class="ted-arrow">▼</span>
+                        </div>
+                    </div>
+                    
+                    <div class="ted-content" id="content_${idTED}">
+                        <div class="ted-content-inner">
+                            <div class="ted-grid">
+                                <div class="ted-field">
+                                    <small>Instituição</small>
+                                    <span>${instituicao}</span>
+                                </div>
+                                <div class="ted-field">
+                                    <small>Área Técnica</small>
+                                    <span>${areaTecnica}</span>
+                                </div>
+                                <div class="ted-field highlight">
+                                    <small>Valor Total do Projeto (Teto Atualizado)</small>
+                                    <span class="mono-val">${formatarBRL(valorTotalProjeto)}</span>
+                                </div>
+                                <div class="ted-field success">
+                                    <small>Saldo a Empenhar / Descentralizar (Real)</small>
+                                    <span class="mono-val">${formatarBRL(vSaldoRestante)}</span>
+                                </div>
+                                <div class="ted-field">
+                                    <small>Fim da Vigência</small>
+                                    <span>${vigencia}</span>
+                                </div>
+                                <div class="ted-field">
+                                    <small>Aditivo de Prazo</small>
+                                    <span>${aditPrazo}</span>
+                                </div>
+                                <div class="ted-field">
+                                    <small>Aditivo de Valor Cadastrado</small>
+                                    <span style="color: var(--ms-amber); font-weight:700;">${aditValorRaw !== '' ? aditValorRaw : 'Sem Aditivos'}</span>
+                                </div>
+                                <div class="ted-field full-width" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                                    <small style="color: var(--ms-blue); margin-bottom: 8px;">📊 Cronograma de Desembolso Anual (Projeção)</small>
+                                    ${cronogramaHTML}
+                                </div>
+                                
+                                ${ncsHTML !== '' ? `
+                                    <div class="nc-box">
+                                        <div class="nc-title">Notas de Crédito Emitidas (Abatidas no Saldo Real)</div>
+                                        ${ncsHTML}
+                                        <div class="nc-row" style="border-top:1px solid #cbd5e1; margin-top:5px; padding-top:5px; font-weight:bold;">
+                                            <span>TOTAL EMITIDO</span>
+                                            <span style="color:var(--ms-red)">${formatarBRL(totalNCsEmitidas)}</span>
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // FALLBACK RECONSTITUÍDO: GERADOR DE CONTAINER DE OS INDIVIDUAL ANTIGA
+        function gerarCardOSHTML(osNome, seiNumero, statusNome, valorReferencia) {
+            let classeStatus = 'execucao';
+            const statusNormalizado = statusNome ? statusNome.toLowerCase() : '';
+            if(statusNormalizado.includes('aguardando')) classeStatus = 'aguardando';
+            if(statusNormalizado.includes('pago')) classeStatus = 'pago';
+
+            let valorExibivel = isNaN(valorReferencia) ? `<span class="val" style="color:var(--text-muted); font-size:12px;">${valorReferencia}</span>` : `<span class="val positivo">${formatarBRL(Math.abs(valorReferencia))}</span>`;
+
+            return `
+                <div class="os-card" style="margin-top:8px;">
+                    <div class="label-box">
+                        <span>📌 ${osNome || 'OS'}</span>
+                        <span class="sei-text">SEI: ${seiNumero || '---'}</span>
+                    </div>
+                    <div class="value-box">
+                        ${valorExibivel}
+                        <span class="status-pill ${classeStatus}" style="margin-top:6px;">${statusNome || '---'}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // CONTROLADOR RETRAÍVEL UNIFICADO
+        function toggleElemento(contentId, triggerEl) {
+            const content = document.getElementById(contentId);
+            const arrow = triggerEl.querySelector('.ted-arrow');
+            
+            if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+                content.style.maxHeight = '0px';
+                arrow.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                arrow.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        function gerarLinhaHTML(titulo, valor, textoStatus) {
+            const isHold = titulo.toLowerCase().includes('hold') || titulo.toLowerCase().includes('suspenso');
+            const estiloLinha = isHold ? 'style="opacity: 0.5;"' : '';
+            const subtitulo = textoStatus || (isHold ? 'Em Suspenso' : 'Movimentação');
+            const tagHold = isHold ? '<br><span class="status-pill hold">HOLD</span>' : '';
+            
+            let valorExibivel = isNaN(valor) ? `<span class="val" style="color:var(--text-muted); font-size:12px;">${valor}</span>` : `<span class="val ${valor < 0 ? 'negativo' : 'positivo'}">${valor < 0 ? '-' : ''} ${formatarBRL(Math.abs(valor))}</span>`;
+
+            return `<div class="data-row" ${estiloLinha}><div class="label-box"><span>${titulo}</span><small>${subtitulo}</small></div><div class="value-box">${valorExibivel}${tagHold}</div></div>`;
+        }
+
+        function formatarValor(elemento, valor) {
+            if (isNaN(valor) || typeof valor === 'string' && (valor.includes("/") || valor.toLowerCase() === 'ativo')) {
+                elemento.innerText = valor; return;
+            }
+            const valorNumerico = parseFloat(valor);
+            elemento.innerText = formatarBRL(valorNumerico);
+            elemento.style.color = valorNumerico < 0 ? 'var(--ms-red)' : 'inherit';
+        }
+
+        // MOTOR DE NAVEGAÇÃO INTERNA DO PAINEL
         function showSection(id, title) {
+            let currentActive = null;
+            if (document.getElementById('mainMenu').style.display !== 'none') currentActive = { id: 'mainMenu', title: 'PAINEL DEMAS', isMenu: true };
+            else {
+                const activeSection = document.querySelector('.content-section.active-section');
+                if (activeSection) currentActive = { id: activeSection.id, title: document.getElementById('mainTitle').innerText, isMenu: false };
+            }
+            if (currentActive) navigationHistory.push(currentActive);
             document.getElementById('mainMenu').style.display = 'none';
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
             document.getElementById(id).classList.add('active-section');
             document.getElementById('btnBack').style.display = 'block';
             document.getElementById('mainTitle').innerText = title;
-            window.scrollTo(0,0);
         }
 
         function goBack() {
-            // Se estivermos em uma subseção (TED ou Contrato), volta para a tela de Instrumentos
-            const currentTitle = document.getElementById('mainTitle').innerText;
-            
-            if (currentTitle === 'GESTÃO DE TEDs' || currentTitle === 'CONTRATOS ADM') {
-                showSection('instrumentos', 'INSTRUMENTOS');
-            } else {
-                // Caso contrário, volta para o menu principal
+            if (navigationHistory.length === 0) {
                 document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
                 document.getElementById('mainMenu').style.display = 'grid';
                 document.getElementById('btnBack').style.display = 'none';
-                document.getElementById('mainTitle').innerText = 'PAINEL DEMAS';
+                document.getElementById('mainTitle').innerText = 'PAINEL DEMAS'; return;
             }
+            let previousScreen = navigationHistory.pop();
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
+            if (previousScreen.isMenu) {
+                document.getElementById('mainMenu').style.display = 'grid';
+                document.getElementById('btnBack').style.display = 'none';
+            } else {
+                document.getElementById(previousScreen.id).classList.add('active-section');
+                document.getElementById('btnBack').style.display = 'block';
+            }
+            document.getElementById('mainTitle').innerText = previousScreen.title;
         }
+
+        window.onload = sincronizarPainel;
     </script>
 </body>
 </html>
