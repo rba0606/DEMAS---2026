@@ -1,0 +1,17 @@
+{
+  "short_name": "DEMAS 2026",
+  "name": "Painel de Contratos - DEMAS 2026",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/1086/1086741.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#ffffff",
+  "theme-color": "#0284c7",
+  "display": "standalone",
+  "orientation": "portrait"
+}
