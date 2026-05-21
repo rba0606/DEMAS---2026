@@ -186,6 +186,12 @@
     </style>
 </head>
 <body>
+    <div id="bloco-instalacao" style="display: none; padding: 12px; background: #eff6ff; border-bottom: 1px solid #bfdbfe; text-align: center;">
+            <span style="font-size: 13px; color: #1e40af; font-weight: 600; margin-right: 10px;">📊 Acesse mais rápido pelo celular!</span>
+            <button id="btn-instalar-app" style="background: var(--ms-blue, #0284c7); color: white; border: none; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                Instalar Aplicativo
+            </button>
+        </div>
 
     <div class="container">
         <header class="header">
@@ -889,6 +895,43 @@
         }
 
         window.onload = sincronizarPainel;
+        // --- MOTOR DO BOTÃO DE INSTALAÇÃO NATIVA ---
+        let gatilhoInstalacao;
+        const blocoInstalar = document.getElementById('bloco-instalacao');
+        const btnInstalar = document.getElementById('btn-instalar-app');
+
+        // O navegador avisa o código se o celular é compatível com a instalação
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Impede o navegador de mostrar a barra padrão dele
+            e.preventDefault();
+            // Salva o evento para ser disparado pelo nosso botão
+            gatilhoInstalacao = e;
+            // Mostra o nosso bloco de instalação no topo da tela
+            blocoInstalar.style.display = 'block';
+        });
+
+        // Ação de clique no nosso botão personalizado
+        btnInstalar.addEventListener('click', async () => {
+            if (!gatilhoInstalacao) return;
+            
+            // Mostra a caixinha nativa do celular perguntando "Deseja instalar?"
+            gatilhoInstalacao.prompt();
+            
+            // Aguarda a resposta do usuário
+            const { outcome } = await gatilhoInstalacao.userChoice;
+            
+            // Se ele aceitou, esconde o botão porque o app já foi instalado
+            if (outcome === 'accepted') {
+                blocoInstalar.style.display = 'none';
+                gatilhoInstalacao = null;
+            }
+        });
+
+        // Se o app já estiver instalado e o usuário abrir por ele, esconde o botão
+        window.addEventListener('appinstalled', () => {
+            blocoInstalar.style.display = 'none';
+            gatilhoInstalacao = null;
+        });
     </script>
 </body>
 </html>
