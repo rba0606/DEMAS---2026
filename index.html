@@ -141,6 +141,7 @@
         .ted-field small { display: block; font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 2px; }
         .ted-field span { display: block; font-size: 13px; color: var(--text-main); font-weight: 600; }
         .ted-field .mono-val { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+        .ted-field Tri-field { background: #f8fafc; }
         .ted-field.highlight { background: #e0f2fe; border-color: #bae6fd; }
         .ted-field.highlight span { color: var(--ms-blue); }
         .ted-field.success { background: #ecfdf5; border-color: #a7f3d0; }
@@ -172,23 +173,71 @@
         .negativo { color: var(--ms-red); }
         .positivo { color: var(--ms-green); }
         .row-alert { background: #fff7ed; margin: 10px -15px; padding: 15px; border-left: 4px solid var(--ms-amber); color: var(--ms-amber); font-size: 12px; font-weight: 700; }
-        
-        /* BADGES */
-        .status-pill { font-size: 9px; padding: 3px 8px; border-radius: 6px; font-weight: 800; text-transform: uppercase; display: inline-block; text-align: center; }
-        .status-pill.execucao { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
-        .status-pill.aguardando { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
-        .status-pill.pago { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-        .status-pill.hold { background: #fee2e2; color: #ef4444; font-size: 10px; padding: 2px 8px; border-radius: 12px; font-weight: bold; border: 1px solid #fecaca; }
 
         .unified-footer { background: var(--ms-blue-dark); color: white; padding: 30px 20px; text-align: center; }
         .unified-footer span { font-size: 12px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
         .unified-footer strong { display: block; font-size: 1.9rem; color: #4ade80; margin-top: 5px; }
 
         .footer-info { text-align: center; padding: 40px 10px; font-size: 11px; color: var(--text-muted); }
+        
+        /* ESTILOS DO FORMULÁRIO DE CADASTRO */
+        #cadastro_overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-body); z-index: 9999; overflow-y: auto; padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        .form-card {
+            background: white; border-radius: var(--radius-lg); padding: 25px;
+            max-width: 600px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 5px; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 12px;
+            font-size: 14px; font-family: 'Inter', sans-serif; transition: border-color 0.2s;
+        }
+        .form-group input:focus { border-color: var(--ms-blue); outline: none; }
+        
+        .secao-dinamica { 
+            display: none; background: #f8fafc; padding: 15px; border-radius: 16px; 
+            border-left: 4px solid var(--ms-blue); margin-top: 15px;
+        }
+        .btn-salvar-web {
+            background: var(--ms-green); color: white; border: none; width: 100%;
+            padding: 16px; border-radius: 12px; font-weight: 800; font-size: 16px;
+            cursor: pointer; margin-top: 20px; box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+        }
+        .btn-cancelar {
+            background: transparent; color: var(--ms-red); border: none; width: 100%;
+            padding: 10px; font-weight: 600; cursor: pointer; margin-top: 10px;
+        }
+        
+        /* CLASSES AUXILIARES DE STATUS PILLS NAS TABELAS DE OS */
+        .status-pill { display: inline-block; padding: 4px 10px; border-radius: 50px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .status-pill.pago { background: #d1fae5; color: #065f46; }
+        .status-pill.execucao { background: #dbeafe; color: #1e40af; }
+        .status-pill.aguardando { background: #fef3c7; color: #92400e; }
     </style>
 </head>
 <body>
-    <div id="bloco-instalacao" style="display: none; padding: 12px; background: #eff6ff; border-bottom: 1px solid #bfdbfe; text-align: center;">
+        <div class="card-categoria" style="border-left: 4px solid var(--ms-green); background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); margin-bottom: 20px; cursor: pointer; border-radius: 12px; padding: 15px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" onclick="verificarSenhaAcessoCadastro()">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="background: rgba(16, 185, 129, 0.1); width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--ms-green); font-size: 20px;">
+                        🔑
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; font-size: 16px; color: #ffffff; font-family: 'Inter', sans-serif; font-weight: 700;">Área do Gestor</h3>
+                        <p style="margin: 0; font-size: 12px; color: #94a3b8;">Inserir novas demandas e atualizar saldos</p>
+                    </div>
+                </div>
+                <div style="color: var(--ms-green); font-weight: bold; font-size: 14px;">
+                    Acessar App &rarr;
+                </div>
+            </div>
+        </div>
+        
+        <div id="bloco-instalacao" style="display: none; padding: 12px; background: #eff6ff; border-bottom: 1px solid #bfdbfe; text-align: center;">
             <span style="font-size: 13px; color: #1e40af; font-weight: 600; margin-right: 10px;">📊 Acesse mais rápido pelo celular!</span>
             <button id="btn-instalar-app" style="background: var(--ms-blue, #0284c7); color: white; border: none; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                 Instalar Aplicativo
@@ -257,16 +306,6 @@
                         <div class="value-box"><span class="val" id="proj_8753_saldo" style="color: #475569;">...</span></div>
                     </div>
                     <div id="container_proj_8753"></div>
-                    <div class="data-row" style="background: #f8fafc; border-top: 1px solid #cbd5e1; border-bottom: 1px solid #cbd5e1; margin: 10px 0; padding: 8px 0;">
-                        <div class="label-box"><span style="color: #64748b; font-weight: bold;">Saldo após Movimentações</span><small>Subtotal</small></div>
-                        <div class="value-box"><span class="val" id="proj_8753_subtotal" style="color: #64748b;">...</span></div>
-                    </div>
-                    <div class="row-alert" style="margin: 8px 0;">⚠ BLOQUEIO SEIDIGI: AGUARDANDO CRÉDITO ADICIONAL</div>
-                    <div class="data-row" style="background: #ecfdf5; border-left: 4px solid var(--ms-green); padding: 10px; margin-bottom: 12px;">
-                        <div class="label-box"><span style="color: #065f46; font-weight: bold;">Remanejamento Previsto</span><small>Aporte de Crédito</small></div>
-                        <div class="value-box"><span class="val positivo" id="proj_8753_reman">...</span></div>
-                    </div>
-                    <div id="container_holds_8753"></div>
                     <div class="data-row" style="background: #f8fafc; border-top: 2px solid var(--ms-blue); padding: 10px 0; margin-top: 10px;">
                         <div class="label-box"><span style="color:var(--ms-blue); font-weight: bold;">SALDO FINAL PROJETADO 8753</span></div>
                         <div class="value-box"><span class="val" id="proj_8753_final">...</span></div>
@@ -345,9 +384,124 @@
             Gestão Estratégica Financeira
         </div>
     </div>
+    
+    <div id="cadastro_overlay">
+        <div class="form-card">
+            <h2 style="color: var(--ms-blue-dark); font-weight: 900; margin-bottom: 5px;">NOVO REGISTRO</h2>
+            <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 20px;">Preencha os dados para atualizar o saldo orçamentário.</p>
+
+            <div class="form-group">
+                <label>Categoria Orçamentária</label>
+                <select id="web_categoria" onchange="alternarCamposFormularioWeb(this.value)">
+                    <option value="PROJ_20YN">PROJ_20YN (Projetos Comuns)</option>
+                    <option value="EXEC_8753">EXEC_8753 (Execução Direta)</option>
+                    <option value="INST_CONTRATO">INST_CONTRATO (Instrumento Contrato)</option>
+                    <option value="INST_TED">INST_TED (Termo de Execução Descentralizada)</option>
+                    <option value="EXEC_20YN">EXEC_20YN (Execução 20YN)</option>
+                    <option value="PROJ_8753">PROJ_8753 (Projetos 8753)</option>
+                    <option value="PLOA_8753">PLOA_8753 (PLOA 8753)</option>
+                    <option value="PLOA_20YN">PLOA_20YN (PLOA 20YN)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Título / Objeto</label>
+                <input type="text" id="web_titulo" placeholder="Ex: Aquisição de equipamentos">
+            </div>
+
+            <div class="form-group">
+                <label>Valor Total (R$)</label>
+                <input type="text" id="web_valor" placeholder="R$ 0,00" oninput="aplicarMascaraMoeda(this)">
+            </div>
+
+            <div id="web_secao_contrato" class="secao-dinamica">
+                <div class="form-group">
+                    <label>Área Técnica Responsável</label>
+                    <input type="text" id="web_area_contrato" placeholder="Ex: CGTI/SE">
+                </div>
+                <div class="form-group">
+                    <label>Data de Vigência Final</label>
+                    <input type="date" id="web_vigencia_contrato">
+                </div>
+
+                <div style="margin: 10px 0; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px dashed rgba(255,255,255,0.1);">
+                    <label style="display:block; font-size:11px; color:#38bdf8; font-weight:bold; margin-bottom:8px;">ADITIVOS DE VALOR DO CONTRATO</label>
+                    
+                    <div id="container_multi_aditivos">
+                        <div class="form-group" style="margin-bottom: 8px;">
+                            <input type="text" class="classe-aditivo-valor" placeholder="R$ 0,00" oninput="interceptarMascaraDinheiroReal(this); calcularValorGlobalContratoWeb()" style="width:100%;">
+                        </div>
+                    </div>
+                    
+                    <button type="button" onclick="adicionarNovaLinhaAditivoContratoWeb()" style="background:rgba(56,189,248,0.1); color:#38bdf8; border:1px solid rgba(56,189,248,0.3); padding:6px 12px; border-radius:6px; font-size:12px; cursor:pointer; width:100%; font-weight:bold; margin-top:5px;">
+                        ➕ Adicionar Novo Valor de Aditivo
+                    </button>
+                    
+                    <div class="form-group" style="margin-top: 12px;">
+                        <label>Aditivo de Prazo / Observações</label>
+                        <input type="text" id="web_adit_prazo_contrato" placeholder="Ex: Prorrogado por 12 meses">
+                    </div>
+                </div>
+
+                <div class="form-group" style="background:rgba(16,185,129,0.05); padding:10px; border-radius:8px; border:1px solid rgba(16,185,129,0.2);">
+                    <label style="color:#10b981; font-weight:bold;">Valor Global Calculado (Contrato + Aditivos)</label>
+                    <input type="text" id="web_valor_global_calculado_tela" value="R$ 0,00" readonly style="background:transparent; border:none; color:#10b981; font-size:16px; font-weight:800; padding:4px 0; pointer-events:none;">
+                </div>
+
+                <div class="form-group">
+                    <label>Cronograma de Execução</label>
+                    <input type="text" id="web_cronograma_contrato" placeholder="Ex: Parcelado em 4x bimestrais">
+                </div>
+
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.15);">
+                    <p style="margin: 0 0 10px 0; font-size: 11px; font-weight: bold; color: var(--ms-green); text-transform: uppercase; letter-spacing: 0.05em;">Vincular Ordem de Serviço (Opcional)</p>
+                    <div class="form-group">
+                        <label>Identificação da OS</label>
+                        <input type="text" id="web_os_nome" placeholder="Ex: OS 01/2026">
+                    </div>
+                    <div class="form-group">
+                        <label>Processo SEI da OS</label>
+                        <input type="text" id="web_os_sei" placeholder="Ex: 00000.000000/2026-00">
+                    </div>
+                    <div class="form-group">
+                        <label>Valor Inicial Ocupado por esta OS</label>
+                        <input type="text" id="web_os_valor" placeholder="R$ 0,00" oninput="interceptarMascaraDinheiroReal(this)">
+                    </div>
+                </div>
+            </div>
+
+            <div id="web_secao_ted" class="secao-dinamica">
+                <div class="form-group">
+                    <label>Instituição Beneficiária</label>
+                    <input type="text" id="web_inst_ted" placeholder="Ex: FIOCRUZ">
+                </div>
+                <div class="form-group">
+                    <label>Área Gestora</label>
+                    <input type="text" id="web_area_ted" placeholder="Ex: DEMAS/MS">
+                </div>
+                <div class="form-group">
+                    <label>Vigência Fim</label>
+                    <input type="date" id="web_vigencia_ted">
+                </div>
+                
+                <div class="form-group">
+                    <label>Cronograma de Desembolso Anual</label>
+                    <input type="text" id="web_cronograma_ted" placeholder="Ex: 2026: R$ 500.000; 2027: R$ 500.000">
+                </div>
+
+                <div class="form-group">
+                    <label>NC Inicial</label>
+                    <input type="text" id="web_nc_ted" placeholder="Ex: 2026NC00123">
+                </div>
+            </div>
+
+            <button class="btn-salvar-web" onclick="enviarCadastroWeb()">SALVAR REGISTRO</button>
+            <button class="btn-cancelar" onclick="fecharCadastroWeb()">CANCELAR</button>
+        </div>
+    </div>
 
     <script>
-        const URL_API = "https://script.google.com/macros/s/AKfycbwboDwFK6V8k7bFPHVmstsjnOhBIuNfXWDZsZGz5fBRMvqQprKXrxiYDYyW2hFeUhRM/exec";
+        const URL_API = "https://script.google.com/macros/s/AKfycbxyGDdrz4PrbIpVLlUind1OkJ-zesSoo8TvPE5-ISzKNF-Zh-MEd7sn49EKzTFeBK50fg/exec";
         let navigationHistory = [];
         const formatarBRL = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
@@ -360,7 +514,6 @@
                     exec8753: document.getElementById('container_8753'),
                     exec20yn: document.getElementById('container_20yn'),
                     proj8753: document.getElementById('container_proj_8753'),
-                    hold8753: document.getElementById('container_holds_8753'),
                     proj20yn: document.getElementById('container_proj_20yn'),
                     ploa8753: document.getElementById('container_ploa_8753'),
                     ploa20yn: document.getElementById('container_ploa_20yn'),
@@ -369,7 +522,6 @@
                 };
 
                 Object.values(containers).forEach(c => { if(c) c.innerHTML = ''; });
-                let acumularHolds8753 = '';
 
                 Object.keys(dados).forEach(id => {
                     const item = dados[id];
@@ -402,13 +554,7 @@
                         const htmlLinhaComum = gerarLinhaHTML(item.titulo, item.valor, item.status);
                         if (item.categoria === 'EXEC_8753') containers.exec8753.innerHTML += htmlLinhaComum;
                         else if (item.categoria === 'EXEC_20YN') containers.exec20yn.innerHTML += htmlLinhaComum;
-                        else if (item.categoria === 'PROJ_8753') {
-                            if (item.titulo.toLowerCase().includes('hold') || item.titulo.toLowerCase().includes('suspenso')) {
-                                acumularHolds8753 += htmlLinhaComum;
-                            } else {
-                                containers.proj8753.innerHTML += htmlLinhaComum;
-                            }
-                        }
+                        else if (item.categoria === 'PROJ_8753') containers.proj8753.innerHTML += htmlLinhaComum;
                         else if (item.categoria === 'PROJ_20YN') containers.proj20yn.innerHTML += htmlLinhaComum;
                         else if (item.categoria === 'PLOA_8753') containers.ploa8753.innerHTML += htmlLinhaComum;
                         else if (item.categoria === 'PLOA_20YN') containers.ploa20yn.innerHTML += htmlLinhaComum;
@@ -419,16 +565,12 @@
                     }
                 });
 
-                if(containers.hold8753) containers.hold8753.innerHTML = acumularHolds8753;
-
             } catch (e) { console.error("Erro geral na carga do painel:", e); }
         }
 
-        // RECALIBRAÇÃO FINAL E SUPORTE A SÍMBOLOS ESPECIAIS EM CONTRATOS ADM
         function gerarCardContratoHTML(idContrato, tituloContrato, valorGlobal, statusTexto) {
             const partes = statusTexto.split('|');
             
-            // Mapeamento padrão estável
             const areaTecnica    = partes[1] ? partes[1].trim() : '---';
             const vigencia       = partes[2] ? partes[2].trim() : '---';
             const aditPrazo      = partes[3] ? partes[3].trim() : '---';
@@ -437,31 +579,26 @@
 
             let vGlobal = parseFloat(valorGlobal) || 0;
 
-            // --- VARIÁVEIS ACUMULADORAS FINANCEIRAS GERAIS ---
             let tabelaOSHTML = "";
             let totalPago = 0;
             let totalAPagar = 0;
 
-            // --- VARIÁVEIS EXCLUSIVAS PARA SEPARAÇÃO DOS ADITIVOS ---
             let totalContratoInicial = 0;
             let total1Aditivo = 0;
             let total2Aditivo = 0;
 
             if (partes.length > 8 && partes[8].trim() !== '') {
-                // CSS Adaptativo embutido direto no componente
                 tabelaOSHTML = `
                     <style>
-                        /* Estilo padrão para computador */
                         .responsive-table { width: 100%; border-collapse: collapse; font-size: 13px; }
                         .responsive-table th { background: #f1f3f5; text-align: left; padding: 10px 8px; color: var(--text-muted); font-size: 11px; text-transform: uppercase; }
                         .responsive-table td { padding: 10px 8px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
                         
-                        /* MÁGICA PARA O CELULAR (Telas de até 600px) */
                         @media screen and (max-width: 600px) {
                             .responsive-table, .responsive-table thead, .responsive-table tbody, .responsive-table th, .responsive-table td, .responsive-table tr { 
                                 display: block; 
                             }
-                            .responsive-table thead { display: none; } /* Esconde o cabeçalho no celular */
+                            .responsive-table thead { display: none; }
                             
                             .responsive-table tr {
                                 background: #ffffff;
@@ -479,7 +616,6 @@
                                 align-items: center;
                                 font-size: 12px;
                             }
-                            /* Cria etiquetas automáticas para cada informação no celular */
                             .responsive-table td:nth-of-type(1) { font-weight: bold; font-size: 13px; color: var(--text-main); border-bottom: 1px dashed #f1f5f9; padding-bottom: 6px; margin-bottom: 4px; }
                             .responsive-table td:nth-of-type(2)::before { content: "SEI:"; font-weight: 700; color: var(--text-muted); }
                             .responsive-table td:nth-of-type(3)::before { content: "Valor:"; font-weight: 700; color: var(--text-muted); }
@@ -505,19 +641,16 @@
                 
                 todasAsOSs.forEach(osTexto => {
                     if (osTexto.trim() === '' || !osTexto.includes('|')) return;
-                    const dadosOS = osTexto.split('|');
                     
-                    const osNome  = dadosOS[0] ? dadosOS[0].trim() : 'OS';
-                    const osSei   = dadosOS[1] ? dadosOS[1].trim() : '---';
-                    const osValRaw = dadosOS[2] ? dadosOS[2].trim() : '0';
-                    const osStat  = dadosOS[3] ? dadosOS[3].trim() : '---';
+                    // CORREÇÃO: Remove espaços remanescentes das barras de agrupamento do back-end
+                    const dadosOS = osTexto.split('|').map(d => d.trim());
+                    
+                    const osNome  = dadosOS[0] || 'OS';
+                    const osSei   = dadosOS[1] || '---';
+                    const osValRaw = dadosOS[2] || '0';
+                    const osStat  = dadosOS[3] || '---';
 
-                    let valorLimpo = osValRaw.replace(/[R$\s]/g, '');
-                    if (valorLimpo.includes(',') && valorLimpo.includes('.')) {
-                        valorLimpo = valorLimpo.replace(/\./g, '').replace(',', '.');
-                    } else if (valorLimpo.includes(',')) {
-                        valorLimpo = valorLimpo.replace(',', '.');
-                    }
+                    let valorLimpo = osValRaw.replace(/[R$\s.]/g, '').replace(',', '.');
                     const osValor = parseFloat(valorLimpo) || 0;
 
                     const statusLower = osStat.toLowerCase();
@@ -528,6 +661,7 @@
                     }
 
                     const nomeLower = osNome.toLowerCase();
+                    let pesoAditivo = 0;
                     if (nomeLower.includes('1º') || nomeLower.includes('1o') || nomeLower.includes('1_')) {
                         total1Aditivo += osValor;
                         pesoAditivo = 1;
@@ -564,7 +698,7 @@
 
                     tabelaOSHTML += `
                         <tr>
-                            <td>📌 ${os.nome}</td>
+                            <td>` + (os.pesoAditivo > 0 ? '➕' : '📌') + ` ${os.nome}</td>
                             <td style="font-family: 'JetBrains Mono', monospace; color: var(--ms-blue); font-size: 12px; font-weight:600;">${os.sei}</td>
                             <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight:700; color: #334155;">${formatarBRL(os.valor)}</td>
                             <td style="text-align: right;"><span class="status-pill ${classeBadge}">${os.status}</span></td>
@@ -576,7 +710,6 @@
                 
                 let saldoContratual = vGlobal - totalPago;
 
-                // --- PAINEL 1: DISTRIBUIÇÃO DAS ORIGENS ---
                 tabelaOSHTML += `
                     <div style="margin-top: 15px; padding: 12px; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px;">
                         <small style="display:block; font-size:9px; color:var(--ms-blue); font-weight:800; text-transform:uppercase; margin-bottom:8px; letter-spacing:0.5px;">📋 Distribuição do Gasto por Origem (Valor de OS Emitida)</small>
@@ -597,7 +730,6 @@
                     </div>
                 `;
 
-                // --- PAINEL 2: EXTRATO EXECUTIVO DE FLUXO DE CAIXA ---
                 tabelaOSHTML += `
                     <div style="margin-top: 10px; padding: 12px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;">
                         <div style="padding-bottom: 5px;">
@@ -665,7 +797,6 @@
             `;
         }
 
-        // INTEGRAÇÃO TOTAL DA GESTÃO DE TEDs (SOMA DE TETO + ADITIVO DE VALOR)
         function gerarCardTEDHTML(idTED, tituloOriginal, valorTotal, statusTexto) {
             const partes = statusTexto.split('|');
             
@@ -676,10 +807,10 @@
             const aditValorRaw  = partes[4] ? partes[4].trim() : ''; 
             const cronogramaRaw = partes[7] ? partes[7].trim() : '---';
 
-            // Realiza o cálculo integrado da soma do Aditivo de Valor
             let vOriginal = parseFloat(valorTotal) || 0;
             let vAditivo = 0;
 
+            // CORREÇÃO: Tratamento de strings e remoção de caracteres monetários para evitar NaN
             if (aditValorRaw && aditValorRaw !== '---' && aditValorRaw.toLowerCase() !== 'sem aditivos') {
                 let limpo = aditValorRaw.replace(/[R$\s.]/g, '').replace(',', '.');
                 vAditivo = parseFloat(limpo) || 0;
@@ -804,7 +935,6 @@
             `;
         }
 
-        // FALLBACK RECONSTITUÍDO: GERADOR DE CONTAINER DE OS INDIVIDUAL ANTIGA
         function gerarCardOSHTML(osNome, seiNumero, statusNome, valorReferencia) {
             let classeStatus = 'execucao';
             const statusNormalizado = statusNome ? statusNome.toLowerCase() : '';
@@ -827,7 +957,6 @@
             `;
         }
 
-        // CONTROLADOR RETRAÍVEL UNIFICADO
         function toggleElemento(contentId, triggerEl) {
             const content = document.getElementById(contentId);
             const arrow = triggerEl.querySelector('.ted-arrow');
@@ -842,14 +971,10 @@
         }
 
         function gerarLinhaHTML(titulo, valor, textoStatus) {
-            const isHold = titulo.toLowerCase().includes('hold') || titulo.toLowerCase().includes('suspenso');
-            const estiloLinha = isHold ? 'style="opacity: 0.5;"' : '';
-            const subtitulo = textoStatus || (isHold ? 'Em Suspenso' : 'Movimentação');
-            const tagHold = isHold ? '<br><span class="status-pill hold">HOLD</span>' : '';
-            
+            const subtitulo = textoStatus || 'Movimentação';
             let valorExibivel = isNaN(valor) ? `<span class="val" style="color:var(--text-muted); font-size:12px;">${valor}</span>` : `<span class="val ${valor < 0 ? 'negativo' : 'positivo'}">${valor < 0 ? '-' : ''} ${formatarBRL(Math.abs(valor))}</span>`;
 
-            return `<div class="data-row" ${estiloLinha}><div class="label-box"><span>${titulo}</span><small>${subtitulo}</small></div><div class="value-box">${valorExibivel}${tagHold}</div></div>`;
+            return `<div class="data-row"><div class="label-box"><span>${titulo}</span><small>${subtitulo}</small></div><div class="value-box">${valorExibivel}</div></div>`;
         }
 
         function formatarValor(elemento, valor) {
@@ -861,7 +986,6 @@
             elemento.style.color = valorNumerico < 0 ? 'var(--ms-red)' : 'inherit';
         }
 
-        // MOTOR DE NAVEGAÇÃO INTERNA DO PAINEL
         function showSection(id, title) {
             let currentActive = null;
             if (document.getElementById('mainMenu').style.display !== 'none') currentActive = { id: 'mainMenu', title: 'PAINEL DEMAS', isMenu: true };
@@ -897,43 +1021,247 @@
         }
 
         window.onload = sincronizarPainel;
-        // --- MOTOR DO BOTÃO DE INSTALAÇÃO NATIVA ---
+        
         let gatilhoInstalacao;
         const blocoInstalar = document.getElementById('bloco-instalacao');
         const btnInstalar = document.getElementById('btn-instalar-app');
 
-        // O navegador avisa o código se o celular é compatível com a instalação
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Impede o navegador de mostrar a barra padrão dele
             e.preventDefault();
-            // Salva o evento para ser disparado pelo nosso botão
             gatilhoInstalacao = e;
-            // Mostra o nosso bloco de instalação no topo da tela
             blocoInstalar.style.display = 'block';
         });
 
-        // Ação de clique no nosso botão personalizado
         btnInstalar.addEventListener('click', async () => {
             if (!gatilhoInstalacao) return;
-            
-            // Mostra a caixinha nativa do celular perguntando "Deseja instalar?"
             gatilhoInstalacao.prompt();
-            
-            // Aguarda a resposta do usuário
             const { outcome } = await gatilhoInstalacao.userChoice;
-            
-            // Se ele aceitou, esconde o botão porque o app já foi instalado
             if (outcome === 'accepted') {
                 blocoInstalar.style.display = 'none';
                 gatilhoInstalacao = null;
             }
         });
 
-        // Se o app já estiver instalado e o usuário abrir por ele, esconde o botão
         window.addEventListener('appinstalled', () => {
             blocoInstalar.style.display = 'none';
             gatilhoInstalacao = null;
         });
+    
+        function verificarSenhaAcessoCadastro() {
+            const senha = prompt("🔐 Senha de Administrador:");
+            if (senha === "demas2026") {
+                document.getElementById('cadastro_overlay').style.display = 'block';
+                alternarCamposFormularioWeb(document.getElementById('web_categoria').value);
+            } else if (senha !== null) {
+                alert("❌ Senha incorreta!");
+            }
+        }
+
+        function fecharCadastroWeb() {
+            document.getElementById('cadastro_overlay').style.display = 'none';
+        }
+
+        // CORREÇÃO: Função dinâmica adaptada e blindada para expandir abas perfeitamente
+        function alternarCamposFormularioWeb(categoria) {
+            if (!categoria) return;
+            const catLimpa = categoria.trim().toUpperCase();
+
+            document.getElementById('web_secao_contrato').style.display = 'none';
+            document.getElementById('web_secao_ted').style.display = 'none';
+
+            if (catLimpa === 'INST_CONTRATO') {
+                document.getElementById('web_secao_contrato').style.display = 'block';
+            } else if (catLimpa === 'INST_TED') {
+                document.getElementById('web_secao_ted').style.display = 'block';
+            }
+        }
+
+        function aplicarMascaraMoeda(i) {
+            // 1. Captura se o campo tem o sinal de menos ANTES de limpar com o regex
+            let eNegativo = i.value.includes('-');
+            
+            // 2. Remove tudo o que não for número (guarda o valor limpo)
+            let v = i.value.replace(/\D/g, '');
+            
+            // Se o campo for esvaziado pelo utilizador, limpa e sai da função
+            if (v === "") { i.value = ""; return; }
+            
+            // 3. Faz o cálculo das casas decimais normalmente
+            v = (v / 100).toFixed(2) + '';
+            v = v.replace(".", ",");
+            v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+            
+            // 4. Monta o ecrã: se for negativo e diferente de zero, adiciona o sinal de menos
+            if (v !== "0,00") {
+                i.value = (eNegativo ? "- R$ " : "R$ ") + v;
+            } else {
+                i.value = "R$ 0,00";
+            }
+        }
+
+        function aplicarMascaraSei(i) {
+            let v = i.value.replace(/\D/g, "");
+            if (v.length > 17) v = v.substring(0, 17);
+            
+            if (v.length === 17) {
+                i.value = v.replace(/(\d{5})(\d{6})(\d{4})(\d{2})/, "$1.$2/$3-$4");
+            } else {
+                i.value = v;
+            }
+        }
+
+        function formatarDataWebParaPlanilha(dataString) {
+            if (!dataString) return "";
+            const partes = dataString.split("-");
+            if (partes.length !== 3) return "";
+            return `${partes[2]}/${partes[1]}/${partes[0]}`; // AAAA-MM-DD para DD/MM/AAAA
+        }
+
+        function enviarCadastroWeb() {
+            const cat = document.getElementById('web_categoria').value;
+            const tit = document.getElementById('web_titulo').value.trim();
+            const val = document.getElementById('web_valor').value.trim(); // Representa o Valor Inicial
+
+            if(!tit || !val) { alert("⚠️ Preencha Objeto e Valor!"); return; }
+
+            // Formatação de data auxiliar
+            const formatarData = (idField) => {
+                const valData = document.getElementById(idField).value;
+                if(!valData) return "";
+                const p = valData.split("-");
+                return `${p[2]}/${p[1]}/${p[0]}`;
+            };
+
+            // =========================================================================
+            // 1. REGRA DE TRATAMENTO SEGURO DA ORDEM DE SERVIÇO (CONTRATOS CALIBRADO)
+            // =========================================================================
+            const osNomeDigitado = document.getElementById('web_os_nome') ? document.getElementById('web_os_nome').value.trim() : "";
+            const osSeiDigitado  = document.getElementById('web_os_sei')  ? document.getElementById('web_os_sei').value.trim() : "";
+            const osValorInput   = document.getElementById('web_os_valor') ? document.getElementById('web_os_valor').value.trim() : "";
+
+            // Captura os Aditivos do Contrato diretamente da tela (se existirem)
+            const aditPrazoContratoInput = document.getElementById('web_adit_prazo_contrato') ? document.getElementById('web_adit_prazo_contrato').value.trim() : "---";
+            const aditValorContratoInput = document.getElementById('web_adit_valor_contrato') ? document.getElementById('web_adit_valor_contrato').value.trim() : "R$ 0,00";
+
+            // Segurança: A OS inicia zerada para não canibalizar o Contrato Mestre por engano
+            let osValorFinal = "R$ 0,00"; 
+
+            if (cat === "INST_CONTRATO") {
+                if (osValorInput !== "" && osValorInput !== "R$ 0,00") {
+                    // Se o usuário preencheu o campo de valor da OS na tela, usa ele diretamente
+                    osValorFinal = osValorInput;
+                } else if (osNomeDigitado !== "") {
+                    // Se deu nome à OS mas deixou o valor vazio, o sistema obriga a declaração separada via Prompt
+                    let valorOsInformado = prompt(`💵 Contrato Inicial: ${val}\n\nInforme o valor INDIVIDUAL associado apenas à Ordem de Serviço [ ${osNomeDigitado} ]:\n(Se deixar vazio, ela será computada como R$ 0,00)`);
+                    if (valorOsInformado !== null && valorOsInformado.trim() !== "") {
+                        osValorFinal = valorOsInformado.trim();
+                    }
+                }
+            }
+
+            // =========================================================================
+            // 2. REGRA DE CAPTURA DO TED E NOTA DE CRÉDITO INDIVIDUALIZADA (MANTIDA OK)
+            // =========================================================================
+            const ncDigitada = document.getElementById('web_nc_ted').value.trim();
+            const campoCronogramaTed = document.getElementById('web_cronograma_ted');
+            const cronogramaTedValor = (campoCronogramaTed && campoCronogramaTed.value.trim() !== "") ? campoCronogramaTed.value.trim() : "Sim";
+
+            let ncFinal = "---";
+            if (cat === "INST_TED" && ncDigitada !== "") {
+                let valorNcInformado = prompt(`💵 Informe o valor associado à Nota de Crédito [ ${ncDigitada} ]:\n(Se deixar vazio ou cancelar, será usado o valor integral do TED)`);
+                let valorNcFinalNum;
+                if (valorNcInformado === null || valorNcInformado.trim() === "") {
+                    valorNcFinalNum = parseFloat(val.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+                } else {
+                    valorNcFinalNum = parseFloat(valorNcInformado.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+                }
+                ncFinal = `${ncDigitada} | ${valorNcFinalNum}`;
+            } else if (ncDigitada !== "") {
+                ncFinal = ncDigitada;
+            }
+
+            // =========================================================================
+            // 🌟 NOVO MOTOR DE INTEGRAÇÃO MESTRE: CÁLCULO REAL DO VALOR GLOBAL
+            // =========================================================================
+            let valorGlobalFinalParaEnvio = val; // Padrão inicial recebe o valor base da tela
+
+            if (cat === "INST_CONTRATO") {
+                // 1. Converter o Valor Inicial (ex: R$ 7.500.000,00) para número puro
+                let numInicial = parseFloat(val.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+                
+                // 2. Converter o Aditivo de Valor (ex: R$ 500.000,00) para número puro
+                let numAditivo = 0;
+                if (aditValorContratoInput && aditValorContratoInput !== "---" && aditValorContratoInput.toLowerCase() !== "sem aditivos") {
+                    numAditivo = parseFloat(aditValorContratoInput.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+                }
+                
+                // 3. Realizar a soma matemática real (Valor Inicial + Aditivo de Valor)
+                let somaGlobal = numInicial + numAditivo;
+                
+                // 4. Formatar o resultado de volta para string de moeda (Ex: R$ 8.000.000,00)
+                valorGlobalFinalParaEnvio = somaGlobal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            }
+
+            // =========================================================================
+            // 3. MONTAGEM DO PACOTE ESTRUTURADO PARA O BACK-END (CÓDIGO.GS)
+            // =========================================================================
+            const pacote = {
+                categoria: cat,
+                titulo: tit,
+                valorRaw: valorGlobalFinalParaEnvio, // 🌟 CORREÇÃO: Passa a enviar o Valor Mestre somado com o Aditivo
+                areaContrato: document.getElementById('web_area_contrato').value.trim(),
+                vigenciaContrato: formatarData('web_vigencia_contrato'),
+                
+                // Vincula os dados originais de Aditivos para fins de histórico e registro de colunas
+                aditPrazoContrato: aditPrazoContratoInput !== "" ? aditPrazoContratoInput : "---",
+                aditValorContrato: aditValorContratoInput !== "" ? aditValorContratoInput : "R$ 0,00",
+                
+                cronogramaContrato: document.getElementById('web_cronograma_contrato') ? document.getElementById('web_cronograma_contrato').value.trim() : "Sim",
+                os: {
+                    nome: osNomeDigitado !== "" ? osNomeDigitado : "OS 01",
+                    sei: osSeiDigitado !== "" ? osSeiDigitado : "---",
+                    valor: osValorFinal, 
+                    status: "A Pagar"
+                },
+                instituicaoTed: document.getElementById('web_inst_ted').value.trim(),
+                areaTed: document.getElementById('web_area_ted').value.trim(),
+                vigenciaTed: formatarData('web_vigencia_ted'),
+                aditPrazoTed: "---",
+                aditValorTed: "R$ 0,00",
+                cronogramaTed: cronogramaTedValor,
+                ncTed: ncFinal, 
+                statusPadrao: "Em Execução"
+            };
+
+            // =========================================================================
+            // 4. PROCESSAMENTO DO ENVIO PARA O SERVIDOR DO GOOGLE SHEETS
+            // =========================================================================
+            if (typeof google !== "undefined" && google.script && google.script.run) {
+                alert("🚀 Gravando diretamente na Planilha mãe...");
+                google.script.run.withSuccessHandler(() => {
+                    alert("✅ Registro salvo com sucesso na base DADOS!");
+                    fecharCadastroWeb();
+                    sincronizarPainel();
+                }).receberDadosInterfaceHTML(pacote);
+            } else {
+                alert("📡 Enviando dados via API para a nuvem do Google Sheets...");
+                fetch(URL_API, {
+                    method: "POST",
+                    method: "POST",
+                    mode: "no-cors", 
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(pacote)
+                })
+                .then(() => {
+                    alert("✅ Enviado com sucesso! Os saldos serão atualizados na planilha.");
+                    fecharCadastroWeb();
+                    setTimeout(sincronizarPainel, 1500); 
+                })
+                .catch(err => {
+                    alert("❌ Erro ao conectar com a API: " + err.message);
+                });
+            }
+        }
     </script>
 </body>
 </html>
