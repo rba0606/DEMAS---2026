@@ -414,6 +414,21 @@
                 <input type="text" id="web_valor" placeholder="R$ 0,00" oninput="aplicarMascaraMoeda(this)">
             </div>
 
+            <div id="web_secao_alteracao_orcamentaria" class="secao-dinamica" style="background: rgba(2,132,199,0.03); border-left: 4px solid var(--ms-amber); padding: 15px; border-radius: 16px; margin-bottom: 15px;">
+                <p style="margin: 0 0 10px 0; font-size: 11px; font-weight: bold; color: var(--ms-amber); text-transform: uppercase; letter-spacing: 0.05em;">Alterações Orçamentárias da Ação</p>
+                
+                <div class="form-group">
+                    <label>Suplementação (Recursos a Chegar) (R$)</label>
+                    <input type="text" id="web_suplementacao" placeholder="R$ 0,00" oninput="aplicarMascaraMoeda(this)">
+                </div>
+                
+                <div class="form-group">
+                    <label>Remanejamento (Entre Ações) (R$)</label>
+                    <input type="text" id="web_remanejamento" placeholder="R$ 0,00" oninput="aplicarMascaraMoeda(this)">
+                    <small style="color: var(--text-muted); font-size: 11px; display: block; margin-top: 2px;">Digite com sinal de menos (-) se o recurso estiver SAINDO desta ação.</small>
+                </div>
+            </div>
+
             <div id="web_secao_contrato" class="secao-dinamica">
                 <div class="form-group">
                     <label>Área Técnica Responsável</label>
@@ -549,9 +564,46 @@
                         }
                     }
                     
-                    // 3. MENUS DE EXECUÇÃO / PLOA
+                    // =========================================================================
+                    // 3. MENUS DE EXECUÇÃO / PLOA (ATUALIZADO COM SUPLEMENTAÇÃO E REMANEJAMENTO)
+                    // =========================================================================
                     else {
-                        const htmlLinhaComum = gerarLinhaHTML(item.titulo, item.valor, item.status);
+                        let valorFinalItem = item.valor;
+                        let statusFinalItem = item.status;
+
+                        // 🌟 PASSO 4: Se for Execução, extrai os valores da string contábil e soma tudo
+                        if ((item.categoria === 'EXEC_8753' || item.categoria === 'EXEC_20YN') && item.status && item.status.includes('Suplementação:')) {
+                            try {
+                                const partesAjuste = item.status.split('|');
+                                let supRaw = partesAjuste[1].split(':')[1].trim();
+                                let remRaw = partesAjuste[2].split(':')[1].trim();
+                                
+                                let numSup = parseFloat(supRaw.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+                                let numRem = parseFloat(remRaw.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+                                
+                                // Verifica se o usuário inseriu sinal de menos manualmente
+                                if (supRaw.includes('-')) numSup = -Math.abs(numSup);
+                                if (remRaw.includes('-')) numRem = -Math.abs(numRem);
+
+                                // Calcula a nova Dotação Atualizada (Dotação Inicial + Suplementação + Remanejamento)
+                                let dotaçãoAtualizada = (parseFloat(item.valor) || 0) + numSup + numRem;
+                                valorFinalItem = dotaçãoAtualizada;
+                                statusFinalItem = "Dotação Atualizada com Suplementação/Remanejamento";
+                            } catch(err) {
+                                console.error("Erro no processamento contábil do item:", err);
+                            }
+                        }
+
+                        // 🌟 PASSO ANTERIOR INTEGRADO: Verifica se o planejamento já possui execução cadastrada
+                        // (Usa a lógica cruzada que injetamos anteriormente através do Set "titulosDescentralizadosAtivos")
+                        let jaFoiDescentralizado = false;
+                        if (typeof titulosDescentralizadosAtivos !== "undefined" && item.titulo) {
+                            jaFoiDescentralizado = titulosDescentralizadosAtivos.has(item.titulo.toLowerCase().trim());
+                        }
+
+                        // Gera a linha passando o sinalizador do Check
+                        const htmlLinhaComum = gerarLinhaHTML(item.titulo, valorFinalItem, statusFinalItem, jaFoiDescentralizado);
+                        
                         if (item.categoria === 'EXEC_8753') containers.exec8753.innerHTML += htmlLinhaComum;
                         else if (item.categoria === 'EXEC_20YN') containers.exec20yn.innerHTML += htmlLinhaComum;
                         else if (item.categoria === 'PROJ_8753') containers.proj8753.innerHTML += htmlLinhaComum;
@@ -1061,18 +1113,23 @@
             document.getElementById('cadastro_overlay').style.display = 'none';
         }
 
-        // CORREÇÃO: Função dinâmica adaptada e blindada para expandir abas perfeitamente
+        // PASSO 2: CONTROLAR A EXIBIÇÃO DOS NOVOS CAMPOS NA TELA
         function alternarCamposFormularioWeb(categoria) {
             if (!categoria) return;
             const catLimpa = categoria.trim().toUpperCase();
 
-            document.getElementById('web_secao_contrato').style.display = 'none';
-            document.getElementById('web_secao_ted').style.display = 'none';
+            // Garante que todas as seções iniciem escondidas para não travar a tela
+            if(document.getElementById('web_secao_contrato')) document.getElementById('web_secao_contrato').style.display = 'none';
+            if(document.getElementById('web_secao_ted')) document.getElementById('web_secao_ted').style.display = 'none';
+            if(document.getElementById('web_secao_alteracao_orcamentaria')) document.getElementById('web_secao_alteracao_orcamentaria').style.display = 'none';
 
             if (catLimpa === 'INST_CONTRATO') {
-                document.getElementById('web_secao_contrato').style.display = 'block';
+                if(document.getElementById('web_secao_contrato')) document.getElementById('web_secao_contrato').style.display = 'block';
             } else if (catLimpa === 'INST_TED') {
-                document.getElementById('web_secao_ted').style.display = 'block';
+                if(document.getElementById('web_secao_ted')) document.getElementById('web_secao_ted').style.display = 'block';
+            } else if (catLimpa === 'EXEC_8753' || catLimpa === 'EXEC_20YN') {
+                // Ativa a exibição dos novos campos de Suplementação e Remanejamento
+                if(document.getElementById('web_secao_alteracao_orcamentaria')) document.getElementById('web_secao_alteracao_orcamentaria').style.display = 'block';
             }
         }
 
@@ -1119,39 +1176,39 @@
 
         function enviarCadastroWeb() {
             const cat = document.getElementById('web_categoria').value;
-            const tit = document.getElementById('web_titulo').value.trim();
-            const val = document.getElementById('web_valor').value.trim(); // Representa o Valor Inicial
+            const tit = document.getElementById('web_titulo') ? document.getElementById('web_titulo').value.trim() : "";
+            const val = document.getElementById('web_valor') ? document.getElementById('web_valor').value.trim() : "R$ 0,00";
 
-            if(!tit || !val) { alert("⚠️ Preencha Objeto e Valor!"); return; }
+            // Validação de Segurança Básica
+            if(!tit) { alert("⚠️ O campo 'Título / Objeto' é obrigatório!"); return; }
+            if(!val || val === "R$ 0,00") { 
+                // Se for ajuste orçamentário, permite passar zerado, senão barra
+                if (cat !== "EXEC_8753" && cat !== "EXEC_20YN") {
+                    alert("⚠️ O campo 'Valor Total / Inicial' precisa ser preenchido!"); 
+                    return; 
+                }
+            }
 
-            // Formatação de data auxiliar
+            // Formatação de data auxiliar protegida
             const formatarData = (idField) => {
-                const valData = document.getElementById(idField).value;
-                if(!valData) return "";
-                const p = valData.split("-");
-                return `${p[2]}/${p[1]}/${p[0]}`;
+                const elData = document.getElementById(idField);
+                if(!elData || !elData.value) return "";
+                const p = elData.value.split("-");
+                return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : "";
             };
 
             // =========================================================================
-            // 1. REGRA DE TRATAMENTO SEGURO DA ORDEM DE SERVIÇO (CONTRATOS CALIBRADO)
+            // 1. REGRA DE TRATAMENTO SEGURO DA ORDEM DE SERVIÇO (CONTRATOS)
             // =========================================================================
             const osNomeDigitado = document.getElementById('web_os_nome') ? document.getElementById('web_os_nome').value.trim() : "";
             const osSeiDigitado  = document.getElementById('web_os_sei')  ? document.getElementById('web_os_sei').value.trim() : "";
             const osValorInput   = document.getElementById('web_os_valor') ? document.getElementById('web_os_valor').value.trim() : "";
 
-            // Captura os Aditivos do Contrato diretamente da tela (se existirem)
-            const aditPrazoContratoInput = document.getElementById('web_adit_prazo_contrato') ? document.getElementById('web_adit_prazo_contrato').value.trim() : "---";
-            const aditValorContratoInput = document.getElementById('web_adit_valor_contrato') ? document.getElementById('web_adit_valor_contrato').value.trim() : "R$ 0,00";
-
-            // Segurança: A OS inicia zerada para não canibalizar o Contrato Mestre por engano
             let osValorFinal = "R$ 0,00"; 
-
             if (cat === "INST_CONTRATO") {
                 if (osValorInput !== "" && osValorInput !== "R$ 0,00") {
-                    // Se o usuário preencheu o campo de valor da OS na tela, usa ele diretamente
                     osValorFinal = osValorInput;
                 } else if (osNomeDigitado !== "") {
-                    // Se deu nome à OS mas deixou o valor vazio, o sistema obriga a declaração separada via Prompt
                     let valorOsInformado = prompt(`💵 Contrato Inicial: ${val}\n\nInforme o valor INDIVIDUAL associado apenas à Ordem de Serviço [ ${osNomeDigitado} ]:\n(Se deixar vazio, ela será computada como R$ 0,00)`);
                     if (valorOsInformado !== null && valorOsInformado.trim() !== "") {
                         osValorFinal = valorOsInformado.trim();
@@ -1160,9 +1217,9 @@
             }
 
             // =========================================================================
-            // 2. REGRA DE CAPTURA DO TED E NOTA DE CRÉDITO INDIVIDUALIZADA (MANTIDA OK)
+            // 2. REGRA DE CAPTURA DO TED E NOTA DE CRÉDITO INDIVIDUALIZADA
             // =========================================================================
-            const ncDigitada = document.getElementById('web_nc_ted').value.trim();
+            const ncDigitada = document.getElementById('web_nc_ted') ? document.getElementById('web_nc_ted').value.trim() : "";
             const campoCronogramaTed = document.getElementById('web_cronograma_ted');
             const cronogramaTedValor = (campoCronogramaTed && campoCronogramaTed.value.trim() !== "") ? campoCronogramaTed.value.trim() : "Sim";
 
@@ -1181,41 +1238,51 @@
             }
 
             // =========================================================================
-            // 🌟 NOVO MOTOR DE INTEGRAÇÃO MESTRE: CÁLCULO REAL DO VALOR GLOBAL
+            // 🌟 MOTOR MULTI-ADITIVOS E CAPTURA DE ALTERAÇÕES ORÇAMENTÁRIAS
             // =========================================================================
-            let valorGlobalFinalParaEnvio = val; // Padrão inicial recebe o valor base da tela
+            let valorGlobalFinalParaEnvio = val; 
+            let textoAditivosAcumuladosParaPlanilha = "R$ 0,00";
 
             if (cat === "INST_CONTRATO") {
-                // 1. Converter o Valor Inicial (ex: R$ 7.500.000,00) para número puro
                 let numInicial = parseFloat(val.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
-                
-                // 2. Converter o Aditivo de Valor (ex: R$ 500.000,00) para número puro
-                let numAditivo = 0;
-                if (aditValorContratoInput && aditValorContratoInput !== "---" && aditValorContratoInput.toLowerCase() !== "sem aditivos") {
-                    numAditivo = parseFloat(aditValorContratoInput.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+                let somaAditivosAcumulados = 0;
+
+                const inputsAditivos = document.getElementsByClassName('classe-aditivo-valor');
+                for (let i = 0; i < inputsAditivos.length; i++) {
+                    let textoAdit = inputsAditivos[i].value || "0";
+                    let valorAditNum = parseFloat(textoAdit.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+                    somaAditivosAcumulados += valorAditNum;
                 }
-                
-                // 3. Realizar a soma matemática real (Valor Inicial + Aditivo de Valor)
-                let somaGlobal = numInicial + numAditivo;
-                
-                // 4. Formatar o resultado de volta para string de moeda (Ex: R$ 8.000.000,00)
+
+                let somaGlobal = numInicial + somaAditivosAcumulados;
                 valorGlobalFinalParaEnvio = somaGlobal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                textoAditivosAcumuladosParaPlanilha = somaAditivosAcumulados.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             }
 
+            // Captura protegida de Suplementação e Remanejamento do Passo 3
+            const inputSup = document.getElementById('web_suplementacao');
+            const inputRem = document.getElementById('web_remanejamento');
+            const webSuplementacao = inputSup ? inputSup.value.trim() : "R$ 0,00";
+            const webRemanejamento = inputRem ? inputRem.value.trim() : "R$ 0,00";
+
+            let statusFormatadoParaEnvio = "Em Execução";
+            if (cat === "EXEC_8753" || cat === "EXEC_20YN") {
+                statusFormatadoParaEnvio = `Ajuste Orçamentário | Suplementação: ${webSuplementacao || 'R$ 0,00'} | Remanejamento: ${webRemanejamento || 'R$ 0,00'}`;
+            }
+
+            const aditPrazoContratoInput = document.getElementById('web_adit_prazo_contrato') ? document.getElementById('web_adit_prazo_contrato').value.trim() : "---";
+
             // =========================================================================
-            // 3. MONTAGEM DO PACOTE ESTRUTURADO PARA O BACK-END (CÓDIGO.GS)
+            // 3. MONTAGEM DO PACOTE DE TRANSMISSÃO
             // =========================================================================
             const pacote = {
                 categoria: cat,
                 titulo: tit,
-                valorRaw: valorGlobalFinalParaEnvio, // 🌟 CORREÇÃO: Passa a enviar o Valor Mestre somado com o Aditivo
-                areaContrato: document.getElementById('web_area_contrato').value.trim(),
+                valorRaw: valorGlobalFinalParaEnvio, 
+                areaContrato: document.getElementById('web_area_contrato') ? document.getElementById('web_area_contrato').value.trim() : "---",
                 vigenciaContrato: formatarData('web_vigencia_contrato'),
-                
-                // Vincula os dados originais de Aditivos para fins de histórico e registro de colunas
                 aditPrazoContrato: aditPrazoContratoInput !== "" ? aditPrazoContratoInput : "---",
-                aditValorContrato: aditValorContratoInput !== "" ? aditValorContratoInput : "R$ 0,00",
-                
+                aditValorContrato: textoAditivosAcumuladosParaPlanilha,
                 cronogramaContrato: document.getElementById('web_cronograma_contrato') ? document.getElementById('web_cronograma_contrato').value.trim() : "Sim",
                 os: {
                     nome: osNomeDigitado !== "" ? osNomeDigitado : "OS 01",
@@ -1223,42 +1290,41 @@
                     valor: osValorFinal, 
                     status: "A Pagar"
                 },
-                instituicaoTed: document.getElementById('web_inst_ted').value.trim(),
-                areaTed: document.getElementById('web_area_ted').value.trim(),
+                instituicaoTed: document.getElementById('web_inst_ted') ? document.getElementById('web_inst_ted').value.trim() : "---",
+                areaTed: document.getElementById('web_area_ted') ? document.getElementById('web_area_ted').value.trim() : "---",
                 vigenciaTed: formatarData('web_vigencia_ted'),
                 aditPrazoTed: "---",
                 aditValorTed: "R$ 0,00",
                 cronogramaTed: cronogramaTedValor,
                 ncTed: ncFinal, 
-                statusPadrao: "Em Execução"
+                statusPadrao: statusFormatadoParaEnvio
             };
 
             // =========================================================================
-            // 4. PROCESSAMENTO DO ENVIO PARA O SERVIDOR DO GOOGLE SHEETS
+            // 4. ENVIO PROTOCOLAR PARA O GOOGLE SHEETS
             // =========================================================================
             if (typeof google !== "undefined" && google.script && google.script.run) {
-                alert("🚀 Gravando diretamente na Planilha mãe...");
+                alert("🚀 Gravando diretamente na Planilha mestre...");
                 google.script.run.withSuccessHandler(() => {
-                    alert("✅ Registro salvo com sucesso na base DADOS!");
+                    alert("✅ Registro salvo com sucesso!");
                     fecharCadastroWeb();
                     sincronizarPainel();
                 }).receberDadosInterfaceHTML(pacote);
             } else {
-                alert("📡 Enviando dados via API para a nuvem do Google Sheets...");
+                alert("📡 Enviando via API para o Google Sheets...");
                 fetch(URL_API, {
-                    method: "POST",
                     method: "POST",
                     mode: "no-cors", 
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(pacote)
                 })
                 .then(() => {
-                    alert("✅ Enviado com sucesso! Os saldos serão atualizados na planilha.");
+                    alert("✅ Enviado com sucesso!");
                     fecharCadastroWeb();
                     setTimeout(sincronizarPainel, 1500); 
                 })
                 .catch(err => {
-                    alert("❌ Erro ao conectar com a API: " + err.message);
+                    alert("❌ Erro ao conectar: " + err.message);
                 });
             }
         }
