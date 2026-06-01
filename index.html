@@ -23,16 +23,18 @@
             --ms-green: #10b981;
             --ms-red: #ef4444;
             --ms-amber: #f59e0b;
-            --text-main: #334155;
+            --text-main: #475569;
             --text-title: #0f172a;
             --text-muted: #64748b;
-            --bg-body: #f1f5f9;
+            --bg-body: #f8fafc;
             --bg-card: #ffffff;
-            --radius-xl: 20px;
-            --radius-lg: 14px;
-            --radius-md: 8px;
-            --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04);
-            --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.03), 0 1px 2px rgba(15, 23, 42, 0.02);
+            --shadow-md: 0 10px 15px -3px rgba(15, 23, 42, 0.05), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.08);
+            --border-color: #f1f5f9;
         }
 
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
@@ -42,7 +44,7 @@
             color: var(--text-main); 
             margin: 0; 
             padding: clamp(12px, 4vw, 24px); 
-            line-height: 1.5; 
+            line-height: 1.6; 
         }
 
         .container { max-width: 1200px; margin: 0 auto; }
@@ -51,21 +53,22 @@
         .header { 
             background: linear-gradient(135deg, var(--brand-dark) 0%, #1e293b 100%); 
             color: white; 
-            padding: 40px 20px; 
+            padding: 48px 24px; 
             border-radius: var(--radius-xl); 
             margin-bottom: 24px; 
             text-align: center; 
             position: relative;
-            box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.15);
+            box-shadow: var(--shadow-lg);
         }
 
         .btn-back {
             display: none; position: absolute; left: 16px; top: 16px;
-            background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.15); 
-            padding: 8px 16px; border-radius: var(--radius-md); cursor: pointer; font-weight: 600; font-size: 12px;
-            backdrop-filter: blur(12px); z-index: 10; transition: background 0.2s;
+            background: rgba(255, 255, 255, 0.08); color: white; border: 1px solid rgba(255, 255, 255, 0.12); 
+            padding: 10px 18px; border-radius: var(--radius-md); cursor: pointer; font-weight: 600; font-size: 12px;
+            backdrop-filter: blur(12px); z-index: 10; transition: all 0.2s;
+            letter-spacing: 0.5px;
         }
-        .btn-back:hover { background: rgba(255, 255, 255, 0.2); }
+        .btn-back:hover { background: rgba(255, 255, 255, 0.18); transform: translateY(-1px); }
 
         /* CARD GESTOR SUPERIOR */
         .card-categoria {
@@ -74,11 +77,12 @@
             margin-bottom: 24px; 
             cursor: pointer; 
             border-radius: var(--radius-xl); 
-            padding: 16px 20px; 
+            padding: 18px 24px; 
             box-shadow: var(--shadow-md);
-            transition: transform 0.2s;
+            transition: all 0.2s ease;
         }
         .card-categoria:active { transform: scale(0.99); }
+        .card-categoria:hover { box-shadow: var(--shadow-lg); }
 
         /* MENU GRID */
         .menu-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
@@ -87,16 +91,16 @@
         .menu-card { 
             background: var(--bg-card); padding: 32px 24px; border-radius: var(--radius-xl); 
             text-align: center; cursor: pointer; border: 1px solid #e2e8f0;
-            box-shadow: var(--shadow-sm); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm); transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .menu-card:active { transform: scale(0.97); }
-        .menu-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: #cbd5e1; }
-        .menu-card .icon { font-size: 2.5rem; margin-bottom: 12px; display: block; }
+        .menu-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: #cbd5e1; }
+        .menu-card .icon { font-size: 2.5rem; margin-bottom: 14px; display: block; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05)); }
         .menu-card h2 { margin: 0; font-size: 1.25rem; font-weight: 800; color: var(--text-title); letter-spacing: -0.5px; }
-        .menu-card p { margin: 8px 0 0; font-size: 0.9rem; color: var(--text-muted); }
+        .menu-card p { margin: 8px 0 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.4; }
 
         .content-section { display: none; }
-        .active-section { display: block; animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .active-section { display: block; animation: slideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
         @keyframes slideIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
         /* CARDS UNIFICADOS */
@@ -110,20 +114,13 @@
             display: flex; align-items: center; gap: 10px; font-size: 0.85rem;
         }
         
-        .action-group { padding: 20px 24px; border-bottom: 8px solid #f1f5f9; }
+        .action-group { padding: 24px; border-bottom: 8px solid #f1f5f9; }
         .action-group:last-child { border-bottom: none; }
         
         .action-tag { 
             display: inline-block; padding: 4px 14px; background: #e2e8f0; 
             color: var(--text-title); border-radius: 50px; font-size: 10px; font-weight: 800; margin-bottom: 16px; letter-spacing: 0.5px;
         }
-
-        /* DATA ROW FIXO (USADO EM TOTAIS) */
-        .data-row { 
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 0; border-bottom: 1px solid #f1f5f9;
-        }
-        .data-row:last-child { border-bottom: none; }
 
         /* DESIGN DO PAINEL DE EXECUÇÃO / PLANEJAMENTO */
         .dinamic-data-list { display: flex; flex-direction: column; gap: 10px; margin: 12px 0; }
@@ -141,20 +138,19 @@
         .exe-panel-title { font-size: 13.5px; font-weight: 700; color: var(--text-title); flex: 1; }
         .exe-panel-status { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; background: #ebd5e1; background-color: #e2e8f0; padding: 2px 8px; border-radius: 4px; }
         
-        /* CORREÇÃO: CSS da classe exe-panel-val herdava explicitamente a cor preta padrão, agora ela aceita as classes de cor injetadas */
-        .exe-panel-val { 
-            font-family: 'JetBrains Mono', monospace; 
+        .exe-panel-val, .val { 
+            font-family: 'JetBrains Mono', monospace !important; 
             font-size: 13.5px; 
             font-weight: 700; 
             text-align: right; 
             white-space: nowrap !important; 
             flex-shrink: 0 !important; 
+            display: inline-block;
         }
 
         .exe-panel-card.dotacao-card { background: #ffffff; border-left: 4px solid var(--text-title); }
         .exe-panel-card.saldo-card { background: #f0f9ff; border: 1px solid #bae6fd; border-left: 4px solid var(--brand-primary); }
 
-        /* CLASSES DE ESPECIFICAÇÃO CROMÁTICA FINANCEIRA */
         .negativo { color: var(--ms-red) !important; }
         .positivo { color: var(--ms-green) !important; }
 
@@ -189,12 +185,29 @@
         .mini-caixa-valor small { display: block; font-size: 8px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
         .mini-caixa-valor span { display: block; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: var(--text-title); margin-top: 2px; }
         .aditivo-retratil-container { max-height: 0; overflow: hidden; transition: max-height 0.22s ease-out; background: #ffffff; }
+        
+        /* OS CONTAINER E MINI CARDS */
         .os-cards-container { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
         .os-mini-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow-sm); }
-        .os-mini-card-row { display: flex; justify-content: space-between; align-items: center; }
-        .os-card-title { font-size: 12.5px; font-weight: 700; color: var(--text-title); }
-        .os-card-sei { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--brand-primary); }
-        .os-card-val { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; font-weight: 700; color: var(--text-title); }
+        .os-mini-card-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            gap: 16px;
+            flex-wrap: nowrap !important;
+        }
+        .os-card-title { font-size: 12.5px; font-weight: 700; color: var(--text-title); flex: 1; }
+        .os-card-sei { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--brand-primary); flex: 1; text-align: left; }
+        .os-card-val { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 12.5px; 
+            font-weight: 700; 
+            color: var(--text-title); 
+            white-space: nowrap !important;
+            flex-shrink: 0 !important;
+            text-align: right;
+        }
+
         .ted-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
         @media (min-width: 480px) { .ted-grid { grid-template-columns: 1fr 1fr; } .full-width { grid-column: 1 / -1; } }
         .ted-field { background: var(--brand-light); padding: 10px 14px; border-radius: var(--radius-lg); border: 1px solid #e2e8f0; }
@@ -296,7 +309,7 @@
                     <div class="exe-panel-card saldo-card" style="margin-top: 12px;">
                         <div class="exe-panel-row">
                             <span class="exe-panel-title" style="color: var(--brand-primary);">SALDO ATUAL DISPONÍVEL 8753</span>
-                            <span class="exe-panel-val val" id="exe_8753_disponivel" style="font-size: 14.5px;">...</span>
+                            <span class="exe-panel-val val" id="exe_8753_disponivel">...</span>
                         </div>
                         <div class="exe-panel-row" style="margin-top: 4px;">
                             <span class="exe-panel-status" style="background: #e0f2fe; color: #0369a1;">Recurso Líquido</span>
@@ -322,7 +335,7 @@
                     <div class="exe-panel-card saldo-card" style="margin-top: 12px;">
                         <div class="exe-panel-row">
                             <span class="exe-panel-title" style="color: var(--brand-primary);">SALDO ATUAL DISPONÍVEL 20YN</span>
-                            <span class="exe-panel-val val" id="exe_20yn_disponivel" style="font-size: 14.5px;">...</span>
+                            <span class="exe-panel-val val" id="exe_20yn_disponivel">...</span>
                         </div>
                         <div class="exe-panel-row" style="margin-top: 4px;">
                             <span class="exe-panel-status" style="background: #e0f2fe; color: #0369a1;">Recurso Líquido</span>
@@ -351,7 +364,7 @@
                     <div class="exe-panel-card saldo-card" style="margin-top: 12px;">
                         <div class="exe-panel-row">
                             <span class="exe-panel-title" style="color: var(--brand-primary);">SALDO FINAL PROJETADO 8753</span>
-                            <span class="exe-panel-val val" id="proj_8753_final" style="font-size: 14.5px;">...</span>
+                            <span class="exe-panel-val val" id="proj_8753_final">...</span>
                         </div>
                         <div class="exe-panel-row" style="margin-top: 4px;">
                             <span class="exe-panel-status" style="background: #e0f2fe; color: #0369a1;">Estimativa Balanço</span>
@@ -377,7 +390,7 @@
                     <div class="exe-panel-card saldo-card" style="margin-top: 12px;">
                         <div class="exe-panel-row">
                             <span class="exe-panel-title" style="color: var(--brand-primary);">SALDO FINAL PROJETADO 20YN</span>
-                            <span class="exe-panel-val val" id="proj_20yn_final" style="font-size: 14.5px;">...</span>
+                            <span class="exe-panel-val val" id="proj_20yn_final">...</span>
                         </div>
                         <div class="exe-panel-row" style="margin-top: 4px;">
                             <span class="exe-panel-status" style="background: #e0f2fe; color: #0369a1;">Estimativa Balanço</span>
@@ -402,7 +415,7 @@
                     <div class="exe-panel-card saldo-card" style="margin-top: 12px;">
                         <div class="exe-panel-row">
                             <span class="exe-panel-title" style="color: var(--brand-primary);">TOTAL ESTIMADO 8753</span>
-                            <span class="exe-panel-val val" id="ploa_8753_total" style="font-size: 14.5px;">...</span>
+                            <span class="exe-panel-val val" id="ploa_8753_total">...</span>
                         </div>
                         <div class="exe-panel-row" style="margin-top: 4px;">
                             <span class="exe-panel-status" style="background: #e0f2fe; color: #0369a1;">Planejamento</span>
@@ -417,7 +430,7 @@
                     <div class="exe-panel-card saldo-card" style="margin-top: 12px;">
                         <div class="exe-panel-row">
                             <span class="exe-panel-title" style="color: var(--brand-primary);">TOTAL ESTIMADO 20YN</span>
-                            <span class="exe-panel-val val" id="ploa_20yn_total" style="font-size: 14.5px;">...</span>
+                            <span class="exe-panel-val val" id="ploa_20yn_total">...</span>
                         </div>
                         <div class="exe-panel-row" style="margin-top: 4px;">
                             <span class="exe-panel-status" style="background: #e0f2fe; color: #0369a1;">Planejamento</span>
@@ -669,7 +682,6 @@
                     }
                 });
 
-                // Varre os elementos estáticos e fixa as classes de cor com base no conteúdo textual
                 document.querySelectorAll('.val').forEach(el => {
                     if (el.innerText.includes('-')) {
                         el.classList.add('negativo');
@@ -783,7 +795,6 @@
                 `;
             };
 
-            // 🆕 MODIFICADO: Agora as datas são alimentadas dinamicamente pelas variáveis extraídas do banco
             let aditivosMontadosHTML = "";
             aditivosMontadosHTML += renderizarBlocoAditivoCard("📋 Contrato Inicial", osContratoInicial, `sub_ini_${idContrato}`, "var(--brand-primary)", "Vigência Inicial / Base");
             aditivosMontadosHTML += renderizarBlocoAditivoCard("🔸 1º Termo Aditivo", osPrimeiroAditivo, `sub_1a_${idContrato}`, "var(--ms-amber)", aditPrazo);
@@ -858,6 +869,8 @@
                 tituloExibivel = tUpper.includes("2022") ? "TED 11/2022 - UFG" : "TED 04/2026 - UFG";
             } else if (tUpper.includes("FIOCRUZ") && tUpper.includes("DF")) {
                 tituloExibivel = "TED 39/2023 - FIOCRUZ/DF";
+            } else if (tUpper.includes("UFG")) {
+                tituloExibivel = "TED 34/2023 - UFMG";
             } else if (tUpper.includes("FIOCRUZ") && (tUpper.includes("RJ") || tUpper.includes("MANGUINHOS") || tUpper.includes("BIO"))) {
                 tituloExibivel = tUpper.includes("2025") ? "TED 41/2025 - FIOCRUZ/RJ" : "TED 27/2023 - FIOCRUZ/RJ";
             }
@@ -995,7 +1008,6 @@
             }
         }
 
-        // CORREÇÃO: Força o acoplamento correto das classes cromaticas eliminando interferência de cor do card
         function generarLinhaHTML(titulo, valor, textoStatus) {
             const statusLabel = textoStatus || 'Movimentação';
             let valorClass = "positivo";
@@ -1012,7 +1024,7 @@
                 <div class="exe-panel-card">
                     <div class="exe-panel-row">
                         <span class="exe-panel-title">▪️ ${titulo}</span>
-                        <span class="exe-panel-val ${valorClass}">${stringValorExibivel}</span>
+                        <span class="exe-panel-val val ${valorClass}">${stringValorExibivel}</span>
                     </div>
                     <div class="exe-panel-row" style="margin-top: 4px;">
                         <span class="exe-panel-status">${statusLabel}</span>
@@ -1076,7 +1088,7 @@
             }
         }
 
-        /* CORREÇÃO: Fechamento correto da overlay sem quebrar a pilha do escopo */
+        /* ⚖️ CORRIGIDO: Removida a string corrompida que travava a interpretação do script */
         function fecharCadastroWeb() {
             document.getElementById('cadastro_overlay').style.display = 'none';
         }
