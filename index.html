@@ -90,7 +90,7 @@
         .main-title { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.5px; }
         .main-subtitle { font-size: 0.8rem; color: #94a3b8; margin-top: 2px; font-weight: 500; }
 
-        /* DASHBOARD SUMMARY (KPIS HUB) - CENTRALIZADO */
+        /* DASHBOARD SUMMARY (KPIS HUB) */
         .kpi-summary-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -144,7 +144,12 @@
 
         /* NAVEGAÇÃO DE CONTEXTO */
         .content-section { display: none; }
-        .active-section { display: block; animation: slideIn 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+        .content-section.active-section { 
+            display: block; 
+            animation: slideIn 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
+            height: auto !important;
+            overflow: visible !important;
+        }
         @keyframes slideIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
         /* CARDS UNIFICADOS DE DADOS */
@@ -181,7 +186,7 @@
         .negativo { color: var(--ms-red) !important; }
         .positivo { color: var(--ms-green) !important; }
 
-        /* CARDS RETRAÍVEIS PREMIUM (TED / CONTRATOS) */
+        /* CARDS RETRAÍVEIS PREMIUM */
         .ted-card {
             background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-xl);
             margin-bottom: 10px; box-shadow: var(--shadow-sm); overflow: hidden;
@@ -196,7 +201,7 @@
         .ted-quick-val small { display: block; font-size: 8px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
         .ted-quick-val span { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: var(--brand-primary); }
         
-        .ted-content { max-height: 0; overflow: hidden; transition: max-height 0.25s ease-out; background: #ffffff; }
+        .ted-content { max-height: 0; overflow: hidden; transition: max-height 0.25s ease-out; background: #ffffff; will-change: max-height; }
         .ted-content-inner { padding: 14px; border-top: 1px solid #f1f5f9; background: #fafafa; }
 
         .alert-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 8.5px; font-weight: 700; text-transform: uppercase; margin-top: 4px; }
@@ -212,11 +217,11 @@
         .mini-caixa-valor { background: var(--bg-body); padding: 4px 8px; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
         .mini-caixa-valor small { display: block; font-size: 8px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
         .mini-caixa-valor span { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; color: var(--text-title); }
-        .aditivo-retratil-container { max-height: 0; overflow: hidden; transition: max-height 0.2s ease-out; }
+        .aditivo-retratil-container { max-height: 0; overflow: hidden; transition: max-height 0.2s ease-out; will-change: max-height; }
         
         /* OS CONFIGS */
         .os-cards-container { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
-        .os-mini-card { background: var(--bg-body); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; }
+        .os-mini-card { background: var(--bg-body); border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; }
         .os-mini-card-row { display: flex; justify-content: space-between; align-items: center; }
         .os-card-title { font-size: 11px; font-weight: 700; color: var(--text-title); }
         .os-card-sei { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--brand-primary); }
@@ -232,10 +237,11 @@
         .ted-field.success { background: #ecfdf5; border-color: #a7f3d0; }
         .ted-field.success span { color: #065f46; }
         
-        .status-pill { display: inline-block; padding: 1px 5px; border-radius: 4px; font-size: 8.5px; font-weight: 700; text-transform: uppercase; }
-        .status-pill.pago { background: #d1fae5; color: #065f46; }
-        .status-pill.execucao { background: #e0f2fe; color: #0369a1; }
-        .status-pill.aguardando { background: #fef3c7; color: #92400e; }
+        /* CORRIGIDO: CORES E SINTAXE DOS BADGES DAS ORDENS DE SERVIÇO (OS) */
+        .status-pill { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; }
+        .status-pill.pago { background: #d1fae5 !important; color: #065f46 !important; }
+        .status-pill.execucao { background: #e0f2fe !important; color: #0369a1 !important; }
+        .status-pill.aguardando { background: #fef3c7 !important; color: #92400e !important; }
         
         .tabela-mobile-gaveta { width: 100%; overflow-x: auto; margin-top: 6px; border-radius: var(--radius-md); border: 1px solid #e2e8f0; }
         .cron-table { width: 100%; border-collapse: collapse; background: #ffffff; }
@@ -246,9 +252,9 @@
         .nc-title { font-size: 8.5px; color: var(--text-title); font-weight: 700; text-transform: uppercase; margin-bottom: 4px; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; }
         .nc-row { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; padding: 2px 0; }
         
-        .unified-footer { background: var(--brand-dark); color: white; padding: 16px; text-align: center; }
-        .unified-footer span { font-size: 9px; opacity: 0.7; text-transform: uppercase; font-weight: 700; }
-        .unified-footer strong { display: block; font-size: 1.35rem; color: #4ade80; margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
+        .unified-footer { background: var(--brand-dark); color: white; padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .unified-footer span { font-size: 9px; opacity: 0.7; text-transform: uppercase; font-weight: 700; text-align: center; }
+        .unified-footer strong { display: block; font-size: 1.35rem; color: #4ade80; margin-top: 2px; font-family: 'JetBrains Mono', monospace; text-align: center; }
         
         .footer-info { text-align: center; padding: 20px 10px; font-size: 10.5px; color: var(--text-muted); font-weight: 500; line-height: 1.4; }
         
@@ -295,7 +301,7 @@
                 <span class="kpi-value" id="kpi_total_contratos"><span class="shimmer">00</span></span>
             </div>
             <div class="kpi-mini-card">
-                <span class="kpi-label">TEDs Gerenciados</span>
+                <span class="kpi-label">TEDs Gerenciadas</span>
                 <span class="kpi-value" id="kpi_total_teds"><span class="shimmer">00</span></span>
             </div>
         </div>
@@ -601,16 +607,13 @@
                 const partes = dataString.split('/');
                 const dataVigencia = new Date(parseInt(partes[2]), parseInt(partes[1]) - 1, parseInt(partes[0]));
                 const hoje = new Date(2026, 5, 1); 
-                
                 const diffTime = dataVigencia - hoje;
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 
                 if (diffDays < 0) return { label: "Vencido", classe: "critico" };
                 if (diffDays <= 90) return { label: `Vence em ${diffDays} d`, classe: "atencao" };
                 return { label: "Vigência OK", classe: "regular" };
-            } catch(e) {
-                return { label: "Vigência", classe: "regular" };
-            }
+            } catch(e) { return { label: "Vigência", classe: "regular" }; }
         }
 
         async function sincronizarPainel() {
@@ -761,12 +764,25 @@
                         </div>
                         <div id="${idSub}" class="aditivo-retratil-container" onclick="event.stopPropagation();">
                             <div class="os-cards-container">
-                                ${objMeta.lista.map(os => `
+                                ${objMeta.lista.map(os => {
+                                    // TRATAMENTO DINÂMICO PARA IDENTIFICAÇÃO DAS CLASSES DE CORES DO BADGE
+                                    let classeCorStatus = "execucao";
+                                    let sLower = os.status.toLowerCase();
+                                    if(sLower.includes('pago')) classeCorStatus = "pago";
+                                    else if(sLower.includes('aguardando')) classeCorStatus = "aguardando";
+                                    
+                                    return `
                                     <div class="os-mini-card">
-                                        <div class="os-mini-card-row"><span class="os-card-title">📌 ${os.nome}</span><span class="status-pill ${os.status.toLowerCase().includes('pago') ? 'pago' : 'execucao'}">${os.status}</span></div>
-                                        <div class="os-mini-card-row" style="margin-top:2px;"><span class="os-card-sei">${os.sei}</span><span class="os-card-val">${formatarBRL(os.valor)}</span></div>
+                                        <div class="os-mini-card-row">
+                                            <span class="os-card-title">📌 ${os.nome}</span>
+                                            <span class="status-pill ${classeCorStatus}">${os.status}</span>
+                                        </div>
+                                        <div class="os-mini-card-row" style="margin-top:2px;">
+                                            <span class="os-card-sei">${os.sei}</span>
+                                            <span class="os-card-val">${formatarBRL(os.valor)}</span>
+                                        </div>
                                     </div>
-                                `).join('')}
+                                `}).join('')}
                             </div>
                         </div>
                     </div>
@@ -841,7 +857,7 @@
                 cronogramaHTML = `<div class="tabela-mobile-gaveta"><table class="cron-table"><thead><tr><th>Ano</th><th style="text-align: right;">Previsão</th></tr></thead><tbody>`;
                 cronogramaRaw.split(";").forEach(linha => {
                     if(!linha.includes(":")) return;
-                    const subPartes = inline = linha.split(":");
+                    const subPartes = linha.split(":");
                     const vAnoRaw = parseFloat(subPartes[1].replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
                     cronogramaHTML += `<tr><td style="font-weight: 600; color: var(--text-main);">${subPartes[0].trim()}</td><td style="text-align: right; font-weight: 700; color: var(--brand-dark); font-family: 'JetBrains Mono', monospace;">${formatarBRL(vAnoRaw)}</td></tr>`;
                 });
@@ -891,9 +907,32 @@
             if (content.style.maxHeight && content.style.maxHeight !== '0px') {
                 content.style.maxHeight = '0px';
                 if(arrow) arrow.style.transform = 'rotate(0deg)';
+                
+                let ancestral = content.parentElement;
+                while (ancestral) {
+                    if (ancestral.classList && (ancestral.classList.contains('ted-content') || ancestral.classList.contains('aditivo-retratil-container'))) {
+                        if (ancestral.style.maxHeight && ancestral.style.maxHeight !== 'none') {
+                            ancestral.style.maxHeight = (ancestral.scrollHeight - content.scrollHeight) + "px";
+                        }
+                    }
+                    ancestral = ancestral.parentElement;
+                }
             } else {
                 content.style.maxHeight = content.scrollHeight + "px";
                 if(arrow) arrow.style.transform = 'rotate(180deg)';
+                
+                let ancestral = content.parentElement;
+                while (ancestral) {
+                    if (ancestral.classList && (ancestral.classList.contains('ted-content') || ancestral.classList.contains('aditivo-retratil-container'))) {
+                        ancestral.style.maxHeight = (ancestral.scrollHeight + content.scrollHeight) + "px";
+                    }
+                    ancestral = ancestral.parentElement;
+                }
+                
+                setTimeout(() => {
+                    window.scrollBy({ top: 1, behavior: 'smooth' });
+                    window.scrollBy({ top: -1, behavior: 'smooth' });
+                }, 260);
             }
         }
 
@@ -929,7 +968,7 @@
             
             document.getElementById('mainMenu').style.display = 'none';
             document.getElementById('dashboardSummaryHub').style.display = 'none';
-            document.getElementById('managerAccessBlock').style.display = 'none'; // Esconde acesso na sub-tela
+            document.getElementById('managerAccessBlock').style.display = 'none'; 
             
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
             document.getElementById(id).classList.add('active-section');
@@ -954,7 +993,7 @@
             if (prev.isMenu) {
                 document.getElementById('mainMenu').style.display = 'flex';
                 document.getElementById('dashboardSummaryHub').style.display = 'grid';
-                document.getElementById('managerAccessBlock').style.display = 'block'; // Mostra novamente na home
+                document.getElementById('managerAccessBlock').style.display = 'block'; 
                 document.getElementById('btnBack').style.display = 'none';
             } else {
                 document.getElementById(prev.id).classList.add('active-section');
