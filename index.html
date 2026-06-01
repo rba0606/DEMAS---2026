@@ -125,16 +125,38 @@
         }
         .data-row:last-child { border-bottom: none; }
 
-        /* NOVO DESIGN DO PAINEL DE EXECUÇÃO / PLANEJAMENTO */
+        /* DESIGN DO PAINEL DE EXECUÇÃO / PLANEJAMENTO */
         .dinamic-data-list { display: flex; flex-direction: column; gap: 10px; margin: 12px 0; }
         .exe-panel-card {
             background: var(--brand-light); border: 1px solid #e2e8f0; border-radius: var(--radius-lg); padding: 14px 18px;
             display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow-sm);
         }
-        .exe-panel-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-        .exe-panel-title { font-size: 13.5px; font-weight: 700; color: var(--text-title); }
+        .exe-panel-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            gap: 12px; 
+            flex-wrap: nowrap !important; 
+        }
+        .exe-panel-title { font-size: 13.5px; font-weight: 700; color: var(--text-title); flex: 1; }
         .exe-panel-status { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; background: #ebd5e1; background-color: #e2e8f0; padding: 2px 8px; border-radius: 4px; }
-        .exe-panel-val { font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 700; text-align: right; }
+        
+        /* CORREÇÃO: CSS da classe exe-panel-val herdava explicitamente a cor preta padrão, agora ela aceita as classes de cor injetadas */
+        .exe-panel-val { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 13.5px; 
+            font-weight: 700; 
+            text-align: right; 
+            white-space: nowrap !important; 
+            flex-shrink: 0 !important; 
+        }
+
+        .exe-panel-card.dotacao-card { background: #ffffff; border-left: 4px solid var(--text-title); }
+        .exe-panel-card.saldo-card { background: #f0f9ff; border: 1px solid #bae6fd; border-left: 4px solid var(--brand-primary); }
+
+        /* CLASSES DE ESPECIFICAÇÃO CROMÁTICA FINANCEIRA */
+        .negativo { color: var(--ms-red) !important; }
+        .positivo { color: var(--ms-green) !important; }
 
         /* CARDS RETRAÍVEIS (TED / CONTRATOS) */
         .ted-card {
@@ -159,38 +181,22 @@
         .ted-content-inner { padding: 0 24px 24px 24px; border-top: 1px solid #f1f5f9; margin-top: 4px; padding-top: 20px; }
 
         /* MINI CARDS INTERNOS (ADITIVOS) */
-        .card-aditivo-financeiro {
-            background: var(--brand-light); border: 1px solid #e2e8f0; border-radius: var(--radius-lg);
-            padding: 16px; margin-top: 12px; margin-bottom: 4px; cursor: pointer;
-            -webkit-tap-highlight-color: transparent; box-shadow: var(--shadow-sm);
-        }
-        .aditivo-header-grid {
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px dashed #cbd5e1; padding-bottom: 8px; margin-bottom: 12px;
-        }
+        .card-aditivo-financeiro { background: var(--brand-light); border: 1px solid #e2e8f0; border-radius: var(--radius-lg); padding: 16px; margin-top: 12px; margin-bottom: 4px; cursor: pointer; -webkit-tap-highlight-color: transparent; box-shadow: var(--shadow-sm); }
+        .aditivo-header-grid { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #cbd5e1; padding-bottom: 8px; margin-bottom: 12px; }
         .aditivo-titulo-texto { font-size: 11px; font-weight: 800; color: var(--text-title); text-transform: uppercase; letter-spacing: 0.5px; }
         .aditivo-valores-mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        
         .mini-caixa-valor { background: #ffffff; padding: 8px 12px; border-radius: var(--radius-md); border: 1px solid #e2e8f0; }
         .mini-caixa-valor small { display: block; font-size: 8px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
         .mini-caixa-valor span { display: block; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: var(--text-title); margin-top: 2px; }
-
         .aditivo-retratil-container { max-height: 0; overflow: hidden; transition: max-height 0.22s ease-out; background: #ffffff; }
-
-        /* MINI CARDS EXCLUSIVOS DE OS */
         .os-cards-container { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
-        .os-mini-card {
-            background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 12px 14px;
-            display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow-sm);
-        }
+        .os-mini-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow-sm); }
         .os-mini-card-row { display: flex; justify-content: space-between; align-items: center; }
         .os-card-title { font-size: 12.5px; font-weight: 700; color: var(--text-title); }
         .os-card-sei { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--brand-primary); }
         .os-card-val { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; font-weight: 700; color: var(--text-title); }
-
         .ted-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
         @media (min-width: 480px) { .ted-grid { grid-template-columns: 1fr 1fr; } .full-width { grid-column: 1 / -1; } }
-        
         .ted-field { background: var(--brand-light); padding: 10px 14px; border-radius: var(--radius-lg); border: 1px solid #e2e8f0; }
         .ted-field small { display: block; font-size: 9px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 4px; letter-spacing: 0.5px; }
         .ted-field span { display: block; font-size: 13px; color: var(--text-title); font-weight: 600; }
@@ -199,36 +205,22 @@
         .ted-field.highlight span { color: #0369a1; }
         .ted-field.success { background: #f0fdf4; border-color: #bbf7d0; }
         .ted-field.success span { color: #166534; }
-
-        /* STATUS PILLS */
         .status-pill { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
         .status-pill.pago { background: #d1fae5; color: #065f46; }
         .status-pill.execucao { background: #e0f2fe; color: #0369a1; }
         .status-pill.aguardando { background: #fef3c7; color: #92400e; }
-
         .tabela-mobile-gaveta { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 12px; border-radius: var(--radius-md); border: 1px solid #e2e8f0; }
         .cron-table { width: 100%; border-collapse: collapse; background: #ffffff; }
         .cron-table th { padding: 10px 12px; font-size: 10px; text-transform: uppercase; color: var(--text-muted); background: var(--brand-light); border-bottom: 2px solid #e2e8f0; text-align: left; letter-spacing: 0.5px; }
         .cron-table td { padding: 12px; font-size: 12.5px; border-bottom: 1px solid #f1f5f9; color: var(--text-title); }
-
         .nc-box { grid-column: 1 / -1; margin-top: 12px; background: #fafafa; border: 1px dashed #cbd5e1; border-radius: var(--radius-lg); padding: 16px; }
         .nc-title { font-size: 10px; color: var(--text-title); font-weight: 800; text-transform: uppercase; margin: 0 0 10px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; letter-spacing: 0.5px; }
         .nc-row { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 6px 0; border-bottom: 1px solid #f1f5f9; }
         .nc-row:last-child { border-bottom: none; }
-
-        .label-box span { display: block; font-size: 13.5px; font-weight: 700; color: var(--text-title); }
-        .label-box small { font-size: 9px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
-        .value-box .val { display: block; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; }
-        
-        .negativo { color: var(--ms-red) !important; }
-        .positivo { color: var(--ms-green) !important; }
-
         .unified-footer { background: var(--brand-dark); color: white; padding: 28px 20px; text-align: center; }
         .unified-footer span { font-size: 11px; opacity: 0.7; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
         .unified-footer strong { display: block; font-size: 1.75rem; color: #4ade80; margin-top: 6px; font-family: 'JetBrains Mono', monospace; }
         .footer-info { text-align: center; padding: 40px 10px; font-size: 11px; color: var(--text-muted); font-weight: 500; }
-        
-        /* OVERLAY CADASTRO */
         #cadastro_overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-body); z-index: 9999; overflow-y: auto; padding: 16px; }
         .form-card { background: white; border-radius: var(--radius-xl); padding: 24px; max-width: 600px; margin: 0 auto; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
         .form-group { margin-bottom: 16px; }
@@ -288,26 +280,53 @@
                 <div class="card-header-main">📍 Recursos Descentralizados (Em Conta)</div>
                 <div class="action-group">
                     <div class="action-tag">AÇÃO 8753</div>
-                    <div class="data-row">
-                        <div class="label-box"><span>Dotação Inicial Total</span><small>LOA 2026</small></div>
-                        <div class="value-box"><span class="val" id="exe_8753_dotacao">...</span></div>
+                    
+                    <div class="exe-panel-card dotacao-card">
+                        <div class="exe-panel-row">
+                            <span class="exe-panel-title">Dotação Inicial Total</span>
+                            <span class="exe-panel-val val" id="exe_8753_dotacao">...</span>
+                        </div>
+                        <div class="exe-panel-row" style="margin-top: 4px;">
+                            <span class="exe-panel-status">LOA 2026</span>
+                        </div>
                     </div>
+
                     <div id="container_8753" class="dinamic-data-list"></div> 
-                    <div class="data-row" style="background: var(--brand-light); margin-top: 12px; border-radius: var(--radius-lg); border: 1px solid #e2e8f0; padding: 12px 16px;">
-                        <div class="label-box"><span style="color:var(--brand-primary)">SALDO ATUAL DISPONÍVEL 8753</span></div>
-                        <div class="value-box"><span class="val" id="exe_8753_disponivel" style="color:var(--brand-primary); font-size:15px;">...</span></div>
+                    
+                    <div class="exe-panel-card saldo-card" style="margin-top: 12px;">
+                        <div class="exe-panel-row">
+                            <span class="exe-panel-title" style="color: var(--brand-primary);">SALDO ATUAL DISPONÍVEL 8753</span>
+                            <span class="exe-panel-val val" id="exe_8753_disponivel" style="font-size: 14.5px;">...</span>
+                        </div>
+                        <div class="exe-panel-row" style="margin-top: 4px;">
+                            <span class="exe-panel-status" style="background: #e0f2fe; color: #0369a1;">Recurso Líquido</span>
+                        </div>
                     </div>
                 </div>
+
                 <div class="action-group">
                     <div class="action-tag" style="background: var(--brand-dark); color: white;">AÇÃO 20YN</div>
-                    <div class="data-row">
-                        <div class="label-box"><span>Dotação Inicial Total</span><small>LOA 2026</small></div>
-                        <div class="value-box"><span class="val" id="exe_20yn_dotacao">...</span></div>
+                    
+                    <div class="exe-panel-card dotacao-card">
+                        <div class="exe-panel-row">
+                            <span class="exe-panel-title">Dotação Inicial Total</span>
+                            <span class="exe-panel-val val" id="exe_20yn_dotacao">...</span>
+                        </div>
+                        <div class="exe-panel-row" style="margin-top: 4px;">
+                            <span class="exe-panel-status">LOA 2026</span>
+                        </div>
                     </div>
+
                     <div id="container_20yn" class="dinamic-data-list"></div> 
-                    <div class="data-row" style="background: var(--brand-light); margin-top: 12px; border-radius: var(--radius-lg); border: 1px solid #e2e8f0; padding: 12px 16px;">
-                        <div class="label-box"><span style="color:var(--brand-primary)">SALDO ATUAL DISPONÍVEL 20YN</span></div>
-                        <div class="value-box"><span class="val" id="exe_20yn_disponivel" style="color:var(--brand-primary); font-size:15px;">...</span></div>
+                    
+                    <div class="exe-panel-card saldo-card" style="margin-top: 12px;">
+                        <div class="exe-panel-row">
+                            <span class="exe-panel-title" style="color: var(--brand-primary);">SALDO ATUAL DISPONÍVEL 20YN</span>
+                            <span class="exe-panel-val val" id="exe_20yn_disponivel" style="font-size: 14.5px;">...</span>
+                        </div>
+                        <div class="exe-panel-row" style="margin-top: 4px;">
+                            <span class="exe-panel-status" style="background: #e0f2fe; color: #0369a1;">Recurso Líquido</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -316,31 +335,59 @@
                 <div class="card-header-main">📉 Planejamento de Saídas (Projeção)</div>
                 <div class="action-group">
                     <div class="action-tag">AÇÃO 8753</div>
-                    <div class="data-row" style="background: #f1f5f9; padding: 12px 16px; border-radius: var(--radius-lg); border: 1px solid #e2e8f0; margin-bottom: 12px;">
-                        <div class="label-box"><span style="color: #475569;">Saldo Atual Base</span><small>Recurso em Conta</small></div>
-                        <div class="value-box"><span class="val" id="proj_8753_saldo" style="color: #475569;">...</span></div>
+                    
+                    <div class="exe-panel-card dotacao-card" style="margin-bottom: 12px;">
+                        <div class="exe-panel-row">
+                            <span class="exe-panel-title" style="color: #475569;">Saldo Atual Base</span>
+                            <span class="exe-panel-val val" id="proj_8753_saldo" style="color: #475569;">...</span>
+                        </div>
+                        <div class="exe-panel-row" style="margin-top: 4px;">
+                            <span class="exe-panel-status">Recurso em Conta</span>
+                        </div>
                     </div>
+
                     <div id="container_proj_8753" class="dinamic-data-list"></div>
-                    <div class="data-row" style="background: var(--brand-light); border-top: 2px solid var(--brand-primary); padding: 14px 0; margin-top: 12px;">
-                        <div class="label-box"><span style="color:var(--brand-primary); font-weight: 800;">SALDO FINAL PROJETADO 8753</span></div>
-                        <div class="value-box"><span class="val" id="proj_8753_final" style="font-size:15px; color:var(--brand-primary);">...</span></div>
+                    
+                    <div class="exe-panel-card saldo-card" style="margin-top: 12px;">
+                        <div class="exe-panel-row">
+                            <span class="exe-panel-title" style="color: var(--brand-primary);">SALDO FINAL PROJETADO 8753</span>
+                            <span class="exe-panel-val val" id="proj_8753_final" style="font-size: 14.5px;">...</span>
+                        </div>
+                        <div class="exe-panel-row" style="margin-top: 4px;">
+                            <span class="exe-panel-status" style="background: #e0f2fe; color: #0369a1;">Estimativa Balanço</span>
+                        </div>
                     </div>
                 </div>
+
                 <div class="action-group">
                     <div class="action-tag" style="background: var(--brand-dark); color: white;">AÇÃO 20YN</div>
-                    <div class="data-row" style="background: #f1f5f9; padding: 12px 16px; border-radius: var(--radius-lg); border: 1px solid #e2e8f0; margin-bottom: 12px;">
-                        <div class="label-box"><span style="color: #475569;">Saldo Atual Base</span><small>Recurso em Conta</small></div>
-                        <div class="value-box"><span class="val" id="proj_20yn_saldo" style="color: #475569;">...</span></div>
+                    
+                    <div class="exe-panel-card dotacao-card" style="margin-bottom: 12px;">
+                        <div class="exe-panel-row">
+                            <span class="exe-panel-title" style="color: #475569;">Saldo Atual Base</span>
+                            <span class="exe-panel-val val" id="proj_20yn_saldo" style="color: #475569;">...</span>
+                        </div>
+                        <div class="exe-panel-row" style="margin-top: 4px;">
+                            <span class="exe-panel-status">Recurso em Conta</span>
+                        </div>
                     </div>
+
                     <div id="container_proj_20yn" class="dinamic-data-list"></div>
-                    <div class="data-row" style="background: var(--brand-light); border-top: 2px solid var(--brand-primary); padding: 14px 0; margin-top: 12px;">
-                        <div class="label-box"><span style="color:var(--brand-primary); font-weight: 800;">SALDO FINAL PROJETADO 20YN</span></div>
-                        <div class="value-box"><span class="val" id="proj_20yn_final" style="font-size:15px; color:var(--brand-primary);">...</span></div>
+                    
+                    <div class="exe-panel-card saldo-card" style="margin-top: 12px;">
+                        <div class="exe-panel-row">
+                            <span class="exe-panel-title" style="color: var(--brand-primary);">SALDO FINAL PROJETADO 20YN</span>
+                            <span class="exe-panel-val val" id="proj_20yn_final" style="font-size: 14.5px;">...</span>
+                        </div>
+                        <div class="exe-panel-row" style="margin-top: 4px;">
+                            <span class="exe-panel-status" style="background: #e0f2fe; color: #0369a1;">Estimativa Balanço</span>
+                        </div>
                     </div>
                 </div>
+
                 <div class="unified-footer">
                     <span>SALDO FINAL PROJETADO 2026 GERAL</span>
-                    <strong id="proj_final_geral">...</strong>
+                    <strong id="proj_final_geral" class="val">...</strong>
                 </div>
             </div>
         </section>
@@ -351,22 +398,36 @@
                 <div class="action-group">
                     <div class="action-tag">AÇÃO 8753 - PLOA 2027</div>
                     <div id="container_ploa_8753" class="dinamic-data-list"></div> 
-                    <div class="data-row" style="background:var(--brand-light); border: 1px solid #e2e8f0; padding: 12px 16px; border-radius: var(--radius-lg);">
-                        <div class="label-box"><span style="font-weight: 800;">TOTAL ESTIMADO 8753</span></div>
-                        <div class="value-box"><span class="val" id="ploa_8753_total" style="font-size:14px; color:var(--text-title);">...</span></div>
+                    
+                    <div class="exe-panel-card saldo-card" style="margin-top: 12px;">
+                        <div class="exe-panel-row">
+                            <span class="exe-panel-title" style="color: var(--brand-primary);">TOTAL ESTIMADO 8753</span>
+                            <span class="exe-panel-val val" id="ploa_8753_total" style="font-size: 14.5px;">...</span>
+                        </div>
+                        <div class="exe-panel-row" style="margin-top: 4px;">
+                            <span class="exe-panel-status" style="background: #e0f2fe; color: #0369a1;">Planejamento</span>
+                        </div>
                     </div>
                 </div>
+
                 <div class="action-group">
                     <div class="action-tag" style="background: var(--brand-dark); color: white;">AÇÃO 20YN - PLOA 2027</div>
                     <div id="container_ploa_20yn" class="dinamic-data-list"></div> 
-                    <div class="data-row" style="background:var(--brand-light); border: 1px solid #e2e8f0; padding: 12px 16px; border-radius: var(--radius-lg);">
-                        <div class="label-box"><span style="font-weight: 800;">TOTAL ESTIMADO 20YN</span></div>
-                        <div class="value-box"><span class="val" id="ploa_20yn_total" style="font-size:14px; color:var(--text-title);">...</span></div>
+                    
+                    <div class="exe-panel-card saldo-card" style="margin-top: 12px;">
+                        <div class="exe-panel-row">
+                            <span class="exe-panel-title" style="color: var(--brand-primary);">TOTAL ESTIMADO 20YN</span>
+                            <span class="exe-panel-val val" id="ploa_20yn_total" style="font-size: 14.5px;">...</span>
+                        </div>
+                        <div class="exe-panel-row" style="margin-top: 4px;">
+                            <span class="exe-panel-status" style="background: #e0f2fe; color: #0369a1;">Planejamento</span>
+                        </div>
                     </div>
                 </div>
+
                 <div class="unified-footer" style="background: #064e3b;">
                     <span>Teto Geral Projetado PLOA 2027</span>
-                    <strong id="ploa_teto_geral">...</strong>
+                    <strong id="ploa_teto_geral" class="val">...</strong>
                 </div>
             </div>
         </section>
@@ -608,6 +669,17 @@
                     }
                 });
 
+                // Varre os elementos estáticos e fixa as classes de cor com base no conteúdo textual
+                document.querySelectorAll('.val').forEach(el => {
+                    if (el.innerText.includes('-')) {
+                        el.classList.add('negativo');
+                        el.classList.remove('positivo');
+                    } else if (el.innerText !== "..." && el.innerText !== "R$ 0,00") {
+                        el.classList.add('positivo');
+                        el.classList.remove('negativo');
+                    }
+                });
+
             } catch (e) { console.error("Erro geral na carga do painel:", e); }
         }
 
@@ -682,18 +754,15 @@
                             <span class="aditivo-titulo-texto">${tituloInterno}</span>
                             <span class="ted-arrow" style="font-size:10px;">▼</span>
                         </div>
-                        
                         <div style="margin-bottom:8px; background:#ffffff; padding:6px 10px; border-radius:6px; font-size:11px; color:var(--text-muted); border: 1px solid #e2e8f0;">
                             <strong>Prazo/Situação:</strong> ${prazoEspecifico}
                         </div>
-
                         <div class="aditivo-valores-mini-grid">
                             <div class="mini-caixa-valor"><small>Total</small><span>${formatarBRL(metaObjeto.total)}</span></div>
                             <div class="mini-caixa-valor"><small style="color:#16a34a;">Pago</small><span style="color:#16a34a;">${formatarBRL(metaObjeto.pago)}</span></div>
                             <div class="mini-caixa-valor"><small style="color:#d97706;">A Pagar</small><span style="color:#d97706;">${formatarBRL(metaObjeto.apagar)}</span></div>
                             <div class="mini-caixa-valor"><small style="color:#0284c7;">Saldo</small><span style="color:#0284c7;">${formatarBRL(saldoFase)}</span></div>
                         </div>
-                        
                         <div id="${idSubBloco}" class="aditivo-retratil-container" onclick="event.stopPropagation();">
                             <div class="os-cards-container">
                                 ${metaObjeto.lista.map(os => `
@@ -714,10 +783,11 @@
                 `;
             };
 
+            // 🆕 MODIFICADO: Agora as datas são alimentadas dinamicamente pelas variáveis extraídas do banco
             let aditivosMontadosHTML = "";
-            aditivosMontadosHTML += renderizarBlocoAditivoCard("📋 Contrato Inicial", osContratoInicial, `sub_ini_${idContrato}`, "var(--brand-primary)", "Original de Contrato");
+            aditivosMontadosHTML += renderizarBlocoAditivoCard("📋 Contrato Inicial", osContratoInicial, `sub_ini_${idContrato}`, "var(--brand-primary)", "Vigência Inicial / Base");
             aditivosMontadosHTML += renderizarBlocoAditivoCard("🔸 1º Termo Aditivo", osPrimeiroAditivo, `sub_1a_${idContrato}`, "var(--ms-amber)", aditPrazo);
-            aditivosMontadosHTML += renderizarBlocoAditivoCard("🔺 2º Termo Aditivo", osSegundoAditivo, `sub_2a_${idContrato}`, "var(--ms-red)", "Fase de Aditivo Vigente");
+            aditivosMontadosHTML += renderizarBlocoAditivoCard("🔺 2º Termo Aditivo", osSegundoAditivo, `sub_2a_${idContrato}`, "var(--ms-red)", `Vigência Atualizada: ${vigencia}`);
 
             let saldoGeralRestante = somaRealValorGlobalInstrumento - totalPago;
 
@@ -736,7 +806,6 @@
                             <span class="ted-arrow">▼</span>
                         </div>
                     </div>
-                    
                     <div class="ted-content" id="content_${idContrato}">
                         <div class="ted-content-inner" style="padding: 16px; background:#fafafa;">
                             <div class="ted-grid" style="margin-bottom:10px;">
@@ -746,7 +815,6 @@
                                 <div class="ted-field success"><small>💡 Saldo Restante Global</small><span class="mono-val" style="color:#0284c7;">${formatarBRL(saldoGeralRestante)}</span></div>
                                 <div class="ted-field full-width"><small>Histórico Contratual / Aditivos de Valor</small><span style="font-size:12px; font-weight:600; color:var(--text-muted);">${aditValor}</span></div>
                             </div>
-
                             ${aditivosMontadosHTML !== "" ? `
                                 <div style="margin-top:14px; margin-bottom:4px; padding:2px 4px;">
                                     <small style="font-weight:800; color:var(--text-muted); text-transform:uppercase; font-size:9px; letter-spacing:0.5px;">📑 Estrutura de Aditivos & OS Relacionadas</small>
@@ -790,8 +858,6 @@
                 tituloExibivel = tUpper.includes("2022") ? "TED 11/2022 - UFG" : "TED 04/2026 - UFG";
             } else if (tUpper.includes("FIOCRUZ") && tUpper.includes("DF")) {
                 tituloExibivel = "TED 39/2023 - FIOCRUZ/DF";
-            } else if (tUpper.includes("UFMG")) {
-                tituloExibivel = "TED 34/2023 - UFMG";
             } else if (tUpper.includes("FIOCRUZ") && (tUpper.includes("RJ") || tUpper.includes("MANGUINHOS") || tUpper.includes("BIO"))) {
                 tituloExibivel = tUpper.includes("2025") ? "TED 41/2025 - FIOCRUZ/RJ" : "TED 27/2023 - FIOCRUZ/RJ";
             }
@@ -847,7 +913,6 @@
                             <span class="ted-arrow">▼</span>
                         </div>
                     </div>
-                    
                     <div class="ted-content" id="content_${idTED}">
                         <div class="ted-content-inner">
                             <div class="ted-grid">
@@ -883,7 +948,6 @@
                                     <small style="color: var(--brand-primary); margin-bottom: 8px;">📊 Cronograma de Desembolso Anual (Projeção)</small>
                                     ${cronogramaHTML}
                                 </div>
-                                
                                 ${ncsHTML !== '' ? `
                                     <div class="nc-box">
                                         <div class="nc-title">Notas de Crédito Emitidas (Abatidas no Saldo Real)</div>
@@ -931,14 +995,14 @@
             }
         }
 
-        /* CARD DE DADOS FLUIDO PARA EXECUÇÃO E PLANEJAMENTO PLOA */
+        // CORREÇÃO: Força o acoplamento correto das classes cromaticas eliminando interferência de cor do card
         function generarLinhaHTML(titulo, valor, textoStatus) {
             const statusLabel = textoStatus || 'Movimentação';
             let valorClass = "positivo";
             
-            if (!isNaN(valor)) {
-                if (valor < 0) valorClass = "negativo";
-            } else if (typeof valor === 'string' && valor.includes('-')) {
+            if (typeof valor === 'string' && (valor.includes('-') || valor.startsWith('-'))) {
+                valorClass = "negativo";
+            } else if (!isNaN(valor) && valor < 0) {
                 valorClass = "negativo";
             }
 
@@ -1001,42 +1065,18 @@
         }
 
         window.onload = sincronizarPainel;
-        
-        let gatilhoInstalacao;
-        const blocoInstalar = document.getElementById('bloco-instalacao');
-        const btnInstalar = document.getElementById('btn-instalar-app');
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            gatilhoInstalacao = e;
-            blocoInstalar.style.display = 'block';
-        });
-
-        btnInstalar.addEventListener('click', async () => {
-            if (!gatilhoInstalacao) return;
-            gatilhoInstalacao.prompt();
-            const { outcome } = await gatilhoInstalacao.userChoice;
-            if (outcome === 'accepted') {
-                blocoInstalar.style.display = 'none';
-                gatilhoInstalacao = null;
-            }
-        });
-
-        window.addEventListener('appinstalled', () => {
-            blocoInstalar.style.display = 'none';
-            gatilhoInstalacao = null;
-        });
-    
         function verificarSenhaAcessoCadastro() {
             const senha = prompt("🔐 Senha de Administrador:");
             if (senha === "demas2026") {
                 document.getElementById('cadastro_overlay').style.display = 'block';
-                alternarCamiorForm = alternarCamposFormularioWeb(document.getElementById('web_categoria').value);
+                alternarCamposFormularioWeb(document.getElementById('web_categoria').value);
             } else if (senha !== null) {
                 alert("❌ Senha incorreta!");
             }
         }
 
+        /* CORREÇÃO: Fechamento correto da overlay sem quebrar a pilha do escopo */
         function fecharCadastroWeb() {
             document.getElementById('cadastro_overlay').style.display = 'none';
         }
@@ -1082,66 +1122,9 @@
             }
         }
 
-        function formatarDataWebParaPlanilha(dataString) {
-            if (!dataString) return "";
-            const partes = dataString.split("-");
-            if (partes.length !== 3) return "";
-            return `${partes[2]}/${partes[1]}/${partes[0]}`;
-        }
-
-        function limparFormularioCadastroWeb() {
-            document.getElementById('web_titulo').value = "";
-            document.getElementById('web_valor').value = "";
-            
-            if(document.getElementById('web_area_contrato')) document.getElementById('web_area_contrato').value = "";
-            if(document.getElementById('web_vigencia_contrato')) document.getElementById('web_vigencia_contrato').value = "";
-            if(document.getElementById('web_adit_prazo_contrato')) document.getElementById('web_adit_prazo_contrato').value = "";
-            if(document.getElementById('web_valor_global_calculado_tela')) document.getElementById('web_valor_global_calculado_tela').value = "R$ 0,00";
-            
-            document.querySelectorAll('.classe-aditivo-valor').forEach(input => input.value = "");
-
-            if(document.getElementById('web_inst_ted')) document.getElementById('web_inst_ted').value = "";
-            if(document.getElementById('web_area_ted')) document.getElementById('web_area_ted').value = "";
-            if(document.getElementById('web_vigencia_ted')) document.getElementById('web_vigencia_ted').value = "";
-            if(document.getElementById('web_adit_prazo_ted')) document.getElementById('web_adit_prazo_ted').value = "";
-            if(document.getElementById('web_adit_valor_ted')) document.getElementById('web_adit_valor_ted').value = "";
-            if(document.getElementById('web_cronograma_ted')) document.getElementById('web_cronograma_ted').value = "";
-            if(document.getElementById('web_nc_ted')) document.getElementById('web_nc_ted').value = "";
-
-            if(document.getElementById('web_status_padrao')) document.getElementById('web_status_padrao').value = "";
-
-            const containerOS = document.getElementById('container_multi_os_web');
-            if (containerOS) {
-                containerOS.innerHTML = `
-                    <div class="bloco-os-linha" style="background: var(--brand-light); padding: 14px; border-radius: var(--radius-lg); border: 1px solid #e2e8f0; margin-bottom: 12px;">
-                        <div class="form-group" style="margin-bottom: 10px;">
-                            <label style="font-size: 10px; font-weight: 700; color: var(--text-muted);">Identificação da OS</label>
-                            <input type="text" class="classe-os-nome" placeholder="Ex: OS 01/2026" style="width:100%;">
-                        </div>
-                        <div class="form-group" style="margin-bottom: 10px;">
-                            <label style="font-size: 10px; font-weight: 700; color: var(--text-muted);">Processo SEI da OS</label>
-                            <input type="text" class="classe-os-sei" placeholder="Ex: 00000.000000/2026-00" oninput="aplicarMascaraSei(this)" style="width:100%;">
-                        </div>
-                        <div class="form-group" style="margin-bottom: 10px;">
-                            <label style="font-size: 10px; font-weight: 700; color: var(--text-muted);">Valor da OS (R$)</label>
-                            <input type="text" class="classe-os-valor" placeholder="R$ 0,00" oninput="aplicarMascaraMoeda(this)" style="width:100%;">
-                        </div>
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label style="font-size: 10px; font-weight: 700; color: var(--text-muted);">Status da OS</label>
-                            <select class="classe-os-status" style="width:100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff;">
-                                <option value="A Pagar">A Pagar</option>
-                                <option value="Pago">Pago</option>
-                            </select>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
         function adicionarNovaLinhaOSWeb() {
             const container = document.getElementById('container_multi_os_web');
             if (!container) return;
-
             const novaDiv = document.createElement('div');
             novaDiv.className = 'bloco-os-linha';
             novaDiv.style.background = 'var(--brand-light)';
@@ -1150,7 +1133,6 @@
             novaDiv.style.border = '1px solid #e2e8f0';
             novaDiv.style.marginBottom = '12px';
             novaDiv.style.marginTop = '12px';
-            
             novaDiv.innerHTML = `
                 <div class="form-group" style="margin-bottom: 10px;">
                     <label style="font-size: 10px; font-weight: 700; color: var(--text-muted);">Identificação da OS</label>
@@ -1175,18 +1157,27 @@
             container.appendChild(novaDiv);
         }
 
+        function limparFormularioCadastroWeb() {
+            document.getElementById('web_titulo').value = "";
+            document.getElementById('web_valor').value = "";
+            if(document.getElementById('web_area_contrato')) document.getElementById('web_area_contrato').value = "";
+            if(document.getElementById('web_vigencia_contrato')) document.getElementById('web_vigencia_contrato').value = "";
+            if(document.getElementById('web_adit_prazo_contrato')) document.getElementById('web_adit_prazo_contrato').value = "";
+            if(document.getElementById('web_valor_global_calculado_tela')) document.getElementById('web_valor_global_calculado_tela').value = "R$ 0,00";
+            document.querySelectorAll('.classe-aditivo-valor').forEach(input => input.value = "");
+            if(document.getElementById('web_inst_ted')) document.getElementById('web_inst_ted').value = "";
+            if(document.getElementById('web_area_ted')) document.getElementById('web_area_ted').value = "";
+            if(document.getElementById('web_vigencia_ted')) document.getElementById('web_vigencia_ted').value = "";
+            if(document.getElementById('web_cronograma_ted')) document.getElementById('web_cronograma_ted').value = "";
+            if(document.getElementById('web_nc_ted')) document.getElementById('web_nc_ted').value = "";
+        }
+
         function enviarCadastroWeb() {
             const cat = document.getElementById('web_categoria').value;
             const tit = document.getElementById('web_titulo') ? document.getElementById('web_titulo').value.trim() : "";
             const val = document.getElementById('web_valor') ? document.getElementById('web_valor').value.trim() : "R$ 0,00";
 
             if(!tit) { alert("⚠️ O campo 'Título / Objeto' é obrigatório!"); return; }
-            if(!val || val === "R$ 0,00") { 
-                if (!cat.toUpperCase().includes("EXEC")) {
-                    alert("⚠️ O campo 'Valor Total / Inicial' precisa ser preenchido!"); 
-                    return; 
-                }
-            }
 
             const formatarData = (idField) => {
                 const elData = document.getElementById(idField);
@@ -1207,110 +1198,39 @@
                     let seiOsi   = seisOS[i] ? seisOS[i].value.trim() : "---";
                     let valorOsi = valoresOS[i] && valoresOS[i].value.trim() !== "" ? valoresOS[i].value.trim() : "R$ 0,00";
                     let statOsi  = statusOS[i] ? statusOS[i].value : "A Pagar";
-
                     if (nomeOsi !== "") {
                         listaOSsMontada.push(`${nomeOsi} | ${seiOsi} | ${valorOsi} | ${statOsi}`);
                     }
                 }
             }
 
-            const textoOSsAcumuladasParaEnvio = listaOSsMontada.length > 0 ? listaOSsMontada.join('; ') : "---";
-
-            const ncDigitada = document.getElementById('web_nc_ted') ? document.getElementById('web_nc_ted').value.trim() : "";
-            const campoCronogramaTed = document.getElementById('web_cronograma_ted');
-            const cronogramaTedValor = (campoCronogramaTed && campoCronogramaTed.value.trim() !== "") ? campoCronogramaTed.value.trim() : "Sim";
-
-            let ncFinal = "---";
-            if (cat.toUpperCase().includes('TED') && ncDigitada !== "") {
-                let valorNcInformado = prompt(`💵 Informe o valor associado à Nota de Crédito [ ${ncDigitada} ]:\n(Se deixar vazio ou cancelar, será usado o valor integral do TED)`);
-                let valorNcFinalNum;
-                if (valorNcInformado === null || valorNcInformado.trim() === "") {
-                    valorNcFinalNum = parseFloat(val.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
-                } else {
-                    valorNcFinalNum = parseFloat(valorNcInformado.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
-                }
-                ncFinal = `${ncDigitada} | ${valorNcFinalNum}`;
-            } else if (ncDigitada !== "") {
-                ncFinal = ncDigitada;
-            }
-
-            let valorGlobalFinalParaEnvio = val; 
-            let textoAditivosAcumuladosParaPlanilha = "R$ 0,00";
-
-            if (cat.toUpperCase().includes('CONTRATO')) {
-                let numInicial = parseFloat(val.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
-                let somaAditivosAcumulados = 0;
-
-                const inputsAditivos = document.getElementsByClassName('classe-aditivo-valor');
-                for (let i = 0; i < inputsAditivos.length; i++) {
-                    let textoAdit = inputsAditivos[i].value || "0";
-                    let valorAditNum = parseFloat(textoAdit.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
-                    somaAditivosAcumulados += valorAditNum;
-                }
-
-                let somaGlobal = numInicial + somaAditivosAcumulados;
-                valorGlobalFinalParaEnvio = somaGlobal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-                textoAditivosAcumuladosParaPlanilha = somaAditivosAcumulados.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-            }
-
-            const inputSup = document.getElementById('web_suplementacao');
-            const inputRem = document.getElementById('web_remanejamento');
-            const webSuplementacao = inputSup ? inputSup.value.trim() : "R$ 0,00";
-            const webRemanejamento = inputRem ? inputRem.value.trim() : "R$ 0,00";
-
-            let statusFormatadoParaEnvio = "Em Execução";
-            if (cat.toUpperCase().includes("EXEC")) {
-                statusFormatadoParaEnvio = `Ajuste Orçamentário | Suplementação: ${webSuplementacao || 'R$ 0,00'} | Remanejamento: ${webRemanejamento || 'R$ 0,00'}`;
-            }
-
-            const aditPrazoContratoInput = document.getElementById('web_adit_prazo_contrato') ? document.getElementById('web_adit_prazo_contrato').value.trim() : "---";
-
             const pacote = {
                 categoria: cat,
                 titulo: tit,
-                valorRaw: valorGlobalFinalParaEnvio, 
+                valorRaw: val,
                 areaContrato: document.getElementById('web_area_contrato') ? document.getElementById('web_area_contrato').value.trim() : "---",
                 vigenciaContrato: formatarData('web_vigencia_contrato'),
-                aditPrazoContrato: aditPrazoContratoInput !== "" ? aditPrazoContratoInput : "---",
-                aditValorContrato: textoAditivosAcumuladosParaPlanilha,
-                cronogramaContrato: "Sim",
-                stringMultiOS: textoOSsAcumuladasParaEnvio,
+                stringMultiOS: listaOSsMontada.length > 0 ? listaOSsMontada.join('; ') : "---",
                 instituicaoTed: document.getElementById('web_inst_ted') ? document.getElementById('web_inst_ted').value.trim() : "---",
                 areaTed: document.getElementById('web_area_ted') ? document.getElementById('web_area_ted').value.trim() : "---",
                 vigenciaTed: formatarData('web_vigencia_ted'),
-                aditPrazoTed: "---",
-                aditValorTed: "R$ 0,00",
-                cronogramaTed: cronogramaTedValor,
-                ncTed: ncFinal, 
-                statusPadrao: statusFormatadoParaEnvio
+                cronogramaTed: document.getElementById('web_cronograma_ted') ? document.getElementById('web_cronograma_ted').value.trim() : "Sim",
+                ncTed: document.getElementById('web_nc_ted') ? document.getElementById('web_nc_ted').value.trim() : "---"
             };
 
-            if (typeof google !== "undefined" && google.script && google.script.run) {
-                alert("🚀 Gravando diretamente na Planilha mestre...");
-                google.script.run.withSuccessHandler(() => {
-                    alert("✅ Registro salvo com sucesso!");
-                    limparFormularioCadastroWeb();
-                    fecharCadastroWeb();
-                    sincronizarPainel();
-                }).receberDadosInterfaceHTML(pacote);
-            } else {
-                alert("📡 Enviando via API para o Google Sheets...");
-                fetch(URL_API, {
-                    method: "POST",
-                    mode: "no-cors", 
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(pacote)
-                })
-                .then(() => {
-                    alert("✅ Enviado com sucesso!");
-                    limparFormularioCadastroWeb();
-                    fecharCadastroWeb();
-                    setTimeout(sincronizarPainel, 1500); 
-                })
-                .catch(err => {
-                    alert("❌ Erro ao conectar: " + err.message);
-                });
-            }
+            fetch(URL_API, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(pacote)
+            })
+            .then(() => {
+                alert("✅ Registro enviado com sucesso!");
+                limparFormularioCadastroWeb();
+                fecharCadastroWeb();
+                setTimeout(sincronizarPainel, 1500);
+            })
+            .catch(err => alert("❌ Erro ao conectar: " + err.message));
         }
     </script>
 </body>
