@@ -190,7 +190,7 @@
             font-size: 12.5px; 
             font-weight: 700; 
             text-align: right; 
-            white-space: nowrap; /* Impede a quebra isolada do sinal negativo */
+            white-space: nowrap;
         }
         
         .exe-panel-card.dotacao-card { background: #ffffff; border-left: 4px solid var(--text-title); }
@@ -924,7 +924,7 @@
                 cronogramaHTML = `<div class="tabela-mobile-gaveta"><table class="cron-table"><thead><tr><th>Ano</th><th style="text-align: right;">Previsão</th></tr></thead><tbody>`;
                 cronogramaRaw.split(";").forEach(linha => {
                     if(!linha.includes(":")) return;
-                    const subPartes = inline.split(":");
+                    const subPartes = linha.split(":");
                     const vAnoRaw = parseFloat(subPartes[1].replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
                     cronogramaHTML += `<tr><td style="font-weight: 600; color: var(--text-main);">${subPartes[0].trim()}</td><td style="text-align: right; font-weight: 700; color: var(--brand-dark); font-family: 'JetBrains Mono', monospace;">${formatarBRL(vAnoRaw)}</td></tr>`;
                 });
