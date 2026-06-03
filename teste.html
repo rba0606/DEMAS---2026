@@ -47,13 +47,12 @@
         }
 
         * { box-sizing: border-box; -webkit-font-smoothing: antialiased; margin: 0; padding: 0; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-body); color: var(--text-main); padding: clamp(14px, 4vw, 20px); line-height: 1.4; padding-bottom: 60px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-body); color: var(--text-main); padding: clamp(14px, 4vw, 20px); line-height: 1.4; padding-bottom: 70px; }
         .container { max-width: 520px; margin: 0 auto; }
 
         .header { background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-slate) 100%); color: white; padding: 24px 18px; border-radius: var(--radius-xl); margin-bottom: 16px; text-align: center; position: relative; box-shadow: var(--shadow-lg); }
         .btn-back { display: none; position: absolute; left: 14px; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.08); color: white; border: 1px solid rgba(255, 255, 255, 0.12); padding: 8px 14px; border-radius: var(--radius-lg); cursor: pointer; font-weight: 700; font-size: 11px; backdrop-filter: blur(10px); z-index: 10; }
         
-        /* BOTÃO FLUTUANTE DE INSERÇÃO GLOBAL */
         .btn-floating-add { position: fixed; bottom: 20px; right: 20px; background: var(--brand-primary); color: white; border: none; width: 56px; height: 56px; border-radius: 50%; font-size: 24px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 999; transition: transform 0.2s; }
         .btn-floating-add:active { transform: scale(0.92); }
 
@@ -84,9 +83,11 @@
 
         .dinamic-data-list { display: flex; flex-direction: column; gap: 8px; margin: 6px 0; }
         .exe-panel-card { background: var(--bg-body); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 10px 14px; display: flex; flex-direction: column; gap: 4px; }
+        
         .exe-panel-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; }
         .exe-panel-title { font-size: 12.5px; font-weight: 600; color: var(--text-title); flex: 1; }
         .exe-panel-status { font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; background: #e2e8f0; padding: 2px 6px; border-radius: 4px; }
+        
         .exe-panel-val, .val { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; font-weight: 700; text-align: right; white-space: nowrap; }
         
         .exe-panel-card.dotacao-card { border-left: 4px solid var(--text-title); background: #fff; }
@@ -105,10 +106,9 @@
         .ted-quick-val small { display: block; font-size: 8px; color: var(--text-muted); text-transform: uppercase; }
         .ted-quick-val span { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: var(--brand-primary); }
         
-        .ted-content { max-height: 0; overflow: hidden; transition: max-height 0.25s ease-out; background: #ffffff; }
+        .ted-content { max-height: 0; overflow: hidden; transition: max-height 0.25s ease-out; background: #ffffff; will-change: max-height; }
         .ted-content-inner { padding: 14px; border-top: 1px solid #f1f5f9; background: #fafafa; }
 
-        /* RECURSO EXCLUSIVO: BOTÕES DE CONTEXTO DENTRO DOS CARDS */
         .card-action-bar { display: flex; gap: 8px; margin-top: 12px; border-top: 1px dashed var(--border-color); padding-top: 10px; }
         .btn-card-action { flex: 1; padding: 8px; border-radius: var(--radius-md); font-size: 11px; font-weight: 700; cursor: pointer; border: none; text-align: center; display: flex; align-items: center; justify-content: center; gap: 4px; }
         .btn-card-action.edit { background: rgba(79, 70, 229, 0.08); color: var(--brand-primary); }
@@ -151,8 +151,8 @@
 
         .tabela-mobile-gaveta { width: 100%; overflow-x: auto; margin-top: 6px; border-radius: var(--radius-md); border: 1px solid #e2e8f0; }
         .cron-table { width: 100%; border-collapse: collapse; background: #ffffff; }
-        .cron-table th { padding: 6px 8px; font-size: 8.5px; text-transform: uppercase; color: var(--text-muted); background: var(--bg-body); }
-        .cron-table td { padding: 8px; font-size: 11.5px; border-bottom: 1px solid #f1f5f9; }
+        .cron-table th { padding: 6px 8px; font-size: 8.5px; text-transform: uppercase; color: var(--text-muted); background: var(--bg-body); text-align: left; }
+        .cron-table td { padding: 8px; font-size: 11.5px; border-bottom: 1px solid #f1f5f9; color: var(--text-title); }
 
         .nc-box { margin-top: 6px; background: #ffffff; border: 1px dashed var(--border-color); border-radius: var(--radius-lg); padding: 10px; }
         .nc-title { font-size: 8.5px; color: var(--text-title); font-weight: 700; text-transform: uppercase; margin-bottom: 4px; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; }
@@ -166,7 +166,6 @@
         .shimmer { background: linear-gradient(90deg, #eff1f3 4%, #e2e8f0 25%, #eff1f3 36%); background-size: 1200px 100%; animation: shimmer-animation 1.6s infinite linear; border-radius: 4px; color: transparent !important; min-width: 80px; display: inline-block; }
         @keyframes shimmer-animation { 0% { background-position: -600px 0; } 100% { background-position: 600px 0; } }
 
-        /* OVERLAYS / MODAIS DE EDIDÃO */
         #cadastro_overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-body); z-index: 9999; overflow-y: auto; padding: 14px; }
         .form-card { background: white; border-radius: var(--radius-xl); padding: 16px; box-shadow: var(--shadow-lg); border: 1px solid var(--border-color); }
         .form-group { margin-bottom: 12px; }
@@ -228,6 +227,7 @@
             </div>
         </div>
 
+        <!-- SEÇÃO EXECUÇÃO -->
         <section id="execucao" class="content-section">
             <div class="unified-card">
                 <div class="card-header-main">📍 Recursos Descentralizados (Em Conta)</div>
@@ -254,6 +254,7 @@
             </div>
         </section>
 
+        <!-- SEÇÃO PLANEJAMENTO -->
         <section id="planejamento" class="content-section">
             <div class="unified-card">
                 <div class="card-header-main">📈 Projeção Orçamentária 2027</div>
@@ -293,6 +294,7 @@
 
     <button class="btn-floating-add" onclick="abrirModalInclusaoGlobal()">+</button>
 
+    <!-- GAVETA UNIFICADA DE MODAL -->
     <div id="cadastro_overlay">
         <div class="form-card">
             <h2 id="modalFormTitle" style="color: var(--brand-dark); font-weight: 800; font-size: 1.15rem; margin-bottom: 2px;">MODIFICAR REGISTRO</h2>
@@ -303,7 +305,7 @@
 
             <div class="form-group" id="group_categoria">
                 <label>Categoria Orçamentária</label>
-                <select id="web_categoria" onchange="alternarCamposFormularioWeb(this.value)">
+                <select id="web_categoria">
                     <option value="INST_TED">INST_TED (Termo de Execução Descentralizada)</option>
                     <option value="INST_CONTRATO">INST_CONTRATO (Instrumento Contrato)</option>
                     <option value="EXEC_8753">EXEC_8753 (Execução Direta 8753)</option>
@@ -432,11 +434,43 @@
             const vigencia    = partes[2] ? partes[2].trim() : '---';
             const aditPrazo   = partes[3] ? partes[3].trim() : '---';
             const aditValor   = partes[4] ? partes[4].trim() : '';
-            const cronograma  = partes[7] ? partes[7].trim() : '---';
+            const cronogramaRaw = partes[7] ? partes[7].trim() : '---';
+            const historicoRaw  = partes[8] ? partes[8].trim() : '';
 
             let vOriginal = parseFloat(valorTotal) || 0;
             let tetoAtualizado = vOriginal; 
             const saude = calcularSaudeVigencia(vigencia);
+
+            // Restauração das Tabelas de Cronograma Anual Empilhadas
+            let cronogramaHTML = "";
+            if (cronogramaRaw && cronogramaRaw.includes(":")) {
+                cronogramaHTML = `<div class="tabela-mobile-gaveta"><table class="cron-table"><thead><tr><th>Ano</th><th style="text-align: right;">Previsão</th></tr></thead><tbody>`;
+                cronogramaRaw.split(";").forEach(linha => {
+                    if(!linha.includes(":")) return;
+                    const subPartes = linha.split(":");
+                    const vAnoRaw = parseFloat(subPartes[1].replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+                    cronogramaHTML += `<tr><td style="font-weight: 600; color: var(--text-main);">${subPartes[0].trim()}</td><td style="text-align: right; font-weight: 700; color: var(--brand-dark); font-family: 'JetBrains Mono', monospace;">${formatarBRL(vAnoRaw)}</td></tr>`;
+                });
+                cronogramaHTML += `</tbody></table></div>`;
+            } else {
+                cronogramaHTML = `<span>${cronogramaRaw || '---'}</span>`;
+            }
+
+            // Restauração dos Blocos de Notas de Crédito Empilhados
+            let ncsHTML = '';
+            let totalNCs = 0;
+            if (historicoRaw !== '' && historicoRaw.includes('|')) {
+                historicoRaw.split(';').forEach(ncTexto => {
+                    if (ncTexto.trim() === '' || !ncTexto.includes('|')) return;
+                    const dNC = ncTexto.split('|');
+                    if (dNC.length < 2) return;
+                    const valNC = parseFloat(dNC[1].replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+                    if(!isNaN(valNC)) {
+                        totalNCs += valNC;
+                        ncsHTML += `<div class="nc-row"><span>📄 ${dNC[0].trim()}</span><span>${formatarBRL(valNC)}</span></div>`;
+                    }
+                });
+            }
 
             return `
                 <div class="ted-card" id="card_${idTED}">
@@ -447,18 +481,23 @@
                             <span class="alert-badge ${saude.classe}">${saude.label}</span>
                         </div>
                         <div class="ted-trigger-right">
-                            <div class="ted-quick-val"><small>Valor Teto</small><span>${formatarBRL(tetoAtualizado)}</span></div>
+                            <div class="ted-quick-val"><small>Saldo Restante</small><span>${formatarBRL(tetoAtualizado - totalNCs)}</span></div>
                             <span class="ted-arrow">▼</span>
                         </div>
                     </div>
                     <div class="ted-content" id="content_${idTED}">
                         <div class="ted-content-inner">
                             <div class="ted-grid">
-                                <div class="ted-field"><small>Instituição</small><span>${instituicao}</span></div>
-                                <div class="ted-field highlight"><small>Teto Descentralizado</small><span>${formatarBRL(tetoAtualizado)}</span></div>
+                                <div class="ted-field"><small>Instituição Beneficiária</small><span>${instituicao}</span></div>
+                                <div class="ted-field highlight"><small>Valor do Teto Atualizado</small><span>${formatarBRL(tetoAtualizado)}</span></div>
+                                <div class="ted-field success"><small>Saldo a Descentralizar</small><span>${formatarBRL(tetoAtualizado - totalNCs)}</span></div>
                                 <div class="ted-field"><small>Vigência Fim</small><span>${vigencia}</span></div>
-                                <div class="ted-field"><small>Cronograma Anual</small><span>${cronograma}</span></div>
-                                <div class="ted-field"><small>Histórico Bruto</small><span style="font-size:10px; word-break:break-all;">${partes[8] || '---'}</span></div>
+                                <div class="ted-field"><small>Aditamentos Cadastrados</small><span>${aditPrazo}</span></div>
+                                <div class="ted-field" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                                    <small style="color: var(--brand-primary); margin-bottom: 4px;">📊 Cronograma de Desembolso Anual</small>
+                                    ${cronogramaHTML}
+                                </div>
+                                ${ncsHTML !== '' ? `<div class="nc-box"><div class="nc-title">Notas de Crédito Emitidas</div>${ncsHTML}</div>` : ''}
                             </div>
                             <div class="card-action-bar">
                                 <button class="btn-card-action edit" onclick="event.stopPropagation(); abrirModalEdicaoCard('${idTED}', 'TED')">✏️ Editar Dados</button>
@@ -475,7 +514,87 @@
             const partes = statusTexto.split('|');
             const areaTecnica = partes[1] ? partes[1].trim() : '---';
             const vigencia    = partes[2] ? partes[2].trim() : '---';
+            const aditPrazo   = partes[3] ? partes[3].trim() : '---';
+            const aditValor   = partes[4] ? partes[4].trim() : '---';
+            const historicoRaw  = partes[8] ? partes[8].trim() : '';
+
+            let totalPago = 0;
+            let osContratoInicial = { lista: [], total: 0, pago: 0, apagar: 0 };
+            let osPrimeiroAditivo = { lista: [], total: 0, pago: 0, apagar: 0 };
+            let osSegundoAditivo  = { lista: [], total: 0, pago: 0, apagar: 0 };
+
+            if (historicoRaw !== '') {
+                historicoRaw.split(';').forEach(osTexto => {
+                    if (osTexto.trim() === '' || !osTexto.includes('|')) return;
+                    const dadosOS = osTexto.split('|').map(d => d.trim());
+                    if (dadosOS.length < 4) return;
+                    let osValor = parseFloat(dadosOS[2].replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+                    let statusPago = dadosOS[3].toLowerCase().includes('pago');
+                    totalPago += statusPago ? osValor : 0;
+
+                    let objetoOS = { nome: dadosOS[0], sei: dadosOS[1], valor: osValor, status: dadosOS[3] };
+                    const nL = dadosOS[0].toLowerCase();
+
+                    if (nL.includes('1º') || nL.includes('1o')) {
+                        osPrimeiroAditivo.total += osValor;
+                        if (statusPago) osPrimeiroAditivo.pago += osValor; else osPrimeiroAditivo.apagar += osValor;
+                        osPrimeiroAditivo.lista.push(objetoOS);
+                    } else if (nL.includes('2º') || nL.includes('2o')) {
+                        osSegundoAditivo.total += osValor;
+                        if (statusPago) osSegundoAditivo.pago += osValor; else osSegundoAditivo.apagar += osValor;
+                        osSegundoAditivo.lista.push(objetoOS);
+                    } else {
+                        osContratoInicial.total += osValor;
+                        if (statusPago) osContratoInicial.pago += osValor; else osContratoInicial.apagar += osValor;
+                        osContratoInicial.lista.push(objetoOS);
+                    }
+                });
+            }
+
+            let somaRealGlobal = osContratoInicial.total + osPrimeiroAditivo.total + osSegundoAditivo.total;
+            if(somaRealGlobal === 0) somaRealGlobal = parseFloat((valorGlobal || "0").toString().replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
             const saude = calcularSaudeVigencia(vigencia);
+
+            const renderBlocoAdit = (titInt, objMeta, idSub, cor, prazo) => {
+                if (objMeta.lista.length === 0) return "";
+                return `
+                    <div class="card-aditivo-financeiro" style="border-left: 4px solid ${cor};" onclick="event.stopPropagation(); toggleElemento('${idSub}', this)">
+                        <div class="aditivo-header-grid"><span class="aditivo-titulo-texto">${titInt}</span><span class="ted-arrow">▼</span></div>
+                        <div style="margin-bottom:6px; background:#fff; padding:4px 8px; border-radius:4px; font-size:10.5px; color:var(--text-muted); text-align:left;"><strong>Vigência:</strong> ${prazo}</div>
+                        <div class="aditivo-valores-mini-grid">
+                            <div class="mini-caixa-valor"><small>Total</small><span>${formatarBRL(objMeta.total)}</span></div>
+                            <div class="mini-caixa-valor"><small style="color:var(--ms-green);">Pago</small><span>${formatarBRL(objMeta.pago)}</span></div>
+                            <div class="mini-caixa-valor"><small style="color:var(--ms-amber);">A Pagar</small><span>${formatarBRL(objMeta.apagar)}</span></div>
+                            <div class="mini-caixa-valor"><small style="color:var(--brand-primary);">Saldo</small><span>${formatarBRL(objMeta.total - objMeta.pago)}</span></div>
+                        </div>
+                        <div id="${idSub}" class="aditivo-retratil-container" onclick="event.stopPropagation();">
+                            <div class="os-cards-container">
+                                ${objMeta.lista.map(os => {
+                                    let classeCorStatus = "execucao";
+                                    if(os.status.toLowerCase().includes('pago')) classeCorStatus = "pago";
+                                    else if(os.status.toLowerCase().includes('aguardando')) classeCorStatus = "aguardando";
+                                    return `
+                                    <div class="os-mini-card">
+                                        <div class="os-mini-card-row">
+                                            <span class="os-card-title">📌 ${os.nome}</span>
+                                            <span class="status-pill ${classeCorStatus}">${os.status}</span>
+                                        </div>
+                                        <div class="os-mini-card-row" style="margin-top:2px;">
+                                            <span class="os-card-sei">${os.sei}</span>
+                                            <span class="os-card-val">${formatarBRL(os.valor)}</span>
+                                        </div>
+                                    </div>
+                                `}).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            };
+
+            let aditHTML = "";
+            aditHTML += renderBlocoAdit("📋 Contrato Inicial", osContratoInicial, `sub_ini_${idContrato}`, "var(--brand-primary)", "Base");
+            aditHTML += renderBlocoAdit("🔸 1º Termo Aditivo", osPrimeiroAditivo, `sub_1a_${idContrato}`, "var(--ms-amber)", aditPrazo);
+            aditHTML += renderBlocoAdit("🔺 2º Termo Aditivo", osSegundoAditivo, `sub_2a_${idContrato}`, "var(--ms-red)", vigencia);
 
             return `
                 <div class="ted-card" id="card_${idContrato}">
@@ -486,18 +605,20 @@
                             <span class="alert-badge ${saude.classe}">${saude.label}</span>
                         </div>
                         <div class="ted-trigger-right">
-                            <div class="ted-quick-val"><small>Global</small><span>${formatarBRL(parseFloat(valorGlobal)||0)}</span></div>
+                            <div class="ted-quick-val"><small>Saldo Restante OS</small><span>${formatarBRL(somaRealGlobal - totalPago)}</span></div>
                             <span class="ted-arrow">▼</span>
                         </div>
                     </div>
                     <div class="ted-content" id="content_${idContrato}">
                         <div class="ted-content-inner">
                             <div class="ted-grid">
-                                <div class="ted-field"><small>Área Responsável</small><span>${areaTecnica}</span></div>
-                                <div class="ted-field highlight"><small>Valor Global</small><span>${formatarBRL(parseFloat(valorGlobal)||0)}</span></div>
-                                <div class="ted-field"><small>Vigência</small><span>${vigencia}</span></div>
-                                <div class="ted-field"><small>Histórico Bruto OSs</small><span style="font-size:10px; word-break:break-all;">${partes[8] || '---'}</span></div>
+                                <div class="ted-field"><small>🏛️ Área Responsável</small><span>${areaTecnica}</span></div>
+                                <div class="ted-field highlight"><small>💰 Valor Global Instrumento</small><span class="mono-val">${formatarBRL(somaRealGlobal)}</span></div>
+                                <div class="ted-field"><small>🗓️ Final de Vigência</small><span>${vigencia}</span></div>
+                                <div class="ted-field success"><small>💡 Saldo Restante OS</small><span class="mono-val">${formatarBRL(somaRealGlobal - totalPago)}</span></div>
+                                <div class="ted-field"><small>Histórico / Aditivos de Valor</small><span style="font-size:11.5px; color:var(--text-muted); font-weight:600;">${aditValor || 'Sem histórico adicional'}</span></div>
                             </div>
+                            <div style="margin-top:10px;">${aditHTML}</div>
                             <div class="card-action-bar">
                                 <button class="btn-card-action edit" onclick="event.stopPropagation(); abrirModalEdicaoCard('${idContrato}', 'CONTRATO')">✏️ Editar Contrato</button>
                             </div>
@@ -526,18 +647,16 @@
             if(parseFloat(valor) < 0) elemento.style.color = 'var(--ms-red)';
         }
 
-        // CONTROLADORES DOS MODAIS CONTEXTUAIS DE MODIFICAÇÃO
         function abrirModalEdicaoCard(id, tipoContexto) {
             const item = backupDadosGerais[id];
             if (!item) return;
 
             document.getElementById('edit_id').value = id;
             document.getElementById('edit_mode').value = "EDITAR_INSTRUMENTO";
-            document.getElementById('group_categoria').style.display = 'none'; // Trava categoria na edição
+            document.getElementById('group_categoria').style.display = 'none'; 
 
             document.getElementById('web_titulo').value = item.titulo;
             document.getElementById('web_valor').value = formatarBRL(item.valor);
-            
             document.getElementById('modalFormTitle').innerText = "EDITAR: " + item.titulo;
 
             if (tipoContexto === 'TED' || tipoContexto === 'CONTRATO') {
@@ -574,7 +693,7 @@
         }
 
         function abrirPromptInjecaoRapida(id) {
-            const novaNC = prompt("✏️ Digite a nova NC/OS no padrão (Nome | SEI | Valor | Status):\nEx: NC 999 | 25000.123/2026-00 | 50000 | Pago");
+            const novaNC = prompt("✏️ Digite a nova NC/OS no padrão (Nome | Valor | Status):\nEx: 2026NC00555 | 150000 | Emitido");
             if (!novaNC) return;
 
             const senha = prompt("🔑 Confirmar Senha Master:");
@@ -599,7 +718,6 @@
 
             if (!tit) { alert("⚠️ O Título/Objeto é obrigatório."); return; }
 
-            // Remonta a string estruturada de metadados da Coluna E
             let inst = document.getElementById('meta_ted_inst').value.trim() || "---";
             let area = document.getElementById('meta_ted_area').value.trim() || "---";
             let vig  = document.getElementById('meta_ted_vigencia').value.trim() || "---";
@@ -609,10 +727,9 @@
             let statusStringMontada = `${inst} | ${area} | ${vig} | --- | --- |   |   | ${cro} | ${hist}`;
 
             if (modo === "INSERIR_NOVO" && !cat.includes("TED") && !cat.includes("CONTRATO")) {
-                statusStringMontada = vig; // Mantém fallback simples para datas manuais
+                statusStringMontada = vig; 
             }
 
-            // Conversão numérica limpa
             let numValor = parseFloat(valRaw.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
             if (valRaw.includes('-')) numValor = -Math.abs(numValor);
 
@@ -636,18 +753,36 @@
         }
 
         function fecharCadastroWeb() { document.getElementById('cadastro_overlay').style.display = 'none'; }
-        function alternarCamposFormularioWeb(c) { }
 
         function toggleElemento(contentId, triggerEl) {
             const content = document.getElementById(contentId);
             const arrow = triggerEl.querySelector('.ted-arrow');
             if (!content) return;
+            
             if (content.style.maxHeight && content.style.maxHeight !== '0px') {
                 content.style.maxHeight = '0px';
                 if(arrow) arrow.style.transform = 'rotate(0deg)';
+                
+                let ancestral = content.parentElement;
+                while (ancestral) {
+                    if (ancestral.classList && (ancestral.classList.contains('ted-content') || ancestral.classList.contains('aditivo-retratil-container'))) {
+                        if (ancestral.style.maxHeight && ancestral.style.maxHeight !== 'none') {
+                            ancestral.style.maxHeight = (ancestral.scrollHeight - content.scrollHeight) + "px";
+                        }
+                    }
+                    ancestral = ancestral.parentElement;
+                }
             } else {
                 content.style.maxHeight = content.scrollHeight + "px";
                 if(arrow) arrow.style.transform = 'rotate(180deg)';
+                
+                let ancestral = content.parentElement;
+                while (ancestral) {
+                    if (ancestral.classList && (ancestral.classList.contains('ted-content') || ancestral.classList.contains('aditivo-retratil-container'))) {
+                        ancestral.style.maxHeight = (ancestral.scrollHeight + content.scrollHeight) + "px";
+                    }
+                    ancestral = ancestral.parentElement;
+                }
             }
         }
 
