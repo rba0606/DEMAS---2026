@@ -110,7 +110,6 @@
             text-align: center;
             gap: 4px;
         }
-        .kpi-mini-card.full-span { grid-column: 1 / -1; }
         .kpi-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; }
         .kpi-value { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: var(--text-title); text-align: center; white-space: nowrap; }
         .kpi-value.green { color: var(--ms-green); }
@@ -237,7 +236,6 @@
         .ted-field.success { background: #ecfdf5; border-color: #a7f3d0; }
         .ted-field.success span { color: #065f46; }
         
-        /* CORRIGIDO: CORES E SINTAXE DOS BADGES DAS ORDENS DE SERVIÇO (OS) */
         .status-pill { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; }
         .status-pill.pago { background: #d1fae5 !important; color: #065f46 !important; }
         .status-pill.execucao { background: #e0f2fe !important; color: #0369a1 !important; }
@@ -601,12 +599,32 @@
         let backupDadosGerais = {}; 
         const formatarBRL = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-        function calcularSaudeVigencia(dataString) {
-            if(!dataString || dataString === "---" || !dataString.includes('/')) return { label: "Sem Prazo", classe: "regular" };
-            try {
+        function interpretarData(dataString) {
+            if (!dataString) return null;
+            if (dataString instanceof Date) return dataString;
+            
+            // Se for string no formato dd/MM/yyyy
+            if (typeof dataString === 'string' && dataString.includes('/')) {
                 const partes = dataString.split('/');
-                const dataVigencia = new Date(parseInt(partes[2]), parseInt(partes[1]) - 1, parseInt(partes[0]));
-                const hoje = new Date(2026, 5, 1); 
+                return new Date(parseInt(partes[2]), parseInt(partes[1]) - 1, parseInt(partes[0]));
+            }
+            
+            // Se for string vinda do ISO (yyyy-mm-dd)
+            const timestamp = Date.parse(dataString);
+            if (!isNaN(timestamp)) {
+                return new Date(timestamp);
+            }
+            return null;
+        }
+
+        function calcularSaudeVigencia(dataString) {
+            if(!dataString || dataString === "---") return { label: "Sem Prazo", classe: "regular" };
+            
+            const dataVigencia = interpretarData(dataString);
+            if (!dataVigencia || isNaN(dataVigencia.getTime())) return { label: "Vigência", classe: "regular" };
+            
+            try {
+                const hoje = new Date(2026, 5, 1); // Baseline Junho de 2026 conforme regra de negócio
                 const diffTime = dataVigencia - hoje;
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 
@@ -640,6 +658,7 @@
 
                 Object.keys(dados).forEach(id => {
                     const item = dados[id];
+                    if (!item) return;
                     const catLimpa = item.categoria ? item.categoria.trim().toUpperCase() : "";
 
                     if (catLimpa.includes('CONTRATO')) {
@@ -668,30 +687,70 @@
                             } catch(err) { console.error(err); }
                         }
 
-                        const htmlLinhaComum = generarLinhaHTML(item.titulo, valorFinalItem, statusFinalItem);
-                        
-                        if (catLimpa === 'EXEC_8753') containers.exec8753.innerHTML += htmlLinhaComum;
-                        else if (catLimpa === 'EXEC_20YN') containers.exec20yn.innerHTML += htmlLinhaComum;
-                        else if (catLimpa === 'PROJ_8753') containers.proj8753.innerHTML += htmlLinhaComum;
-                        else if (catLimpa === 'PROJ_20YN') containers.proj20yn.innerHTML += htmlLinhaComum;
-                        else if (catLimpa === 'PLOA_8753') containers.ploa8753.innerHTML += htmlLinhaComum;
-                        else if (catLimpa === 'PLOA_20YN') containers.ploa20yn.innerHTML += htmlLinhaComum;
-                        else if (catLimpa === 'FIXO') {
+                        // Proteção extra contra IDs repetidos gerando falhas nos blocos fixos
+                        if (catLimpa !== 'FIXO') {
+                            const htmlLinhaComum = generarLinhaHTML(item.titulo, valorFinalItem, statusFinalItem);
+                            if (catLimpa === 'EXEC_8753') containers.exec8753.innerHTML += htmlLinhaComum;
+                            else if (catLimpa === 'EXEC_20YN') containers.exec20yn.innerHTML += htmlLinhaComum;
+                            else if (catLimpa === 'PROJ_8753') containers.proj8753.innerHTML += htmlLinhaComum;
+                            else if (catLimpa === 'PROJ_20YN') containers.proj20yn.innerHTML += htmlLinhaComum;
+                            else if (catLimpa === 'PLOA_8753') containers.ploa8753.innerHTML += htmlLinhaComum;
+                            else if (catLimpa === 'PLOA_20YN') containers.ploa20yn.innerHTML += htmlLinhaComum;
+                        } else {
                             const elFixo = document.getElementById(id);
                             if (elFixo) formatarValor(elFixo, item.valor);
                         }
                     }
                 });
 
+                // Atualização dos contadores
                 document.getElementById('kpi_total_contratos').innerText = totalContratosCount;
                 document.getElementById('kpi_total_teds').innerText = totalTedsCount;
                 
-                let saldo8753 = dados['exe_8753_disponivel'] ? parseFloat(dados['exe_8753_disponivel'].valor) || 0 : 0;
-                let saldo20yn = dados['exe_20yn_disponivel'] ? parseFloat(dados['exe_20yn_disponivel'].valor) || 0 : 0;
+                // Blindagem e cálculo dinâmico do Saldo Disponível
+                let saldo8753 = 0;
+                let saldo20yn = 0;
+
+                if (dados['exe_8753_disponivel']) {
+                    saldo8753 = parseFloat(dados['exe_8753_disponivel'].valor) || 0;
+                } else if (dados['proj_8753_final']) {
+                    saldo8753 = parseFloat(dados['proj_8753_final'].valor) || 0;
+                } else if (dados['exe_8753_saldo']) {
+                    saldo8753 = parseFloat(dados['exe_8753_saldo'].valor) || 0;
+                }
+
+                if (dados['exe_20yn_disponivel']) {
+                    saldo20yn = parseFloat(dados['exe_20yn_disponivel'].valor) || 0;
+                } else if (dados['proj_20yn_final']) {
+                    saldo20yn = parseFloat(dados['proj_20yn_final'].valor) || 0;
+                } else if (dados['proj_20yn_saldo']) {
+                    saldo20yn = parseFloat(dados['proj_20yn_saldo'].valor) || 0;
+                }
+
                 document.getElementById('kpi_saldo_disponivel').innerText = formatarBRL(saldo8753 + saldo20yn);
 
+                // Vinculação estrutural dos cards fixos inferiores e superiores
                 if(dados['ploa_teto_geral']) {
                     document.getElementById('kpi_teto_ploa2027').innerText = formatarBRL(parseFloat(dados['ploa_teto_geral'].valor) || 0);
+                    if (document.getElementById('ploa_teto_geral')) document.getElementById('ploa_teto_geral').innerText = formatarBRL(parseFloat(dados['ploa_teto_geral'].valor) || 0);
+                }
+                if(dados['kpi_teto_ploa2027']) {
+                    document.getElementById('kpi_teto_ploa2027').innerText = formatarBRL(parseFloat(dados['kpi_teto_ploa2027'].valor) || 0);
+                }
+                if(dados['proj_final_geral']) {
+                    if(document.getElementById('proj_final_geral')) document.getElementById('proj_final_geral').innerText = formatarBRL(parseFloat(dados['proj_final_geral'].valor) || 0);
+                }
+                if(dados['ploa_8753_total'] && document.getElementById('ploa_8753_total')) {
+                    document.getElementById('ploa_8753_total').innerText = formatarBRL(parseFloat(dados['ploa_8753_total'].valor) || 0);
+                }
+                if(dados['ploa_20yn_total'] && document.getElementById('ploa_20yn_total')) {
+                    document.getElementById('ploa_20yn_total').innerText = formatarBRL(parseFloat(dados['ploa_20yn_total'].valor) || 0);
+                }
+                if(dados['proj_8753_final'] && document.getElementById('proj_8753_final')) {
+                    document.getElementById('proj_8753_final').innerText = formatarBRL(parseFloat(dados['proj_8753_final'].valor) || 0);
+                }
+                if(dados['proj_20yn_final'] && document.getElementById('proj_20yn_final')) {
+                    document.getElementById('proj_20yn_final').innerText = formatarBRL(parseFloat(dados['proj_20yn_final'].valor) || 0);
                 }
 
                 document.querySelectorAll('.val').forEach(el => {
@@ -765,7 +824,6 @@
                         <div id="${idSub}" class="aditivo-retratil-container" onclick="event.stopPropagation();">
                             <div class="os-cards-container">
                                 ${objMeta.lista.map(os => {
-                                    // TRATAMENTO DINÂMICO PARA IDENTIFICAÇÃO DAS CLASSES DE CORES DO BADGE
                                     let classeCorStatus = "execucao";
                                     let sLower = os.status.toLowerCase();
                                     if(sLower.includes('pago')) classeCorStatus = "pago";
@@ -882,7 +940,7 @@
                     <div class="ted-content" id="content_${idTED}">
                         <div class="ted-content-inner">
                             <div class="ted-grid">
-                                <div class="ted-field"><small>Instituição</small><span>${instituicao}</span></div>
+                                <div class="ted-field"><small>Compartilhado via</small><span>${instituicao}</span></div>
                                 <div class="ted-field highlight"><small>Valor do Teto Atualizado</small><span class="mono-val">${formatarBRL(tetoAtualizado)}</span></div>
                                 <div class="ted-field success"><small>Saldo a Descentralizar</small><span class="mono-val">${formatarBRL(tetoAtualizado - totalNCs)}</span></div>
                                 <div class="ted-field"><small>Fim da Vigência</small><span>${vigencia}</span></div>
