@@ -119,21 +119,21 @@
         .alert-badge.atencao { background: var(--ms-amber-light); color: var(--ms-amber); }
         .alert-badge.critico { background: var(--ms-red-light); color: var(--ms-red); }
 
-        .card-aditivo-financeiro { background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 10px; margin-top: 8px; }
-        .aditivo-header-grid { display: flex; justify-content: space-between; align-items: center; }
+        .card-aditivo-financeiro { background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 10px; margin-top: 8px; cursor: pointer; box-shadow: var(--shadow-sm); }
+        .aditivo-header-grid { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--border-color); padding-bottom: 4px; margin-bottom: 6px; }
         .aditivo-titulo-texto { font-size: 9.5px; font-weight: 700; color: var(--text-title); text-transform: uppercase; }
         .aditivo-valores-mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; margin-top: 6px; }
         .mini-caixa-valor { background: var(--bg-body); padding: 4px 8px; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
         .mini-caixa-valor small { display: block; font-size: 8px; color: var(--text-muted); }
-        .mini-caixa-valor span { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; }
-        .aditivo-retratil-container { max-height: 0; overflow: hidden; transition: max-height 0.2s ease-out; }
+        .mini-caixa-valor span { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; white-space: nowrap; }
+        .aditivo-retratil-container { max-height: 0; overflow: hidden; transition: max-height 0.2s ease-out; will-change: max-height; }
 
         .os-cards-container { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
         .os-mini-card { background: var(--bg-body); border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 8px 10px; }
-        .os-mini-card-row { display: flex; justify-content: space-between; align-items: center; }
-        .os-card-title { font-size: 11px; font-weight: 700; }
+        .os-mini-card-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        .os-card-title { font-size: 11px; font-weight: 700; flex: 1; }
         .os-card-sei { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--brand-primary); }
-        .os-card-val { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; }
+        .os-card-val { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; white-space: nowrap; }
         .status-pill { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 8.5px; font-weight: 800; text-transform: uppercase; }
         .status-pill.pago { background: #d1fae5 !important; color: #065f46 !important; }
         .status-pill.execucao { background: #e0f2fe !important; color: #0369a1 !important; }
@@ -143,7 +143,7 @@
         .ted-field { background: #ffffff; padding: 8px 10px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
         .ted-field small { display: block; font-size: 8.5px; color: var(--text-muted); text-transform: uppercase; }
         .ted-field span { display: block; font-size: 12px; color: var(--text-title); font-weight: 600; }
-        .ted-field .mono-val { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+        .ted-field .mono-val { font-family: 'JetBrains Mono', monospace; font-weight: 700; white-space: nowrap; }
         .ted-field.highlight { background: #eff6ff; border-color: #bfdbfe; }
         .ted-field.highlight span { color: #1e40af; }
         .ted-field.success { background: #ecfdf5; border-color: #a7f3d0; }
@@ -160,7 +160,7 @@
 
         .unified-footer { background: var(--brand-dark); color: white; padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; }
         .unified-footer span { font-size: 9px; opacity: 0.7; text-transform: uppercase; }
-        .unified-footer strong { display: block; font-size: 1.35rem; color: #4ade80; margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
+        .unified-footer strong { display: block; font-size: 1.35rem; color: #4ade80; margin-top: 2px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
         .footer-info { text-align: center; padding: 20px 10px; font-size: 10.5px; color: var(--text-muted); }
 
         .shimmer { background: linear-gradient(90deg, #eff1f3 4%, #e2e8f0 25%, #eff1f3 36%); background-size: 1200px 100%; animation: shimmer-animation 1.6s infinite linear; border-radius: 4px; color: transparent !important; min-width: 80px; display: inline-block; }
@@ -317,7 +317,7 @@
 
             <div class="form-group">
                 <label>Título / Nome do Instrumento</label>
-                <input type="text" id="web_titulo" placeholder="Ex: TED 04/2026 (UFG)">
+                <input type="text" id="web_titulo" placeholder="Ex: Contrato 10/2024">
             </div>
 
             <div class="form-group">
@@ -326,11 +326,13 @@
             </div>
 
             <div id="meta_campos_ted" class="form-group" style="display:none; flex-direction:column; gap:8px;">
-                <div class="form-group"><label>Instituição Beneficiária</label><input type="text" id="meta_ted_inst" placeholder="Ex: FIOCRUZ"></div>
-                <div class="form-group"><label>Área Técnica Gestora</label><input type="text" id="meta_ted_area" placeholder="Ex: CGGIE"></div>
+                <div class="form-group"><label>Área Técnica Responsável / Inst Beneficiária</label><input type="text" id="meta_ted_inst" placeholder="Ex: CGDID / FIOCRUZ"></div>
+                <div class="form-group"><label>Metadados 2 / Área Gestora</label><input type="text" id="meta_ted_area" placeholder="Ex: DEMAS/MS"></div>
                 <div class="form-group"><label>Data Vigência Final</label><input type="text" id="meta_ted_vigencia" placeholder="dd/mm/aaaa"></div>
-                <div class="form-group"><label>Cronograma de Desembolso Anual</label><input type="text" id="meta_ted_crono" placeholder="Ex: 2026: 500000; 2027: 1000000"></div>
-                <div class="form-group"><label>Histórico String Completo (Notas de Crédito / OS)</label><input type="text" id="meta_ted_raw_history" placeholder="Mantenha ou altere a cadeia de histórico bruta"></div>
+                <div class="form-group"><label>Aditivos de Prazo / Histórico 1</label><input type="text" id="meta_ted_adit_prazo" placeholder="Ex: Prorrogado por 12 meses"></div>
+                <div class="form-group"><label>Aditivos de Valor / Histórico 2</label><input type="text" id="meta_ted_adit_valor" placeholder="Ex: R$ 0,00"></div>
+                <div class="form-group"><label>Cronograma de Desembolso / Outros</label><input type="text" id="meta_ted_crono" placeholder="Ex: 2026: 500000"></div>
+                <div class="form-group"><label>Histórico String Completo (Ordens de Serviço / NCs)</label><input type="text" id="meta_ted_raw_history" placeholder="Mantenha ou altere a cadeia de histórico bruta"></div>
             </div>
 
             <button class="btn-salvar-web" onclick="processarEnvioFormularioMestre()">VALIDAR E SALVAR</button>
@@ -433,7 +435,6 @@
             const areaTecnica = partes[1] ? partes[1].trim() : '---';
             const vigencia    = partes[2] ? partes[2].trim() : '---';
             const aditPrazo   = partes[3] ? partes[3].trim() : '---';
-            const aditValor   = partes[4] ? partes[4].trim() : '';
             const cronogramaRaw = partes[7] ? partes[7].trim() : '---';
             const historicoRaw  = partes[8] ? partes[8].trim() : '';
 
@@ -441,7 +442,6 @@
             let tetoAtualizado = vOriginal; 
             const saude = calcularSaudeVigencia(vigencia);
 
-            // Restauração das Tabelas de Cronograma Anual Empilhadas
             let cronogramaHTML = "";
             if (cronogramaRaw && cronogramaRaw.includes(":")) {
                 cronogramaHTML = `<div class="tabela-mobile-gaveta"><table class="cron-table"><thead><tr><th>Ano</th><th style="text-align: right;">Previsão</th></tr></thead><tbody>`;
@@ -456,7 +456,6 @@
                 cronogramaHTML = `<span>${cronogramaRaw || '---'}</span>`;
             }
 
-            // Restauração dos Blocos de Notas de Crédito Empilhados
             let ncsHTML = '';
             let totalNCs = 0;
             if (historicoRaw !== '' && historicoRaw.includes('|')) {
@@ -535,11 +534,11 @@
                     let objetoOS = { nome: dadosOS[0], sei: dadosOS[1], valor: osValor, status: dadosOS[3] };
                     const nL = dadosOS[0].toLowerCase();
 
-                    if (nL.includes('1º') || nL.includes('1o')) {
+                    if (nL.includes('1º') || nL.includes('1o') || nL.includes('1a')) {
                         osPrimeiroAditivo.total += osValor;
                         if (statusPago) osPrimeiroAditivo.pago += osValor; else osPrimeiroAditivo.apagar += osValor;
                         osPrimeiroAditivo.lista.push(objetoOS);
-                    } else if (nL.includes('2º') || nL.includes('2o')) {
+                    } else if (nL.includes('2º') || nL.includes('2o') || nL.includes('2a')) {
                         osSegundoAditivo.total += osValor;
                         if (statusPago) osSegundoAditivo.pago += osValor; else osSegundoAditivo.apagar += osValor;
                         osSegundoAditivo.lista.push(objetoOS);
@@ -555,6 +554,7 @@
             if(somaRealGlobal === 0) somaRealGlobal = parseFloat((valorGlobal || "0").toString().replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
             const saude = calcularSaudeVigencia(vigencia);
 
+            // FUNÇÃO INTERNA PARA CONSTRUIR O RENDERIZADOR SANFONA DINÂMICO DE OSs
             const renderBlocoAdit = (titInt, objMeta, idSub, cor, prazo) => {
                 if (objMeta.lista.length === 0) return "";
                 return `
@@ -618,9 +618,13 @@
                                 <div class="ted-field success"><small>💡 Saldo Restante OS</small><span class="mono-val">${formatarBRL(somaRealGlobal - totalPago)}</span></div>
                                 <div class="ted-field"><small>Histórico / Aditivos de Valor</small><span style="font-size:11.5px; color:var(--text-muted); font-weight:600;">${aditValor || 'Sem histórico adicional'}</span></div>
                             </div>
+                            
+                            <!-- EXIBIÇÃO EMPILHADA DO CONTRATO INICIAL E SEUS ADITIVOS COM AS OSs DENTRO -->
                             <div style="margin-top:10px;">${aditHTML}</div>
+                            
                             <div class="card-action-bar">
                                 <button class="btn-card-action edit" onclick="event.stopPropagation(); abrirModalEdicaoCard('${idContrato}', 'CONTRATO')">✏️ Editar Contrato</button>
+                                <button class="btn-card-action add-member" onclick="event.stopPropagation(); abrirPromptInjecaoRapida('${idContrato}')">➕ Injetar OS rápido</button>
                             </div>
                         </div>
                     </div>
@@ -659,17 +663,15 @@
             document.getElementById('web_valor').value = formatarBRL(item.valor);
             document.getElementById('modalFormTitle').innerText = "EDITAR: " + item.titulo;
 
-            if (tipoContexto === 'TED' || tipoContexto === 'CONTRATO') {
-                document.getElementById('meta_campos_ted').style.display = 'flex';
-                const partes = item.status.split('|');
-                document.getElementById('meta_ted_inst').value = partes[0] ? partes[0].trim() : '';
-                document.getElementById('meta_ted_area').value = partes[1] ? partes[1].trim() : '';
-                document.getElementById('meta_ted_vigencia').value = partes[2] ? partes[2].trim() : '';
-                document.getElementById('meta_ted_crono').value = partes[7] ? partes[7].trim() : '';
-                document.getElementById('meta_ted_raw_history').value = partes[8] ? partes[8].trim() : '';
-            } else {
-                document.getElementById('meta_campos_ted').style.display = 'none';
-            }
+            document.getElementById('meta_campos_ted').style.display = 'flex';
+            const partes = item.status.split('|');
+            document.getElementById('meta_ted_inst').value = partes[0] ? partes[0].trim() : '';
+            document.getElementById('meta_ted_area').value = partes[1] ? partes[1].trim() : '';
+            document.getElementById('meta_ted_vigencia').value = partes[2] ? partes[2].trim() : '';
+            document.getElementById('meta_ted_adit_prazo').value = partes[3] ? partes[3].trim() : '';
+            document.getElementById('meta_ted_adit_valor').value = partes[4] ? partes[4].trim() : '';
+            document.getElementById('meta_ted_crono').value = partes[7] ? partes[7].trim() : '';
+            document.getElementById('meta_ted_raw_history').value = partes[8] ? partes[8].trim() : '';
 
             document.getElementById('cadastro_overlay').style.display = 'block';
         }
@@ -684,6 +686,8 @@
             document.getElementById('meta_ted_inst').value = "";
             document.getElementById('meta_ted_area').value = "";
             document.getElementById('meta_ted_vigencia').value = "";
+            document.getElementById('meta_ted_adit_prazo').value = "";
+            document.getElementById('meta_ted_adit_valor').value = "";
             document.getElementById('meta_ted_crono').value = "";
             document.getElementById('meta_ted_raw_history').value = "";
             
@@ -693,7 +697,7 @@
         }
 
         function abrirPromptInjecaoRapida(id) {
-            const novaNC = prompt("✏️ Digite a nova NC/OS no padrão (Nome | Valor | Status):\nEx: 2026NC00555 | 150000 | Emitido");
+            const novaNC = prompt("✏️ Digite o novo membro no padrão (Nome | SEI | Valor | Status):\nEx para Contrato: OS 13 - 1º Aditivo | 25000.111/2026-00 | 359265,54 | Pago\nEx para TED: 2026NC00555 | 150000 | Emitido");
             if (!novaNC) return;
 
             const senha = prompt("🔑 Confirmar Senha Master:");
@@ -702,7 +706,7 @@
             const pacote = { acao: "ADICIONAR_NC_OS", id: id, senha: senha, novaStringMembro: novaNC.trim() };
 
             fetch(URL_API, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(pacote) })
-            .then(() => { alert("✅ Membro injetado com sucesso!"); sincronizarPainel(); })
+            .then(() => { alert("✅ Elemento injetado com sucesso!"); sincronizarPainel(); })
             .catch(err => alert("❌ Erro: " + err.message));
         }
 
@@ -721,10 +725,12 @@
             let inst = document.getElementById('meta_ted_inst').value.trim() || "---";
             let area = document.getElementById('meta_ted_area').value.trim() || "---";
             let vig  = document.getElementById('meta_ted_vigencia').value.trim() || "---";
+            let adP  = document.getElementById('meta_ted_adit_prazo').value.trim() || "---";
+            let adV  = document.getElementById('meta_ted_adit_valor').value.trim() || "---";
             let cro  = document.getElementById('meta_ted_crono').value.trim() || "---";
             let hist = document.getElementById('meta_ted_raw_history').value.trim() || "---";
             
-            let statusStringMontada = `${inst} | ${area} | ${vig} | --- | --- |   |   | ${cro} | ${hist}`;
+            let statusStringMontada = `${inst} | ${area} | ${vig} | ${adP} | ${adV} |   |   | ${cro} | ${hist}`;
 
             if (modo === "INSERIR_NOVO" && !cat.includes("TED") && !cat.includes("CONTRATO")) {
                 statusStringMontada = vig; 
@@ -779,6 +785,7 @@
                 let ancestral = content.parentElement;
                 while (ancestral) {
                     if (ancestral.classList && (ancestral.classList.contains('ted-content') || ancestral.classList.contains('aditivo-retratil-container'))) {
+                        // Força o contêiner pai a expandir sua altura somando o tamanho do filho aberto
                         ancestral.style.maxHeight = (ancestral.scrollHeight + content.scrollHeight) + "px";
                     }
                     ancestral = ancestral.parentElement;
