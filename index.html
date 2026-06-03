@@ -173,10 +173,25 @@
             background: var(--bg-body); border: 1px solid var(--border-color); 
             border-radius: var(--radius-lg); padding: 10px 14px; display: flex; flex-direction: column; gap: 4px;
         }
-        .exe-panel-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-        .exe-panel-title { font-size: 12.5px; font-weight: 600; color: var(--text-title); }
+        
+        .exe-panel-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            gap: 12px;
+            width: 100%;
+        }
+        
+        .exe-panel-title { font-size: 12.5px; font-weight: 600; color: var(--text-title); flex: 1; }
         .exe-panel-status { font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; background: #e2e8f0; padding: 2px 6px; border-radius: 4px; }
-        .exe-panel-val, .val { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; font-weight: 700; text-align: right; }
+        
+        .exe-panel-val, .val { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 12.5px; 
+            font-weight: 700; 
+            text-align: right; 
+            white-space: nowrap; /* Impede a quebra isolada do sinal negativo */
+        }
         
         .exe-panel-card.dotacao-card { background: #ffffff; border-left: 4px solid var(--text-title); }
         .exe-panel-card.saldo-card { background: #f5f3ff; border: 1px solid #ddd6fe; border-left: 4px solid var(--brand-primary); }
@@ -198,7 +213,7 @@
         .ted-arrow { font-size: 11px; color: var(--text-muted); transition: transform 0.2s; }
         .ted-quick-val { text-align: right; }
         .ted-quick-val small { display: block; font-size: 8px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
-        .ted-quick-val span { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: var(--brand-primary); }
+        .ted-quick-val span { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: var(--brand-primary); white-space: nowrap; }
         
         .ted-content { max-height: 0; overflow: hidden; transition: max-height 0.25s ease-out; background: #ffffff; will-change: max-height; }
         .ted-content-inner { padding: 14px; border-top: 1px solid #f1f5f9; background: #fafafa; }
@@ -215,22 +230,22 @@
         .aditivo-valores-mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
         .mini-caixa-valor { background: var(--bg-body); padding: 4px 8px; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
         .mini-caixa-valor small { display: block; font-size: 8px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
-        .mini-caixa-valor span { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; color: var(--text-title); }
+        .mini-caixa-valor span { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; color: var(--text-title); white-space: nowrap; }
         .aditivo-retratil-container { max-height: 0; overflow: hidden; transition: max-height 0.2s ease-out; will-change: max-height; }
         
         /* OS CONFIGS */
         .os-cards-container { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
         .os-mini-card { background: var(--bg-body); border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 8px 10px; display: flex; flex-direction: column; gap: 2px; }
-        .os-mini-card-row { display: flex; justify-content: space-between; align-items: center; }
-        .os-card-title { font-size: 11px; font-weight: 700; color: var(--text-title); }
+        .os-mini-card-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        .os-card-title { font-size: 11px; font-weight: 700; color: var(--text-title); flex: 1; }
         .os-card-sei { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--brand-primary); }
-        .os-card-val { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--text-title); }
+        .os-card-val { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--text-title); white-space: nowrap; }
 
         .ted-grid { display: flex; flex-direction: column; gap: 6px; }
         .ted-field { background: #ffffff; padding: 8px 10px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); }
         .ted-field small { display: block; font-size: 8.5px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
         .ted-field span { display: block; font-size: 12px; color: var(--text-title); font-weight: 600; }
-        .ted-field .mono-val { font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+        .ted-field .mono-val { font-family: 'JetBrains Mono', monospace; font-weight: 700; white-space: nowrap; }
         .ted-field.highlight { background: #eff6ff; border-color: #bfdbfe; }
         .ted-field.highlight span { color: #1e40af; }
         .ted-field.success { background: #ecfdf5; border-color: #a7f3d0; }
@@ -252,7 +267,7 @@
         
         .unified-footer { background: var(--brand-dark); color: white; padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .unified-footer span { font-size: 9px; opacity: 0.7; text-transform: uppercase; font-weight: 700; text-align: center; }
-        .unified-footer strong { display: block; font-size: 1.35rem; color: #4ade80; margin-top: 2px; font-family: 'JetBrains Mono', monospace; text-align: center; }
+        .unified-footer strong { display: block; font-size: 1.35rem; color: #4ade80; margin-top: 2px; font-family: 'JetBrains Mono', monospace; text-align: center; white-space: nowrap; }
         
         .footer-info { text-align: center; padding: 20px 10px; font-size: 10.5px; color: var(--text-muted); font-weight: 500; line-height: 1.4; }
         
@@ -594,7 +609,7 @@
     </div>
 
     <script>
-        const URL_API = "https://script.google.com/macros/s/AKfycbxF3o7rbSRrmkuQKBv-3kemHP8hHCorS6j3EJHTFQiPFErhJyj5APQGdCppGs2eTC_6rg/exec";
+        const URL_API = "https://script.google.com/macros/s/AKfycbyuJdBEyt-k-ZTDF8O_ZdgK5o-Fw6x7ESXCsDRGWMb-b_IDuL-qyxsUOeoxH1ndvPbrJA/exec";
         let navigationHistory = [];
         let backupDadosGerais = {}; 
         const formatarBRL = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -603,13 +618,11 @@
             if (!dataString) return null;
             if (dataString instanceof Date) return dataString;
             
-            // Se for string no formato dd/MM/yyyy
             if (typeof dataString === 'string' && dataString.includes('/')) {
                 const partes = dataString.split('/');
                 return new Date(parseInt(partes[2]), parseInt(partes[1]) - 1, parseInt(partes[0]));
             }
             
-            // Se for string vinda do ISO (yyyy-mm-dd)
             const timestamp = Date.parse(dataString);
             if (!isNaN(timestamp)) {
                 return new Date(timestamp);
@@ -624,7 +637,7 @@
             if (!dataVigencia || isNaN(dataVigencia.getTime())) return { label: "Vigência", classe: "regular" };
             
             try {
-                const hoje = new Date(2026, 5, 1); // Baseline Junho de 2026 conforme regra de negócio
+                const hoje = new Date(2026, 5, 1); 
                 const diffTime = dataVigencia - hoje;
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 
@@ -687,7 +700,6 @@
                             } catch(err) { console.error(err); }
                         }
 
-                        // Proteção extra contra IDs repetidos gerando falhas nos blocos fixos
                         if (catLimpa !== 'FIXO') {
                             const htmlLinhaComum = generarLinhaHTML(item.titulo, valorFinalItem, statusFinalItem);
                             if (catLimpa === 'EXEC_8753') containers.exec8753.innerHTML += htmlLinhaComum;
@@ -703,11 +715,9 @@
                     }
                 });
 
-                // Atualização dos contadores
                 document.getElementById('kpi_total_contratos').innerText = totalContratosCount;
                 document.getElementById('kpi_total_teds').innerText = totalTedsCount;
                 
-                // Blindagem e cálculo dinâmico do Saldo Disponível
                 let saldo8753 = 0;
                 let saldo20yn = 0;
 
@@ -729,7 +739,6 @@
 
                 document.getElementById('kpi_saldo_disponivel').innerText = formatarBRL(saldo8753 + saldo20yn);
 
-                // Vinculação estrutural dos cards fixos inferiores e superiores
                 if(dados['ploa_teto_geral']) {
                     document.getElementById('kpi_teto_ploa2027').innerText = formatarBRL(parseFloat(dados['ploa_teto_geral'].valor) || 0);
                     if (document.getElementById('ploa_teto_geral')) document.getElementById('ploa_teto_geral').innerText = formatarBRL(parseFloat(dados['ploa_teto_geral'].valor) || 0);
@@ -915,7 +924,7 @@
                 cronogramaHTML = `<div class="tabela-mobile-gaveta"><table class="cron-table"><thead><tr><th>Ano</th><th style="text-align: right;">Previsão</th></tr></thead><tbody>`;
                 cronogramaRaw.split(";").forEach(linha => {
                     if(!linha.includes(":")) return;
-                    const subPartes = linha.split(":");
+                    const subPartes = inline.split(":");
                     const vAnoRaw = parseFloat(subPartes[1].replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
                     cronogramaHTML += `<tr><td style="font-weight: 600; color: var(--text-main);">${subPartes[0].trim()}</td><td style="text-align: right; font-weight: 700; color: var(--brand-dark); font-family: 'JetBrains Mono', monospace;">${formatarBRL(vAnoRaw)}</td></tr>`;
                 });
