@@ -171,7 +171,6 @@
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 9.5px; font-weight: 700; color: var(--text-title); text-transform: uppercase; margin-bottom: 4px; }
         .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 13.5px; color: var(--text-title); }
-        .secao-dinamica { display: none; background: var(--bg-body); padding: 10px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); border-left: 4px solid var(--brand-primary); margin-top: 10px; }
         .btn-salvar-web { background: var(--ms-green); color: white; border: none; width: 100%; padding: 12px; border-radius: var(--radius-lg); font-weight: 700; font-size: 13.5px; cursor: pointer; margin-top: 14px; }
         .btn-cancelar { background: transparent; color: var(--ms-red); border: none; width: 100%; padding: 6px; font-weight: 700; font-size: 12.5px; margin-top: 4px; cursor: pointer; }
     </style>
@@ -227,7 +226,6 @@
             </div>
         </div>
 
-        <!-- SEÇÃO EXECUÇÃO -->
         <section id="execucao" class="content-section">
             <div class="unified-card">
                 <div class="card-header-main">📍 Recursos Descentralizados (Em Conta)</div>
@@ -254,7 +252,6 @@
             </div>
         </section>
 
-        <!-- SEÇÃO PLANEJAMENTO -->
         <section id="planejamento" class="content-section">
             <div class="unified-card">
                 <div class="card-header-main">📈 Projeção Orçamentária 2027</div>
@@ -294,7 +291,6 @@
 
     <button class="btn-floating-add" onclick="abrirModalInclusaoGlobal()">+</button>
 
-    <!-- GAVETA UNIFICADA DE MODAL -->
     <div id="cadastro_overlay">
         <div class="form-card">
             <h2 id="modalFormTitle" style="color: var(--brand-dark); font-weight: 800; font-size: 1.15rem; margin-bottom: 2px;">MODIFICAR REGISTRO</h2>
@@ -342,6 +338,70 @@
 
     <script>
         const URL_API = "https://script.google.com/macros/s/AKfycbybFd_nJvLM9BOHGLqZMwDSYAiHyUf9ixAj1SgJKV4F6Fm4xaC3SEDpA3hrEtBL9_RjdQ/exec";
+        
+        // HARDCODING COMPLETO DO BANCO DE DADOS DA PLANILHA DO DEMAS
+        const MOCK_DADOS = {
+            "exe_8753_dotacao": {"categoria": "FIXO", "titulo": "Dotação Inicial Ação 8753", "valor": 13548529, "status": "---"},
+            "exe_8753_ted27": {"categoria": "EXEC_8753", "titulo": "TED 27/2023 (FIOCRUZ-RJ) - \"BILA\"", "valor": -924686.77, "status": "Movimentação Orçamentária"},
+            "exe_8753_ted41": {"categoria": "EXEC_8753", "titulo": "TED 41/2025 (FIOCRUZ-RJ) - \"FAVELAS\"", "valor": -919431.23, "status": "Movimentação Orçamentária"},
+            "exe_8753_ted39": {"categoria": "EXEC_8753", "titulo": "TED 39/2023 (FIOCRUZ-DF)", "valor": -350000, "status": "Movimentação Orçamentária"},
+            "exe_8753_ted4": {"categoria": "EXEC_8753", "titulo": "TED 04/2026 (UFG) - \"NOVO\"", "valor": -8000000, "status": "Movimentação Orçamentária"},
+            "exe_8753_disponivel": {"categoria": "FIXO", "titulo": "Saldo Disponível Atual 8753", "valor": 8454411, "status": "---"},
+            "exe_20yn_dotacao": {"categoria": "FIXO", "titulo": "Dotação Inicial Ação 20YN", "valor": 15690000, "status": "---"},
+            "exe_20yn_co10": {"categoria": "EXEC_20YN", "titulo": "Contrato 10/2024", "valor": -2862054.75, "status": "Movimentação Orçamentária"},
+            "exe_20yn_co41": {"categoria": "EXEC_20YN", "titulo": "Contrato 41/2024", "valor": -3175282.83, "status": "Movimentação Orçamentária"},
+            "exec_20yn_remanejamento_entre_a_oes_20yn_para_8753_": {"categoria": "EXEC_20YN", "titulo": "Remanejamento entre ações (20YN para 8753)", "valor": -5100000, "status": "Remanejamento"},
+            "exec_8753_remanejamento_entre_a_oes_20yn_para_8753_": {"categoria": "EXEC_8753", "titulo": "Remanejamento entre ações (20YN para 8753)", "valor": 5100000, "status": "Remanejamento"},
+            "exe_20yn_disponivel": {"categoria": "FIXO", "titulo": "Saldo Disponível Atual 20YN", "valor": 4552662.42, "status": "---"},
+            "proj_8753_saldo": {"categoria": "FIXO", "titulo": "Saldo Atual", "valor": 8454411, "status": "---"},
+            "proj_8753_ted34": {"categoria": "PROJ_8753", "titulo": "TED 34/2023 (UFMG) - \"ADInst\"", "valor": -3000000, "status": "Projeção Orçamentária"},
+            "proj_8753_ted27": {"categoria": "PROJ_8753", "titulo": "TED 27/2023 (FIOCRUZ-RJ) - \"BILA\"", "valor": -1378093.19, "status": "Projeção Orçamentária"},
+            "proj_8753_ted39_h": {"categoria": "PROJ_8753", "titulo": "TED 39/2023 (FIOCRUZ-DF)", "valor": -1000000, "status": "Projeção Orçamentária"},
+            "proj_8753_ted41_h": {"categoria": "PROJ_8753", "titulo": "TED 41/2025 (FIOCRUZ-RJ) - \"FAVELAS\"", "valor": -1379112.77, "status": "Projeção Orçamentária"},
+            "proj_8753_final": {"categoria": "FIXO", "titulo": "Saldo Final Projetado 8753", "valor": 1697205.04, "status": "---"},
+            "proj_20yn_saldo": {"categoria": "FIXO", "titulo": "Saldo Atual", "valor": 4552662.42, "status": "---"},
+            "proj_20yn_co41": {"categoria": "PROJ_20YN", "titulo": "Contrato 41/2024 (2º Aditivo)", "valor": -1500292.9, "status": "Projeção Orçamentária"},
+            "proj_20yn_co10": {"categoria": "PROJ_20YN", "titulo": "Contrato 10/2024 (2º Aditivo)", "valor": -1412923, "status": "Projeção Orçamentária"},
+            "proj_20yn_proje_o_co_41_materiais_25_": {"categoria": "PROJ_20YN", "titulo": "Contrato 41/2024 (acréscimo 25%)", "valor": -1125220, "status": "Projeção Orçamentária"},
+            "proj_20yn_final": {"categoria": "FIXO", "titulo": "Saldo Final Projetado 20YN", "valor": 514226.52, "status": "---"},
+            "proj_final_geral": {"categoria": "FIXO", "titulo": "SALDO FINAL PROJETADO 2026", "valor": 2211431.56, "status": "---"},
+            "ploa_8753_ufg": {"categoria": "PLOA_8753", "titulo": "TED 04/2026 (UFG) - \"NOVO\"", "valor": 14000000, "status": "PLOA 2027"},
+            "ploa_8753_fio_rj": {"categoria": "PLOA_8753", "titulo": "TED 27/2023 (FIOCRUZ-RJ) - \"BILA\"", "valor": 3000000, "status": "PLOA 2027"},
+            "ploa_8753_ufmg": {"categoria": "PLOA_8753", "titulo": "TED 34/2023 (UFMG) - \"ADInst\"", "valor": 1080500, "status": "PLOA 2027"},
+            "ploa_8753_fio_df": {"categoria": "PLOA_8753", "titulo": "TED 39/2023 (FIOCRUZ-DF)", "valor": 1000000, "status": "PLOA 2027"},
+            "ploa_8753_fio_rj41": {"categoria": "PLOA_8753", "titulo": "TED 41/2025 (FIOCRUZ-RJ) - \"FAVELAS\"", "valor": 963248, "status": "PLOA 2027"},
+            "ploa_8753_total": {"categoria": "FIXO", "titulo": "Total PLOA 2027 para 8753", "valor": 20043748, "status": "---"},
+            "ploa_20yn_qlik10": {"categoria": "PLOA_20YN", "titulo": "Contratos 10 - Qlik (Manutenção)", "valor": 4662645.95, "status": "PLOA 2027"},
+            "ploa_20yn_qlik41": {"categoria": "PLOA_20YN", "titulo": "Contratos 41 - Qlik (Manutenção)", "valor": 6293606.05, "status": "PLOA 2027"},
+            "ploa_20yn_iniciativas_ia_e_inova_o": {"categoria": "PLOA_20YN", "titulo": "Iniciativas IA e Inovação", "valor": 5000000, "status": "PLOA 2027"},
+            "ploa_20yn_total": {"categoria": "FIXO", "titulo": "Total PLOA 2027 para 20YN", "valor": 15956252, "status": "---"},
+            "kpi_teto_ploa2027": {"categoria": "FIXO", "titulo": "TETO GERAL PROJETADO 2027", "valor": 36000000, "status": "---"},
+            
+            // CONTRATO ADMINISTRATIVO 41/2024 COMPLETO COM TODAS AS OSs
+            "inst_contrato_contrato_41_2024": {
+                "categoria": "INST_CONTRATO",
+                "titulo": "CONTRATO 41/2024",
+                "valor": 4311186.48,
+                "status": "Contrato | CGDID | 29/06/2026 | --- | R$ 0,00 | | | | OS 01 - Contrato inicial | 25000.123426/2024-47 | R$ 338.578,50 | Pago ; OS 02 - Contrato inicial | 25000.141473/2024-72 | R$ 338.578,50 | Pago ; OS 03 - Contrato inicial | 25000.157486/2024-63 | R$ 338.578,50 | Pago ; OS 04 - Contrato inicial | 25000.175586/2024-71 | R$ 338.578,50 | Pago ; OS 05 - Contrato inicial | 25000.192164/2024-61 | R$ 338.578,50 | Pago ; OS 06 - Contrato inicial | 25000.008427/2025-43 | R$ 338.578,50 | Pago ; OS 07 - Contrato inicial | 25000.026140/2025-03 | R$ 338.578,50 | Pago ; OS 08 - Contrato inicial | 25000.040570/2025-20 | R$ 338.578,50 | Pago ; OS 09 - Contrato inicial | 25000.058151/2025-44 | R$ 338.578,50 | Pago; OS 10 - Contrato inicial | 25000.072617/2025-14 | R$ 338.578,50 | Pago; OS 11 - Contrato inicial | 25000.103543/2025-75 | R$ 338.578,50 | Pago; OS 12 - Contrato inicial | 25000.124823/2025-17 | R$ 338.578,50 | Pago; OS 01 - 1º Aditivo | 25000.142367/2025-97 | 359265,54 | Pago ; OS 02 - 1º Aditivo | 25000.166610/2025-62 | 359265,54 | Pago ; OS 03 - 1º Aditivo | 25000.181036/2025-72 | 359265,54 | Pago ; OS 04 - 1º Aditivo | 25000.198379/2025-76 | 359265,54 | Pago ; OS 05 - 1º Aditivo | 25000.218120/2025-59 | 359265,54 | Pago ; OS 06 - 1º Aditivo | 25000.005922/2026-81 | 359265,54 | Pago ; OS 07 - 1º Aditivo | 25000.022543/2026-56 | 359265,54 | Pago ; OS 08 - 1º Aditivo | 25000.039599/2026-40 | 359265,54 | Pago ; OS 09 - 1º Aditivo | 25000.057924/2026-56 | 359265,54 | Aguardando ; OS 10 - 1º Aditivo | 25000.074982/2026-44 | 359265,54 | Em execução"
+            },
+            
+            // CONTRATO ADMINISTRATIVO 10/2024 COMPLETO COM TODAS AS OSs
+            "inst_contrato_contrato_10_2024": {
+                "categoria": "INST_CONTRATO",
+                "titulo": "CONTRATO 10/2024",
+                "valor": 3826335,
+                "status": "Contrato | CGDID | 01/03/2027 | 01/03/2025 a 01/03/2026 | R$ 0,00 | | | | OS 01 - CONTRATO INICIAL | 25000.052978/2024-63 | R$ 318.861,25 | Pago; OS 02 - CONTRATO INICIAL | 25000.072535/2024-99 | R$ 318.861,25 | Pago; OS 03 - CONTRATO INICIAL | 25000.096241/2024-52 | R$ 318.861,25 | Pago; OS 04 - CONTRATO INICIAL | 25000.107415/2024-10 | R$ 318.861,25 | Pago; OS 05 - CONTRATO INICIAL | 25000.123131/2024-71 | R$ 318.861,25 | Pago; OS 06 - CONTRATO INICIAL | 25000.140342/2024-78 | R$ 318.861,25 | Pago; OS 07 - CONTRATO INICIAL | 25000.157481/2024-31 | R$ 318.861,25 | Pago; OS 08 - CONTRATO INICIAL | 25000.175569/2024-34 | R$ 318.861,25 | Pago; OS 09 - CONTRATO INICIAL | 25000.192155/2024-70 | R$ 318.861,25 | Pago; OS 10 - CONTRATO INICIAL | 25000.008412/2025-85 | R$ 318.861,25 | Pago; OS 11 - CONTRATO INICIAL | 25000.025584/2025-13 | R$ 318.861,25 | Pago; OS 12 - CONTRATO INICIAL | 25000.039835/2025-47 | R$ 318.861,25 | Pago; OS 01 - 1º Aditivo | 5000.058185/2025-39 | 338343,64 | Pago ; OS 02 - 1º Aditivo | 25000.072638/2025-30 | 338343,64 | Pago ; OS 03 - 1º Aditivo | 25000.103553/2025-19 | 338343,64 | Pago ; OS 04 - 1º Aditivo | 25000.124722/2025-46 | 338343,64 | Pago ; OS 05 - 1º Aditivo | 25000.142259/2025-14 | 338343,64 | Pago ; OS 06 - 1º Aditivo | 25000.165573/2025-75 | 338343,64 | Pago ; OS 07 - 1º Aditivo | 25000.181027/2025-81 | 338343,64 | Pago ; OS 08 - 1º Aditivo | 25000.198398/2025-01 | 338343,64 | Pago ; OS 09 - 1º Aditivo | 25000.218112/2025-11 | 338343,64 | Pago ; OS 10 - 1º Aditivo | 25000.005894/2026-01 | 338343,64 | Pago ;OS 11 - 1º Aditivo | 25000.022528/2026-16 | R$ 338.434,64 | Pago ; OS 12 - 1º Aditivo | 25000.039593/2026-72 | R$ 338.434,64 | Pago; OS 2 - 2º Aditivo | 25000.074992/2026-80 | 353230,75 | Em Execução; OS 01 - 2º Aditivo | 25000.057942/2026-38 | 353230,75 | Aguardando ;"
+            },
+            
+            // ALL TEDS DA PLANILHA ORIGINAL
+            "TED_11": {"categoria": "INST_TED", "titulo": "TED 11/2022 (UFG) - \"ANTIGO\"", "valor": 33601574.33, "status": "UFG | CGGIE | 31/06/2026 | 1º TA (0030914659), 2º TA (0037686851) | R$ 0,00 | - | - | - | 2022NC806489 | 3854000.00 ; 2022NC815533 | 1117591.00 ; 2023NC811017 | 5125000.00 ; 2023NC817150 | 5874507.43; 2024NC801645 | 2748663.00 ; 2024NC812830 | 2881812.90 ; 2024NC814856 | 4000000.00 ; 2025NC801280 | 5970000.00 ; 2025NC810283 | 2030000.00"},
+            "TED_39": {"categoria": "INST_TED", "titulo": "TED 39/2023 (FIOCRUZ-DF)", "valor": 5000000, "status": "FIOCRUZ/DF | CGGIE | 14/11/2027 | - | - | | | 2026: 350000; 2027: 1000000 | 2023NC817031 | 400000.00 ; 2024NC801275 | 1520000.00 ; 2025NC811641 | 500000.00 ; 2025NC813583 | 500000.00 ; 2025NC801291 | 730000.00 ; 2026NC002695 | 350000.00"},
+            "inst_ted_ted_34_2023": {"categoria": "INST_TED", "titulo": "TED 34/2023 (UFMG) - \"ADInst\"", "valor": 3290000, "status": "UFMG | CGMA | 12/09/2028 | - | - | | | 2023: 1290000; 2024: 1000000; 2025: 1000000 | 2023NC817048 | 1290000; 2024NC801434 | 1000000; 2025NC801227 | 1000000"},
+            "inst_ted_ted_27_2023": {"categoria": "INST_TED", "titulo": "TED 27/2023 (FIOCRUZ-RJ) - \"BILA\"", "valor": 7224779.96, "status": "FIOCRUZ / RJ | CGMA | 15/10/2028 | - | R$ 6.957.537,92 | | | 2026: 1700000; 2027: 3000000; 2028: 2257537,92 | 2023NC816531 | 1222000 ; 2024NC801435 | 3100000; 2025NC801228 | 2300000; 2026NC002717 | 602779.96; 2026NC034820 | 680000; 2026NC002708 | -350093.19; 2026NC002719 | -8000;"},
+            "inst_ted_ted_41_2025": {"categoria": "INST_TED", "titulo": "TED 41/2025 (FIOCRUZ-RJ) - \"FAVELAS\"", "valor": 3758800, "status": "FIOCRUZ/RJ | CGDID | 15/10/2028 | - | - | | | 2025: 248504; 2026: 2298544; 2027: 963248; 2028: 248504 | 2025NC813461 | 248504; 2025NC800029 | -9.73; 2026NC006963 | 574648.17"},
+            "inst_ted_ted_04_2026": {"categoria": "INST_TED", "titulo": "TED 04/2026 (UFG) - \"NOVO\"", "valor": 80000000, "status": "UFG | CGGIE | 28/04/2031 | - | - | | | 2026: 8000000; 2027: 14000000; 2028: 18000000; 2029: 18000000; 2030: 22000000 | 2026NC042356 | 8000000"}
+        };
+
         let navigationHistory = [];
         let backupDadosGerais = {}; 
         const formatarBRL = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -367,10 +427,11 @@
             return { label: "Vigência OK", classe: "regular" };
         }
 
+        // ALTERAÇÃO PARA CARREGAR OS DADOS MOCKADOS LOCAIS AUTOMATICAMENTE
         async function sincronizarPainel() {
             try {
-                const response = await fetch(URL_API);
-                const dados = await response.json();
+                // Alimenta o buffer com os dados locais imutáveis de teste
+                const dados = MOCK_DADOS;
                 backupDadosGerais = dados; 
 
                 const containers = {
@@ -554,7 +615,6 @@
             if(somaRealGlobal === 0) somaRealGlobal = parseFloat((valorGlobal || "0").toString().replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
             const saude = calcularSaudeVigencia(vigencia);
 
-            // FUNÇÃO INTERNA PARA CONSTRUIR O RENDERIZADOR SANFONA DINÂMICO DE OSs
             const renderBlocoAdit = (titInt, objMeta, idSub, cor, prazo) => {
                 if (objMeta.lista.length === 0) return "";
                 return `
@@ -619,7 +679,6 @@
                                 <div class="ted-field"><small>Histórico / Aditivos de Valor</small><span style="font-size:11.5px; color:var(--text-muted); font-weight:600;">${aditValor || 'Sem histórico adicional'}</span></div>
                             </div>
                             
-                            <!-- EXIBIÇÃO EMPILHADA DO CONTRATO INICIAL E SEUS ADITIVOS COM AS OSs DENTRO -->
                             <div style="margin-top:10px;">${aditHTML}</div>
                             
                             <div class="card-action-bar">
@@ -785,7 +844,6 @@
                 let ancestral = content.parentElement;
                 while (ancestral) {
                     if (ancestral.classList && (ancestral.classList.contains('ted-content') || ancestral.classList.contains('aditivo-retratil-container'))) {
-                        // Força o contêiner pai a expandir sua altura somando o tamanho do filho aberto
                         ancestral.style.maxHeight = (ancestral.scrollHeight + content.scrollHeight) + "px";
                     }
                     ancestral = ancestral.parentElement;
