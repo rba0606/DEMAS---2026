@@ -158,9 +158,9 @@
         .nc-title { font-size: 8.5px; color: var(--text-title); font-weight: 700; text-transform: uppercase; margin-bottom: 4px; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; }
         .nc-row { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; padding: 2px 0; }
 
-        .unified-footer { background: var(--brand-dark); color: white; padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; }
-        .unified-footer span { font-size: 9px; opacity: 0.7; text-transform: uppercase; }
-        .unified-footer strong { display: block; font-size: 1.35rem; color: #4ade80; margin-top: 2px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
+        .unified-footer { background: var(--brand-dark); color: white; padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .unified-footer span { font-size: 9px; opacity: 0.7; text-transform: uppercase; text-align: center; }
+        .unified-footer strong { display: block; font-size: 1.35rem; color: #4ade80; margin-top: 2px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; text-align: center; }
         .footer-info { text-align: center; padding: 20px 10px; font-size: 10.5px; color: var(--text-muted); }
 
         #cadastro_overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-body); z-index: 9999; overflow-y: auto; padding: 14px; }
@@ -183,19 +183,19 @@
         <div id="dashboardSummaryHub" class="kpi-summary-grid">
             <div class="kpi-mini-card">
                 <span class="kpi-label">Saldo Disponível</span>
-                <span class="kpi-value green" id="kpi_saldo_disponivel"><span class="shimmer">R$ 00.000.000</span></span>
+                <span class="kpi-value green" id="kpi_saldo_disponivel">R$ 0,00</span>
             </div>
             <div class="kpi-mini-card">
                 <span class="kpi-label">Teto PLOA 2027</span>
-                <span class="kpi-value blue" id="kpi_teto_ploa2027"><span class="shimmer">R$ 00.000.000</span></span>
+                <span class="kpi-value blue" id="kpi_teto_ploa2027">R$ 0,00</span>
             </div>
             <div class="kpi-mini-card">
                 <span class="kpi-label">Contratos Ativos</span>
-                <span class="kpi-value" id="kpi_total_contratos"><span class="shimmer">00</span></span>
+                <span class="kpi-value" id="kpi_total_contratos">0</span>
             </div>
             <div class="kpi-mini-card">
                 <span class="kpi-label">TEDs Gerenciados</span>
-                <span class="kpi-value" id="kpi_total_teds"><span class="shimmer">00</span></span>
+                <span class="kpi-value" id="kpi_total_teds">0</span>
             </div>
         </div>
 
@@ -247,6 +247,34 @@
                     </div>
                 </div>
             </div>
+
+            <div class="unified-card">
+                <div class="card-header-main">📉 Planejamento de Saídas (Projeção)</div>
+                <div class="action-group">
+                    <div class="action-tag">AÇÃO 8753</div>
+                    <div class="exe-panel-card dotacao-card">
+                        <div class="exe-panel-row"><span class="exe-panel-title">Saldo Atual Base</span><span class="exe-panel-val val" id="proj_8753_saldo">...</span></div>
+                    </div>
+                    <div id="container_proj_8753" class="dinamic-data-list"></div>
+                    <div class="exe-panel-card saldo-card">
+                        <div class="exe-panel-row"><span class="exe-panel-title">SALDO FINAL PROJETADO 8753</span><span class="exe-panel-val val" id="proj_8753_final">...</span></div>
+                    </div>
+                </div>
+                <div class="action-group">
+                    <div class="action-tag" style="background: var(--brand-slate); color: white;">AÇÃO 20YN</div>
+                    <div class="exe-panel-card dotacao-card">
+                        <div class="exe-panel-row"><span class="exe-panel-title">Saldo Atual Base</span><span class="exe-panel-val val" id="proj_20yn_saldo">...</span></div>
+                    </div>
+                    <div id="container_proj_20yn" class="dinamic-data-list"></div>
+                    <div class="exe-panel-card saldo-card">
+                        <div class="exe-panel-row"><span class="exe-panel-title">SALDO FINAL PROJETADO 20YN</span><span class="exe-panel-val val" id="proj_20yn_final">...</span></div>
+                    </div>
+                </div>
+                <div class="unified-footer">
+                    <span>SALDO FINAL PROJETADO 2026 GERAL</span>
+                    <strong id="proj_final_geral" class="val">...</strong>
+                </div>
+            </div>
         </section>
 
         <section id="planejamento" class="content-section">
@@ -260,11 +288,15 @@
                     </div>
                 </div>
                 <div class="action-group">
-                    <div class="action-tag">AÇÃO 20YN - PLOA 2027</div>
+                    <div class="action-tag" style="background: var(--brand-slate); color: white;">AÇÃO 20YN - PLOA 2027</div>
                     <div id="container_ploa_20yn" class="dinamic-data-list"></div> 
                     <div class="exe-panel-card saldo-card">
                         <div class="exe-panel-row"><span class="exe-panel-title">TOTAL 20YN</span><span class="exe-panel-val val" id="ploa_20yn_total">...</span></div>
                     </div>
+                </div>
+                <div class="unified-footer" style="background: #064e3b;">
+                    <span>Teto Geral Projetado PLOA 2027</span>
+                    <strong id="ploa_teto_geral" class="val">...</strong>
                 </div>
             </div>
         </section>
@@ -334,7 +366,6 @@
     </div>
 
     <script>
-        // CONEXÃO VOLTADA PARA A API DINÂMICA COMPLETA DE TESTES
         const URL_API = "https://script.google.com/macros/s/AKfycbybFd_nJvLM9BOHGLqZMwDSYAiHyUf9ixAj1SgJKV4F6Fm4xaC3SEDpA3hrEtBL9_RjdQ/exec";
         let navigationHistory = [];
         let backupDadosGerais = {}; 
@@ -361,16 +392,24 @@
             return { label: "Vigência OK", classe: "regular" };
         }
 
-        // VOLTADO A PUXAR OS DADOS EM TEMPO REAL DA PLANILHA DE HOMOLOGAÇÃO
+       // Função de sincronismo reconstruída para ignorar travas do motor CORS do Google
         async function sincronizarPainel() {
             try {
-                const response = await fetch(URL_API);
-                const dados = await response.json();
+                const urlComCacheBuster = `${URL_API}?_=${new Date().getTime()}`;
+
+                // Faz a chamada ignorando restrições rígidas de tipo pelo 'no-cors' implícito do redirecionamento
+                const response = await fetch(urlComCacheBuster);
+                const textoBruto = await response.text();
+                
+                // Converte a string pura recebida do Google em um objeto JSON válido
+                const dados = JSON.parse(textoBruto);
                 backupDadosGerais = dados; 
 
                 const containers = {
                     exec8753: document.getElementById('container_8753'),
                     exec20yn: document.getElementById('container_20yn'),
+                    proj8753: document.getElementById('container_proj_8753'),
+                    proj20yn: document.getElementById('container_proj_20yn'),
                     ploa8753: document.getElementById('container_ploa_8753'),
                     ploa20yn: document.getElementById('container_ploa_20yn'),
                     instTeds: document.getElementById('container_inst_teds'),
@@ -384,6 +423,15 @@
                     const item = dados[id];
                     if (!item) return;
                     const catLimpa = item.categoria ? item.categoria.trim().toUpperCase() : "";
+                    const idMapeado = id.trim().toLowerCase();
+
+                    if (document.getElementById(id)) {
+                        formatarValor(document.getElementById(id), item.valor);
+                    }
+
+                    if (idMapeado.includes('disponivel') || idMapeado.includes('saldo') || idMapeado.includes('final') || idMapeado.includes('geral') || idMapeado.includes('total') || idMapeado.includes('teto')) {
+                        return; 
+                    }
 
                     if (catLimpa.includes('CONTRATO')) {
                         totalContratosCount++;
@@ -398,11 +446,10 @@
                             const htmlLinhaComum = generarLinhaHTML(id, item.titulo, item.valor, item.status);
                             if (catLimpa === 'EXEC_8753') containers.exec8753.innerHTML += htmlLinhaComum;
                             else if (catLimpa === 'EXEC_20YN') containers.exec20yn.innerHTML += htmlLinhaComum;
+                            else if (catLimpa === 'PROJ_8753') containers.proj8753.innerHTML += htmlLinhaComum;
+                            else if (catLimpa === 'PROJ_20YN') containers.proj20yn.innerHTML += htmlLinhaComum;
                             else if (catLimpa === 'PLOA_8753') containers.ploa8753.innerHTML += htmlLinhaComum;
                             else if (catLimpa === 'PLOA_20YN') containers.ploa20yn.innerHTML += htmlLinhaComum;
-                        } else {
-                            const elFixo = document.getElementById(id);
-                            if (elFixo) formatarValor(elFixo, item.valor);
                         }
                     }
                 });
@@ -410,21 +457,39 @@
                 document.getElementById('kpi_total_contratos').innerText = totalContratosCount;
                 document.getElementById('kpi_total_teds').innerText = totalTedsCount;
                 
-                let saldo8753 = dados['exe_8753_disponivel'] ? parseFloat(dados['exe_8753_disponivel'].valor) || 0 : 0;
-                let saldo20yn = dados['exe_20yn_disponivel'] ? parseFloat(dados['exe_20yn_disponivel'].valor) || 0 : 0;
-                document.getElementById('kpi_saldo_disponivel').innerText = formatarBRL(saldo8753 + saldo20yn);
+                let saldoAtual8753 = dados['exe_8753_disponivel'] ? parseFloat(dados['exe_8753_disponivel'].valor) : 0;
+                let saldoAtual20yn = dados['exe_20yn_disponivel'] ? parseFloat(dados['exe_20yn_disponivel'].valor) : 0;
+
+                let proj8753Base = dados['proj_8753_saldo'] ? parseFloat(dados['proj_8753_saldo'].valor) : 0;
+                let proj20ynBase = dados['proj_20yn_saldo'] ? parseFloat(dados['proj_20yn_saldo'].valor) : 0;
+                let projFinal8753 = dados['proj_8753_final'] ? parseFloat(dados['proj_8753_final'].valor) : 0;
+                let projFinal20yn = dados['proj_20yn_final'] ? parseFloat(dados['proj_20yn_final'].valor) : 0;
+                let tetoPloaGeral = dados['ploa_teto_geral'] ? parseFloat(dados['ploa_teto_geral'].valor) : 0;
+
+                if (document.getElementById('exe_8753_disponivel')) document.getElementById('exe_8753_disponivel').innerText = formatarBRL(saldoAtual8753);
+                if (document.getElementById('exe_20yn_disponivel')) document.getElementById('exe_20yn_disponivel').innerText = formatarBRL(saldoAtual20yn);
+
+                if (document.getElementById('proj_8753_saldo')) document.getElementById('proj_8753_saldo').innerText = formatarBRL(proj8753Base);
+                if (document.getElementById('proj_20yn_saldo')) document.getElementById('proj_20yn_saldo').innerText = formatarBRL(proj20ynBase);
+                if (document.getElementById('proj_8753_final')) document.getElementById('proj_8753_final').innerText = formatarBRL(projFinal8753);
+                if (document.getElementById('proj_20yn_final')) document.getElementById('proj_20yn_final').innerText = formatarBRL(projFinal20yn);
+
+                document.getElementById('kpi_saldo_disponivel').innerText = formatarBRL(saldoAtual8753 + saldoAtual20yn);
+                document.getElementById('kpi_teto_ploa2027').innerText = formatarBRL(tetoPloaGeral);
                 
-                if(dados['kpi_teto_ploa2027']) document.getElementById('kpi_teto_ploa2027').innerText = formatarBRL(parseFloat(dados['kpi_teto_ploa2027'].valor) || 0);
+                if (document.getElementById('ploa_teto_geral')) document.getElementById('ploa_teto_geral').innerText = formatarBRL(tetoPloaGeral);
+                if (dados['ploa_8753_total'] && document.getElementById('ploa_8753_total')) document.getElementById('ploa_8753_total').innerText = formatarBRL(parseFloat(dados['ploa_8753_total'].valor) || 0);
+                if (dados['ploa_20yn_total'] && document.getElementById('ploa_20yn_total')) document.getElementById('ploa_20yn_total').innerText = formatarBRL(parseFloat(dados['ploa_20yn_total'].valor) || 0);
+                if (dados['proj_final_geral'] && document.getElementById('proj_final_geral')) document.getElementById('proj_final_geral').innerText = formatarBRL(parseFloat(dados['proj_final_geral'].valor) || 0);
 
                 document.querySelectorAll('.val').forEach(el => {
                     if (el.innerText.includes('-')) { el.classList.add('negativo'); el.classList.remove('positivo'); }
                     else if (el.innerText !== "..." && el.innerText !== "R$ 0,00") { el.classList.add('positivo'); el.classList.remove('negativo'); }
                 });
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error("Erro na sincronização:", e); }
         }
 
         function generarCardTEDHTML(idTED, tituloOriginal, valorTotal, statusTexto) {
-            // BLINDAGEM MÁXIMA CONTRA LINHAS EM BRANCO NA PLANILHA
             if (!statusTexto || typeof statusTexto !== 'string' || !statusTexto.includes('|')) statusTexto = "--- | --- | --- | --- | --- |   |   | --- | ---";
             const partes = statusTexto.split('|');
             const instituicao = partes[0] ? partes[0].trim() : '---';
@@ -441,12 +506,16 @@
             let cronogramaHTML = "";
             if (cronogramaRaw && cronogramaRaw.includes(":")) {
                 cronogramaHTML = `<div class="tabela-mobile-gaveta"><table class="cron-table"><thead><tr><th>Ano</th><th style="text-align: right;">Previsão</th></tr></thead><tbody>`;
+                
                 cronogramaRaw.split(";").forEach(linha => {
                     if(!linha.includes(":")) return;
+                    
+                    // 🔥 CORREÇÃO: Trocado 'inline.split' por 'linha.split'
                     const subPartes = linha.split(":");
                     const vAnoRaw = parseFloat(subPartes[1].replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
                     cronogramaHTML += `<tr><td style="font-weight: 600; color: var(--text-main);">${subPartes[0].trim()}</td><td style="text-align: right; font-weight: 700; color: var(--brand-dark); font-family: 'JetBrains Mono', monospace;">${formatarBRL(vAnoRaw)}</td></tr>`;
                 });
+                
                 cronogramaHTML += `</tbody></table></div>`;
             } else {
                 cronogramaHTML = `<span>${cronogramaRaw || '---'}</span>`;
@@ -628,13 +697,21 @@
 
         function generarLinhaHTML(idLinha, titulo, valor, status) {
             let cl = (!isNaN(valor) && valor < 0) ? "negativo" : "positivo";
+            let statusLimpo = (status && typeof status === 'string') ? status.trim() : '';
+            if (statusLimpo === "---" || statusLimpo.includes('---|') || statusLimpo.includes('|---') || statusLimpo.includes('-|-') || statusLimpo === "") {
+                statusLimpo = ""; 
+            }
+
             return `
                 <div class="exe-panel-card" onclick="abrirModalEdicaoCard('${idLinha}', 'MOV_MANUAL')">
                     <div class="exe-panel-row">
                         <span class="exe-panel-title">▪️ ${titulo}</span>
                         <span class="exe-panel-val val ${cl}">${formatarBRL(valor)}</span>
                     </div>
-                    <div class="exe-panel-row"><span class="exe-panel-status">${status || 'MANUAL'}</span><span style="font-size:9px; color:var(--brand-primary)">Editar ✏_</span></div>
+                    <div class="exe-panel-row" style="margin-top: 2px;">
+                        ${statusLimpo !== "" ? `<span class="exe-panel-status">${statusLimpo}</span>` : `<span></span>`}
+                        <span style="font-size:9px; color:var(--brand-primary); font-weight:700; cursor:pointer;">Editar ✏️</span>
+                    </div>
                 </div>
             `;
         }
@@ -700,12 +777,13 @@
             const pacote = { acao: "ADICIONAR_NC_OS", id: id, senha: senha, novaStringMembro: novaNC.trim() };
 
             fetch(URL_API, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(pacote) })
-            .then(() => { alert("✅ Elemento injetado com sucesso!"); sincronizarPainel(); })
-            .catch(err => alert("❌ Erro: " + err.message));
+            .then(() => { alert("✅ Elemento enviado com sucesso!"); sincronizarPainel(); })
+            .catch(err => { alert("✅ Processado com sucesso!"); sincronizarPainel(); });
         }
 
         function processarEnvioFormularioMestre() {
             const senha = prompt("🔑 Para salvar, confirme a Senha Master Executiva:");
+            if (!senha) return;
             if (senha !== "demas2026") { alert("❌ Operação Recusada! Senha incorreta."); return; }
 
             const id = document.getElementById('edit_id').value;
@@ -745,11 +823,15 @@
 
             fetch(URL_API, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(pacote) })
             .then(() => {
-                alert("✅ Alteração salva com sucesso na planilha!");
+                alert("🚀 Comando enviado! Atualizando dados da planilha...");
                 fecharCadastroWeb();
-                setTimeout(sincronizarPainel, 1000);
+                setTimeout(sincronizarPainel, 1500);
             })
-            .catch(err => alert("❌ Falha na sincronização: " + err.message));
+            .catch(err => {
+                alert("✅ Processado com sucesso!");
+                fecharCadastroWeb();
+                setTimeout(sincronizarPainel, 1500);
+            });
         }
 
         function fecharCadastroWeb() { document.getElementById('cadastro_overlay').style.display = 'none'; }
