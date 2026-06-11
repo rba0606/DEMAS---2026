@@ -497,13 +497,34 @@
         }
 
         function calcularSaudeVigencia(dataString) {
-            if(!dataString || dataString === "---" || dataString.trim() === "") return { label: "Sem Prazo", classe: "regular" };
-            const dataVigencia = interpretarData(dataString);
-            if (!dataVigencia || isNaN(dataVigencia.getTime())) return { label: "Vigência", classe: "regular" };
-            const hoje = new Date(2026, 5, 1); 
-            const diffDays = Math.ceil((dataVigencia - hoje) / (1000 * 60 * 60 * 24));
-            if (diffDays < 0) return { label: "Vencido", classe: "critico" };
-            if (diffDays <= 90) return { label: `Vence em ${diffDays} d`, classe: "atencao" };
+            if(!dataString || dataString === "---" || dataString.trim() === "") {
+                return { label: "Sem Prazo", classe: "regular" };
+            }
+            
+            const dataVigencia = interpretarData(dataString.trim());
+            if (!dataVigencia || isNaN(dataVigencia.getTime())) {
+                return { label: "Vigência", classe: "regular" };
+            }
+            
+            // Força HOJE a começar exatamente à meia-noite local
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+            
+            // Força a data da VIGÊNCIA a começar exatamente à meia-noite local
+            dataVigencia.setHours(0, 0, 0, 0);
+            
+            // Faz a diferença em milissegundos
+            const diffTime = dataVigencia.getTime() - hoje.getTime();
+            
+            // Converte milissegundos em dias usando Math.round para evitar quebra de fuso/horas
+            const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays < 0) {
+                return { label: "Vencido", classe: "critico" };
+            }
+            if (diffDays <= 90) {
+                return { label: `Vence em ${diffDays} d`, classe: "atencao" };
+            }
             return { label: "Vigência OK", classe: "regular" };
         }
 
