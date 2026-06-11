@@ -667,13 +667,19 @@
             const historicoRaw = item.historico || '';
             const numeroSei = item.sei || '---';
 
-            let tetoAtualizado = parseFloat(item.valor) || 0;
+            let tetoInicial = parseFloat(item.valor) || 0;
             let totalAditivosFinanceiros = extrairTotalAditivosMonetarios(aditValor);
             const saude = calcularSaudeVigencia(vigencia);
 
+            // Identifica dinamicamente o ano atual do sistema (Ex: "2026")
+            const anoAtualStr = String(new Date().getFullYear());
+
             let ncsHTML = '';
             let cronogramaHTML = '';
-            let totalNCs = 0;
+            
+            let totalNCsGlobal = 0;       // Todas as NCs do instrumento
+            let totalNCsAnoAtual = 0;     // Apenas as NCs do ano corrente (Ex: 2026NC)
+            let totalCronogramaAnoAtual = 0; // Apenas o repasse planejado para o ano corrente (Ex: 2026)
             let temCronograma = false;
 
             if (historicoRaw !== '') {
@@ -684,18 +690,30 @@
                     const subPartes = blocoTexto.split('|');
                     if (subPartes.length < 2) return;
                     
-                    const identificador = subPartes[0].trim();
+                    const identificador = subPartes[0].trim(); // Ex: "2026" ou "2026NC006963"
                     let textoValor = subPartes[1].replace(/[R$\s]/g, '').replace(',', '.');
                     const valLimpo = parseFloat(textoValor) || 0;
                     
                     if (identificador.toUpperCase().includes('NC')) {
                         if (!isNaN(valLimpo) && valLimpo !== 0) {
-                            totalNCs += valLimpo;
+                            totalNCsGlobal += valLimpo;
+                            
+                            // FILTRO DO ANO DA NC: Verifica se a nota pertence ao ano atual (Ex: "2026NC")
+                            if (identificador.toUpperCase().includes(anoAtualStr + 'NC')) {
+                                totalNCsAnoAtual += valLimpo;
+                            }
+                            
                             let classeNegativo = valLimpo < 0 ? 'class="negativo"' : '';
                             ncsHTML += `<div class="nc-row"><span>📄 ${identificador}</span><span ${classeNegativo}>${formatarBRL(valLimpo)}</span></div>`;
                         }
                     } else {
                         temCronograma = true;
+                        
+                        // FILTRO DO CRONOGRAMA: Se a linha for o ano atual puro (Ex: "2026"), isola o valor
+                        if (identificador === anoAtualStr) {
+                            totalCronogramaAnoAtual += valLimpo;
+                        }
+                        
                         cronogramaHTML += `<tr><td style="font-weight: 600; color: var(--text-main);">📅 ${identificador}</td><td style="text-align: right; font-weight: 700; color: var(--brand-dark); font-family: 'JetBrains Mono', monospace;">${formatarBRL(valLimpo)}</td></tr>`;
                     }
                 });
@@ -703,7 +721,13 @@
                 cronogramaHTML += `</tbody></table></div>`;
             }
 
-            let saldoRestante = (tetoAtualizado + totalAditivosFinanceiros) - totalNCs;
+            // APLICAÇÃO DAS REGRAS CORRIGIDAS
+            // 1. Saldo Restante Global (Usa o histórico total de NCs)
+            let saldoRestante = (tetoInicial + totalAditivosFinanceiros) - totalNCsGlobal;
+
+            // 2. Saldo a Descentralizar do Exercício (Apenas Cronograma do Ano - NCs do Ano)
+            let saldoADescentralizar = totalCronogramaAnoAtual - totalNCsAnoAtual;
+
             let badgeStyle = saldoRestante < 0 ? 'negativo-badge' : '';
 
             return `
@@ -736,11 +760,15 @@
                                     <div class="field-row-edit"><small>Número SEI</small><span class="edit-indicator">Editar ✏️</span></div>
                                     <span class="mono-val" style="color: var(--brand-primary);">${numeroSei}</span>
                                 </div>
-                                <div class="ted-field highlight" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idTED}', 'valor', 'Valor do TED (R$)', '${tetoAtualizado}')">
-                                    <div class="field-row-edit"><small>Valor do TED</small><span class="edit-indicator">Editar ✏️</span></div>
-                                    <span class="mono-val">${formatarBRL(tetoAtualizado)}</span>
+                                <div class="ted-field highlight" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idTED}', 'valor', 'Valor do TED (R$)', '${tetoInicial}')">
+                                    <div class="field-row-edit"><small>Valor Base do TED</small><span class="edit-indicator">Editar ✏️</span></div>
+                                    <span class="mono-val">${formatarBRL(tetoInicial)}</span>
                                 </div>
-                                <div class="ted-field success"><small>Saldo a Descentralizar</small><span>${formatarBRL(saldoRestante)}</span></div>
+                                
+                                <div class="ted-field" style="background: #fffbeb; border-color: #fef3c7;">
+                                    <small style="color: #b45309;">📉 Saldo a Descentralizar (${anoAtualStr})</small>
+                                    <span class="mono-val" style="font-size: 13px; color: #b45309; font-weight: 700;">${formatarBRL(saldoADescentralizar)}</span>
+                                </div>
                                 
                                 <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idTED}', 'vigencia', 'Data Final de Vigência', '${vigencia}')">
                                     <div class="field-row-edit"><small>Vigência Fim</small><span class="edit-indicator">Editar ✏️</span></div>
@@ -755,12 +783,12 @@
                                     <span>${aditValor || '---'}</span>
                                 </div>
                                 
-                                <div class="ted-field" style="background: #f8fafc; border: 1px solid #e2e8f0;">
-                                    <small style="color: var(--brand-primary); margin-bottom: 4px;">📊 Cronograma de Desembolso / Repasses</small>
+                                <div class="ted-field" style="background: #f8fafc; border: 1px solid #e2e8f0; grid-column: span 2;">
+                                    <small style="color: var(--brand-primary); margin-bottom: 4px;">📊 Cronograma de Desembolso / Repasses (Meta ${anoAtualStr}: ${formatarBRL(totalCronogramaAnoAtual)})</small>
                                     ${temCronograma ? cronogramaHTML : '<span style="font-size:11.5px; color:var(--text-muted); font-weight:500;">Nenhuma previsão anual detalhada.</span>'}
                                 </div>
                                 
-                                ${ncsHTML !== '' ? `<div class="nc-box"><div class="nc-title">Notas de Crédito Emitidas</div>${ncsHTML}</div>` : '<div class="nc-box" style="text-align:center; color:var(--text-muted); font-size:11px;">Nenhuma Nota de Crédito cadastrada.</div>'}
+                                ${ncsHTML !== '' ? `<div class="nc-box" style="grid-column: span 2;"><div class="nc-title">Notas de Crédito Emitidas</div>${ncsHTML}</div>` : '<div class="nc-box" style="grid-column: span 2; text-align:center; color:var(--text-muted); font-size:11px;">Nenhuma Nota de Crédito cadastrada.</div>'}
                             </div>
                             <div class="card-action-bar">
                                 <button class="btn-card-action edit" onclick="event.stopPropagation(); abrirModalEdicaoCard('${idTED}', 'TED')">⚙️ Painel Completo</button>
