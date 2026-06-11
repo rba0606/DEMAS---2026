@@ -511,7 +511,6 @@
             try {
                 const urlComCacheBuster = `${URL_API}?_=${new Date().getTime()}`;
                 
-                // Requisição limpa sem custom headers para não acionar o preflight do CORS
                 const response = await fetch(urlComCacheBuster, { 
                     method: "GET"
                 });
@@ -521,6 +520,7 @@
                 const textoBruto = await response.text();
                 const dadosBrutos = JSON.parse(textoBruto);
                 
+                // Normaliza o objeto recebido para evitar qualquer quebra de Case-Sensitive
                 backupDadosGerais = {};
                 Object.keys(dadosBrutos).forEach(k => {
                     const chaveLimpa = k.toLowerCase()
@@ -544,6 +544,10 @@
                 let totalContratosCount = 0; let totalTedsCount = 0;
                 Object.values(containers).forEach(c => { if(c) c.innerHTML = ''; });
 
+                // Variáveis para somadores robustos caso as chaves fixas falhem
+                let somaPloa8753 = 0;
+                let somaPloa20yn = 0;
+
                 Object.keys(backupDadosGerais).forEach(id => {
                     const item = backupDadosGerais[id];
                     if (!item) return;
@@ -558,6 +562,11 @@
                         if(containers.instTeds) containers.instTeds.innerHTML += generarCardTEDHTML(id, item);
                     }
                     else if (catLimpa !== 'FIXO') {
+                        // Captura os valores de PLOA dinamicamente para garantir que não fiquem zerados
+                        if (catLimpa === 'PLOA_8753') somaPloa8753 += parseFloat(item.valor) || 0;
+                        if (catLimpa === 'PLOA_20YN') somaPloa20yn += parseFloat(item.valor) || 0;
+
+                        // Renderiza apenas as linhas que não são totalizadores textuais
                         if (!id.includes('disponivel') && !id.includes('final') && !id.includes('geral') && !id.includes('total') && !id.includes('teto') && !id.includes('dotacao') && !id.includes('saldo') && !id.includes('inicial') && !id.includes('remanejamento')) {
                             const htmlLinhaComum = generarLinhaHTML(id, item.titulo, item.valor, item.status || item.vigencia);
                             if (catLimpa === 'EXEC_8753') containers.exec8753.innerHTML += htmlLinhaComum;
@@ -573,23 +582,30 @@
                 if(document.getElementById('kpi_total_contratos')) document.getElementById('kpi_total_contratos').innerText = totalContratosCount;
                 if(document.getElementById('kpi_total_teds')) document.getElementById('kpi_total_teds').innerText = totalTedsCount;
                 
-                function buscarValorTabela(termo) {
-                    const termoTratado = termo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
-                    const chaveEncontrada = Object.keys(backupDadosGerais).find(k => k.includes(termoTratado));
-                    return chaveEncontrada ? parseFloat(backupDadosGerais[chaveEncontrada].valor) : 0;
+                // Mapeador de Varredura por Substring (Segurança Máxima)
+                function buscarValorPlanilha(listaPalavras) {
+                    const chaveEncontrada = Object.keys(backupDadosGerais).find(k => {
+                        return listaPalavras.every(palavra => k.includes(palavra.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
+                    });
+                    return chaveEncontrada ? parseFloat(backupDadosGerais[chaveEncontrada].valor) : null;
                 }
 
-                let saldoAtual8753 = buscarValorTabela('disponivel 8753') || buscarValorTabela('exe_8753_disponivel');
-                let saldoAtual20yn = buscarValorTabela('disponivel 20yn') || buscarValorTabela('exe_20yn_disponivel');
-                let dotacao8753   = buscarValorTabela('dotacao 8753') || buscarValorTabela('orcamento inicial 8753') || buscarValorTabela('exe_8753_dotacao');
-                let dotacao20yn   = buscarValorTabela('dotacao 20yn') || buscarValorTabela('orcamento inicial 20yn') || buscarValorTabela('exe_20yn_dotacao');
+                // Resgate Inteligente dos Saldos
+                let saldoAtual8753 = buscarValorPlanilha(['disponivel', '8753']) ?? buscarValorPlanilha(['saldo', '8753']) ?? 0;
+                let saldoAtual20yn = buscarValorPlanilha(['disponivel', '20yn']) ?? buscarValorPlanilha(['saldo', '20yn']) ?? 0;
+                
+                let dotacao8753   = buscarValorPlanilha(['dotacao', '8753']) ?? buscarValorPlanilha(['inicial', '8753']) ?? buscarValorPlanilha(['orçamento', '8753']) ?? 0;
+                let dotacao20yn   = buscarValorPlanilha(['dotacao', '20yn']) ?? buscarValorPlanilha(['inicial', '20yn']) ?? buscarValorPlanilha(['orçamento', '20yn']) ?? 0;
 
-                let proj8753Base = buscarValorTabela('saldo 8753') || buscarValorTabela('proj_8753_saldo');
-                let proj20ynBase = buscarValorTabela('saldo 20yn') || buscarValorTabela('proj_20yn_saldo');
-                let projFinal8753 = buscarValorTabela('final 8753') || buscarValorTabela('proj_8753_final');
-                let projFinal20yn = buscarValorTabela('final 20yn') || buscarValorTabela('proj_20yn_final');
-                let tetoPloaGeral = buscarValorTabela('teto geral') || buscarValorTabela('ploa_teto_geral');
+                let proj8753Base  = buscarValorPlanilha(['base', '8753']) ?? saldoAtual8753;
+                let proj20ynBase  = buscarValorPlanilha(['base', '20yn']) ?? saldoAtual20yn;
+                
+                let projFinal8753 = buscarValorPlanilha(['final', '8753']) ?? 0;
+                let projFinal20yn = buscarValorPlanilha(['final', '20yn']) ?? 0;
+                
+                let tetoPloaGeral = buscarValorPlanilha(['teto', 'geral']) ?? buscarValorPlanilha(['teto', '2027']) ?? (somaPloa8753 + somaPloa20yn);
 
+                // Força os dados nas caixas visuais do ecrã
                 if (document.getElementById('exe_8753_dotacao')) document.getElementById('exe_8753_dotacao').innerText = formatarBRL(dotacao8753);
                 if (document.getElementById('exe_20yn_dotacao')) document.getElementById('exe_20yn_dotacao').innerText = formatarBRL(dotacao20yn);
                 if (document.getElementById('exe_8753_disponivel')) document.getElementById('exe_8753_disponivel').innerText = formatarBRL(saldoAtual8753);
@@ -604,9 +620,9 @@
                 if (document.getElementById('kpi_teto_ploa2027')) document.getElementById('kpi_teto_ploa2027').innerText = formatarBRL(tetoPloaGeral);
                 if (document.getElementById('ploa_teto_geral')) document.getElementById('ploa_teto_geral').innerText = formatarBRL(tetoPloaGeral);
                 
-                let ploa8753Total = buscarValorTabela('total 8753') || buscarValorTabela('ploa_8753_total');
-                let ploa20ynTotal = buscarValorTabela('total 20yn') || buscarValorTabela('ploa_20yn_total');
-                let projFinalGeral = buscarValorTabela('final geral') || buscarValorTabela('proj_final_geral');
+                let ploa8753Total = buscarValorPlanilha(['total', '8753']) ?? somaPloa8753;
+                let ploa20ynTotal = buscarValorPlanilha(['total', '20yn']) ?? somaPloa20yn;
+                let projFinalGeral = buscarValorPlanilha(['final', 'geral']) ?? (projFinal8753 + projFinal20yn);
 
                 if (document.getElementById('ploa_8753_total')) document.getElementById('ploa_8753_total').innerText = formatarBRL(ploa8753Total);
                 if (document.getElementById('ploa_20yn_total')) document.getElementById('ploa_20yn_total').innerText = formatarBRL(ploa20ynTotal);
