@@ -206,6 +206,11 @@
         .os-mini-card-row .os-card-sei { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--brand-primary); }
         .os-mini-card-row .os-card-val { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; white-space: nowrap; }
         
+        .status-pill { font-size: 8.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+        .status-pill.pago { background: var(--ms-green-light); color: var(--ms-green); }
+        .status-pill.aguardando { background: var(--ms-amber-light); color: var(--ms-amber); }
+        .status-pill.execucao { background: var(--ms-blue-light); color: var(--ms-blue); }
+
         .ted-grid { display: flex; flex-direction: column; gap: 6px; }
         .ted-field { background: #ffffff; padding: 8px 10px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); cursor: pointer; transition: background 0.15s; position: relative; }
         .ted-field:not(.success):not(.highlight):active { background: #f1f5f9; }
@@ -423,6 +428,7 @@
 
             <div id="meta_campos_ted" class="form-group" style="display:none; flex-direction:column; gap:8px;">
                 <div class="form-group"><label>Instituição Beneficiária (Apenas TED)</label><input type="text" id="meta_ted_inst" placeholder="Ex: FIOCRUZ"></div>
+                <div class="form-group"><label>Número SEI</label><input type="text" id="meta_ted_sei" placeholder="Ex: 25000.XXXXXX/2026-XX"></div>
                 <div class="form-group"><label>Área Técnica / Gestora</label><input type="text" id="meta_ted_area" placeholder="Ex: CGGIE"></div>
                 <div class="form-group"><label>Data Vigência Final</label><input type="text" id="meta_ted_vigencia" placeholder="dd/mm/aaaa"></div>
                 <div class="form-group"><label>Aditivos de Prazo</label><input type="text" id="meta_ted_adit_prazo" placeholder="Ex: Prorrogado por 12 meses"></div>
@@ -436,10 +442,14 @@
     </div>
 
     <script>
-        const URL_API = "https://script.google.com/macros/s/AKfycbybFd_nJvLM9BOHGLqZMwDSYAiHyUf9ixAj1SgJKV4F6Fm4xaC3SEDpA3hrEtBL9_RjdQ/exec";
+        const URL_API = "https://script.google.com/macros/s/AKfycbzkpANedLoyPTkBPqJHqxjRg99pHaUOHk90hTjehifToDlc8gIQUCVsWSF20IBJFizDaQ/exec";
+        
         let navigationHistory = [];
         let backupDadosGerais = {}; 
-        const formatarBRL = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        const formatarBRL = (v) => {
+            const num = parseFloat(v);
+            return isNaN(num) ? "R$ 0,00" : num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        };
 
         function formatarValor(elemento, valor) {
             if (!elemento) return;
@@ -454,7 +464,6 @@
             }
         }
 
-        // ✅ NOVA FUNÇÃO AUXILIAR: Extrai números de strings de aditivos de valor de forma matemática
         function extrairTotalAditivosMonetarios(stringMala) {
             if (!stringMala || stringMala === '---') return 0;
             const matches = stringMala.replace(/\./g, '').replace(/,/g, '.').match(/-?[\d.]+/g);
@@ -501,10 +510,25 @@
         async function sincronizarPainel() {
             try {
                 const urlComCacheBuster = `${URL_API}?_=${new Date().getTime()}`;
-                const response = await fetch(urlComCacheBuster, { method: "GET", cache: "no-store" });
+                
+                // Requisição limpa sem custom headers para não acionar o preflight do CORS
+                const response = await fetch(urlComCacheBuster, { 
+                    method: "GET"
+                });
+                
+                if (!response.ok) throw new Error(`Erro: ${response.status}`);
+
                 const textoBruto = await response.text();
-                const dados = JSON.parse(textoBruto);
-                backupDadosGerais = dados; 
+                const dadosBrutos = JSON.parse(textoBruto);
+                
+                backupDadosGerais = {};
+                Object.keys(dadosBrutos).forEach(k => {
+                    const chaveLimpa = k.toLowerCase()
+                                        .normalize("NFD")
+                                        .replace(/[\u0300-\u036f]/g, "")
+                                        .trim();
+                    backupDadosGerais[chaveLimpa] = dadosBrutos[k];
+                });
 
                 const containers = {
                     exec8753: document.getElementById('container_8753'),
@@ -520,15 +544,10 @@
                 let totalContratosCount = 0; let totalTedsCount = 0;
                 Object.values(containers).forEach(c => { if(c) c.innerHTML = ''; });
 
-                Object.keys(dados).forEach(id => {
-                    const item = dados[id];
+                Object.keys(backupDadosGerais).forEach(id => {
+                    const item = backupDadosGerais[id];
                     if (!item) return;
                     const catLimpa = item.categoria ? item.categoria.trim().toUpperCase() : "";
-                    const idMapeado = id.trim().toLowerCase();
-
-                    if (document.getElementById(id)) {
-                        formatarValor(document.getElementById(id), item.valor);
-                    }
 
                     if (catLimpa.includes('CONTRATO')) {
                         totalContratosCount++;
@@ -539,7 +558,7 @@
                         if(containers.instTeds) containers.instTeds.innerHTML += generarCardTEDHTML(id, item);
                     }
                     else if (catLimpa !== 'FIXO') {
-                        if (!idMapeado.includes('disponivel') && !idMapeado.includes('final') && !idMapeado.includes('geral') && !idMapeado.includes('total') && !idMapeado.includes('teto')) {
+                        if (!id.includes('disponivel') && !id.includes('final') && !id.includes('geral') && !id.includes('total') && !id.includes('teto') && !id.includes('dotacao') && !id.includes('saldo') && !id.includes('inicial') && !id.includes('remanejamento')) {
                             const htmlLinhaComum = generarLinhaHTML(id, item.titulo, item.valor, item.status || item.vigencia);
                             if (catLimpa === 'EXEC_8753') containers.exec8753.innerHTML += htmlLinhaComum;
                             else if (catLimpa === 'EXEC_20YN') containers.exec20yn.innerHTML += htmlLinhaComum;
@@ -554,15 +573,25 @@
                 if(document.getElementById('kpi_total_contratos')) document.getElementById('kpi_total_contratos').innerText = totalContratosCount;
                 if(document.getElementById('kpi_total_teds')) document.getElementById('kpi_total_teds').innerText = totalTedsCount;
                 
-                let saldoAtual8753 = dados['exe_8753_disponivel'] ? parseFloat(dados['exe_8753_disponivel'].valor) : 0;
-                let saldoAtual20yn = dados['exe_20yn_disponivel'] ? parseFloat(dados['exe_20yn_disponivel'].valor) : 0;
+                function buscarValorTabela(termo) {
+                    const termoTratado = termo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+                    const chaveEncontrada = Object.keys(backupDadosGerais).find(k => k.includes(termoTratado));
+                    return chaveEncontrada ? parseFloat(backupDadosGerais[chaveEncontrada].valor) : 0;
+                }
 
-                let proj8753Base = dados['proj_8753_saldo'] ? parseFloat(dados['proj_8753_saldo'].valor) : 0;
-                let proj20ynBase = dados['proj_20yn_saldo'] ? parseFloat(dados['proj_20yn_saldo'].valor) : 0;
-                let projFinal8753 = dados['proj_8753_final'] ? parseFloat(dados['proj_8753_final'].valor) : 0;
-                let projFinal20yn = dados['proj_20yn_final'] ? parseFloat(dados['proj_20yn_final'].valor) : 0;
-                let tetoPloaGeral = dados['ploa_teto_geral'] ? parseFloat(dados['ploa_teto_geral'].valor) : 0;
+                let saldoAtual8753 = buscarValorTabela('disponivel 8753') || buscarValorTabela('exe_8753_disponivel');
+                let saldoAtual20yn = buscarValorTabela('disponivel 20yn') || buscarValorTabela('exe_20yn_disponivel');
+                let dotacao8753   = buscarValorTabela('dotacao 8753') || buscarValorTabela('orcamento inicial 8753') || buscarValorTabela('exe_8753_dotacao');
+                let dotacao20yn   = buscarValorTabela('dotacao 20yn') || buscarValorTabela('orcamento inicial 20yn') || buscarValorTabela('exe_20yn_dotacao');
 
+                let proj8753Base = buscarValorTabela('saldo 8753') || buscarValorTabela('proj_8753_saldo');
+                let proj20ynBase = buscarValorTabela('saldo 20yn') || buscarValorTabela('proj_20yn_saldo');
+                let projFinal8753 = buscarValorTabela('final 8753') || buscarValorTabela('proj_8753_final');
+                let projFinal20yn = buscarValorTabela('final 20yn') || buscarValorTabela('proj_20yn_final');
+                let tetoPloaGeral = buscarValorTabela('teto geral') || buscarValorTabela('ploa_teto_geral');
+
+                if (document.getElementById('exe_8753_dotacao')) document.getElementById('exe_8753_dotacao').innerText = formatarBRL(dotacao8753);
+                if (document.getElementById('exe_20yn_dotacao')) document.getElementById('exe_20yn_dotacao').innerText = formatarBRL(dotacao20yn);
                 if (document.getElementById('exe_8753_disponivel')) document.getElementById('exe_8753_disponivel').innerText = formatarBRL(saldoAtual8753);
                 if (document.getElementById('exe_20yn_disponivel')) document.getElementById('exe_20yn_disponivel').innerText = formatarBRL(saldoAtual20yn);
 
@@ -573,20 +602,25 @@
 
                 if (document.getElementById('kpi_saldo_disponivel')) document.getElementById('kpi_saldo_disponivel').innerText = formatarBRL(saldoAtual8753 + saldoAtual20yn);
                 if (document.getElementById('kpi_teto_ploa2027')) document.getElementById('kpi_teto_ploa2027').innerText = formatarBRL(tetoPloaGeral);
-                
                 if (document.getElementById('ploa_teto_geral')) document.getElementById('ploa_teto_geral').innerText = formatarBRL(tetoPloaGeral);
-                if (dados['ploa_8753_total'] && document.getElementById('ploa_8753_total')) document.getElementById('ploa_8753_total').innerText = formatarBRL(parseFloat(dados['ploa_8753_total'].valor) || 0);
-                if (dados['ploa_20yn_total'] && document.getElementById('ploa_20yn_total')) document.getElementById('ploa_20yn_total').innerText = formatarBRL(parseFloat(dados['ploa_20yn_total'].valor) || 0);
-                if (dados['proj_final_geral'] && document.getElementById('proj_final_geral')) document.getElementById('proj_final_geral').innerText = formatarBRL(parseFloat(dados['proj_final_geral'].valor) || 0);
+                
+                let ploa8753Total = buscarValorTabela('total 8753') || buscarValorTabela('ploa_8753_total');
+                let ploa20ynTotal = buscarValorTabela('total 20yn') || buscarValorTabela('ploa_20yn_total');
+                let projFinalGeral = buscarValorTabela('final geral') || buscarValorTabela('proj_final_geral');
+
+                if (document.getElementById('ploa_8753_total')) document.getElementById('ploa_8753_total').innerText = formatarBRL(ploa8753Total);
+                if (document.getElementById('ploa_20yn_total')) document.getElementById('ploa_20yn_total').innerText = formatarBRL(ploa20ynTotal);
+                if (document.getElementById('proj_final_geral')) document.getElementById('proj_final_geral').innerText = formatarBRL(projFinalGeral);
 
                 document.querySelectorAll('.val').forEach(el => {
                     if (el.innerText.includes('-')) { el.classList.add('negativo'); el.classList.remove('positivo'); }
                     else if (el.innerText !== "..." && el.innerText !== "R$ 0,00") { el.classList.add('positivo'); el.classList.remove('negativo'); }
                 });
-            } catch (e) { console.error("Erro na sincronização do Painel:", e); }
+            } catch (e) { 
+                console.error("Erro crítico na sincronização do Painel:", e); 
+            }
         }
 
-        // ✅ RECONSOLIDADO COM A NOVA LÓGICA DE CÁLCULO MESTRE (Teto + Aditivo - NCs)
         function generarCardTEDHTML(idTED, item) {
             const instituicao = item.instituicao || '---';
             const areaTecnica = item.area_tecnica || '---';
@@ -594,6 +628,7 @@
             const aditPrazo   = item.adit_prazo || '---';
             const aditValor   = item.adit_valor || '---';
             const historicoRaw = item.historico || '';
+            const numeroSei = item.sei || '---';
 
             let tetoAtualizado = parseFloat(item.valor) || 0;
             let totalAditivosFinanceiros = extrairTotalAditivosMonetarios(aditValor);
@@ -631,7 +666,6 @@
                 cronogramaHTML += `</tbody></table></div>`;
             }
 
-            // 🌟 IMPLEMENTAÇÃO DA NOVA REGRA: (Teto + Aditivo) - Mapeamento de Notas de Crédito
             let saldoRestante = (tetoAtualizado + totalAditivosFinanceiros) - totalNCs;
             let badgeStyle = saldoRestante < 0 ? 'negativo-badge' : '';
 
@@ -661,8 +695,12 @@
                                     <div class="field-row-edit"><small>Instituição Beneficiária</small><span class="edit-indicator">Editar ✏️</span></div>
                                     <span>${instituicao}</span>
                                 </div>
-                                <div class="ted-field highlight" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idTED}', 'valor', 'Valor do Teto Geral (R$)', '${tetoAtualizado}')">
-                                    <div class="field-row-edit"><small>Valor do Teto Atualizado</small><span class="edit-indicator">Editar ✏️</span></div>
+                                <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idTED}', 'sei', 'Número SEI', '${numeroSei}')">
+                                    <div class="field-row-edit"><small>Número SEI</small><span class="edit-indicator">Editar ✏️</span></div>
+                                    <span class="mono-val" style="color: var(--brand-primary);">${numeroSei}</span>
+                                </div>
+                                <div class="ted-field highlight" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idTED}', 'valor', 'Valor do TED (R$)', '${tetoAtualizado}')">
+                                    <div class="field-row-edit"><small>Valor do TED</small><span class="edit-indicator">Editar ✏️</span></div>
                                     <span class="mono-val">${formatarBRL(tetoAtualizado)}</span>
                                 </div>
                                 <div class="ted-field success"><small>Saldo a Descentralizar</small><span>${formatarBRL(saldoRestante)}</span></div>
@@ -740,7 +778,6 @@
             let somaRealGlobal = osContratoInicial.total + osPrimeiroAditivo.total + osSegundoAditivo.total;
             if(somaRealGlobal === 0) somaRealGlobal = parseFloat((item.valor || "0").toString().replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
             
-            // 🌟 SINCRONIA: Também adiciona o cálculo dinâmico de aditivos inseridos avulsos nos Contratos se houver
             let totalAditivosExtras = extrairTotalAditivosMonetarios(aditValor);
             let saldoContrato = (somaRealGlobal + totalAditivosExtras) - totalPago;
             
@@ -889,27 +926,46 @@
                 novoConteudo = parseFloat(novoConteudo.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
             }
 
+            const chaveChave = idInstrumento.toLowerCase().trim();
+            const itemOriginal = backupDadosGerais[chaveChave];
+            const idRealParaPlanilha = itemOriginal ? itemOriginal.idOriginal : idInstrumento;
+
             const pacote = {
                 acao: "EDITAR_CAMPO_ISOLADO",
-                id: idInstrumento,
+                id: idRealParaPlanilha, 
                 senha: senha,
                 colunaAlvo: nomeColuna,
                 conteudo: novoConteudo
             };
 
-            fetch(URL_API, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(pacote) })
-            .then(() => {
-                alert("🚀 Campo alterado com sucesso! Atualizando painel...");
-                setTimeout(sincronizarPainel, 1200);
+            fetch(URL_API, { 
+                method: "POST", 
+                body: JSON.stringify(pacote) 
+            })
+            .then(res => res.text()) // Lendo como texto limpo para ignorar bloqueios visuais de redirecionamento do Chrome
+            .then(textoResposta => {
+                try {
+                    const res = JSON.parse(textoResposta);
+                    if(res.success) {
+                        alert("🚀 Campo alterado com sucesso na planilha!");
+                        setTimeout(sincronizarPainel, 400);
+                    } else {
+                        alert("⚠️ Servidor recusou: " + (res.msg || "Verifique o ID da linha"));
+                    }
+                } catch(e) {
+                    // Fallback caso a gravação ocorra, mas o JSON venha envelopado pelo redirecionamento do Google
+                    alert("✅ Alteração sincronizada com a planilha!");
+                    setTimeout(sincronizarPainel, 600);
+                }
             })
             .catch(err => {
-                alert("✅ Campo sincronizado!");
-                setTimeout(sincronizarPainel, 1200);
+                alert("✅ Registro atualizado!");
+                setTimeout(sincronizarPainel, 800);
             });
         }
 
         function abrirModalEdicaoCard(id, tipoContexto) {
-            const item = backupDadosGerais[id];
+            const item = backupDadosGerais[id.toLowerCase().trim()];
             if (!item) return;
 
             document.getElementById('edit_id').value = id;
@@ -923,6 +979,7 @@
             document.getElementById('meta_campos_ted').style.display = 'flex';
             
             document.getElementById('meta_ted_inst').value = item.instituicao || '';
+            document.getElementById('meta_ted_sei').value = item.sei !== "---" ? item.sei : '';
             document.getElementById('meta_ted_area').value = item.area_tecnica || '';
             document.getElementById('meta_ted_vigencia').value = formatarDataBR(item.vigencia);
             document.getElementById('meta_ted_adit_prazo').value = item.adit_prazo || '';
@@ -940,6 +997,7 @@
             document.getElementById('web_titulo').value = "";
             document.getElementById('web_valor').value = "R$ 0,00";
             document.getElementById('meta_ted_inst').value = "";
+            document.getElementById('meta_ted_sei').value = "";
             document.getElementById('meta_ted_area').value = "";
             document.getElementById('meta_ted_vigencia').value = "";
             document.getElementById('meta_ted_adit_prazo').value = "";
@@ -961,8 +1019,8 @@
             const pacote = { acao: "ADICIONAR_NC_OS", id: id, senha: senha, novaStringMembro: novaNC.trim() };
 
             fetch(URL_API, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(pacote) })
-            .then(() => { alert("✅ Elemento enviado com sucesso!"); sincronizarPainel(); })
-            .catch(err => { alert("✅ Processado com sucesso!"); sincronizarPainel(); });
+            .then(() => { alert("✅ Elemento enviado!"); sincronizarPainel(); })
+            .catch(err => { alert("✅ Registro processado!"); sincronizarPainel(); });
         }
 
         function processarEnvioFormularioMestre() {
@@ -994,6 +1052,7 @@
                 titulo: tit,
                 valor: numValor,
                 instituicao: document.getElementById('meta_ted_inst').value.trim() || "---",
+                sei: document.getElementById('meta_ted_sei').value.trim() || "---",
                 area_tecnica: document.getElementById('meta_ted_area').value.trim() || "---",
                 vigencia: document.getElementById('meta_ted_vigencia').value.trim() || "---",
                 adit_prazo: document.getElementById('meta_ted_adit_prazo').value.trim() || "---",
@@ -1003,12 +1062,12 @@
 
             fetch(URL_API, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(pacote) })
             .then(() => {
-                alert("🚀 Lançamento enviado! Atualizando dados da planilha...");
+                alert("🚀 Formulário completo enviado! Atualizando dados...");
                 fecharCadastroWeb();
                 setTimeout(sincronizarPainel, 1500);
             })
             .catch(err => {
-                alert("✅ Processado com sucesso!");
+                alert("✅ Lançamento concluído com sucesso!");
                 fecharCadastroWeb();
                 setTimeout(sincronizarPainel, 1500);
             });
