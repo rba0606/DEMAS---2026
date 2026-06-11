@@ -583,12 +583,22 @@
                         if(containers.instTeds) containers.instTeds.innerHTML += generarCardTEDHTML(id, item);
                     }
                     else if (catLimpa !== 'FIXO') {
-                        // Captura os valores de PLOA dinamicamente para garantir que não fiquem zerados
+                        // Captura os valores de PLOA dinamicamente para os somatórios
                         if (catLimpa === 'PLOA_8753') somaPloa8753 += parseFloat(item.valor) || 0;
                         if (catLimpa === 'PLOA_20YN') somaPloa20yn += parseFloat(item.valor) || 0;
 
-                        // Renderiza apenas as linhas que não são totalizadores textuais
-                        if (!id.includes('disponivel') && !id.includes('final') && !id.includes('geral') && !id.includes('total') && !id.includes('teto') && !id.includes('dotacao') && !id.includes('saldo') && !id.includes('inicial') && !id.includes('remanejamento')) {
+                        // FILTRO CALIBRADO: Bloqueia apenas os saldos, dotações e totais finais. 
+                        // Permite explicitamente a exibição da linha de Remanejamento!
+                        const ehTotalizadorFixo = id.includes('disponivel') || 
+                                                  id.includes('final') || 
+                                                  id.includes('geral') || 
+                                                  id.includes('total') || 
+                                                  id.includes('teto') || 
+                                                  id.includes('dotacao') || 
+                                                  id.includes('inicial') ||
+                                                  (id.includes('saldo') && !id.includes('remanejamento')); // Não bloqueia saldos de remanejamento
+
+                        if (!ehTotalizadorFixo) {
                             const htmlLinhaComum = generarLinhaHTML(id, item.titulo, item.valor, item.status || item.vigencia);
                             if (catLimpa === 'EXEC_8753') containers.exec8753.innerHTML += htmlLinhaComum;
                             else if (catLimpa === 'EXEC_20YN') containers.exec20yn.innerHTML += htmlLinhaComum;
