@@ -190,18 +190,91 @@
         .alert-badge.atencao { background: var(--ms-amber-light); color: var(--ms-amber); border-color: #fde68a; }
         .alert-badge.critico { background: var(--ms-red-light); color: var(--ms-red); border-color: #fecaca; }
 
-        .card-aditivo-financeiro { background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 10px; margin-top: 8px; cursor: pointer; box-shadow: var(--shadow-sm); }
-        .aditivo-header-grid { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--border-color); padding-bottom: 4px; margin-bottom: 6px; }
-        .aditivo-titulo-texto { font-size: 9.5px; font-weight: 700; color: var(--text-title); text-transform: uppercase; }
-        .aditivo-valores-mini-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; margin-top: 6px; }
-        .mini-caixa-valor { background: var(--bg-body); padding: 4px 8px; border-radius: var(--radius-md); border: 1px solid var(--border-color); }
-        .mini-caixa-valor small { display: block; font-size: 8px; color: var(--text-muted); }
-        .mini-caixa-valor span { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 700; white-space: nowrap; }
-        .aditivo-retratil-container { max-height: 0; overflow: hidden; transition: max-height 0.2s ease-out; will-change: max-height; }
+        .etapa-contrato-bloco {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 12px;
+            box-shadow: var(--shadow-sm);
+            display: block;
+            clear: both;
+            margin-bottom: 12px !important;
+        }
+        .etapa-contrato-titulo {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--brand-dark);
+            margin-bottom: 8px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+        }
+        .etapa-contrato-grid {
+            display: grid;
+            gap: 6px;
+        }
+        .etapa-mini-card {
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 6px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .etapa-mini-card small {
+            font-size: 8px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+        .etapa-mini-card span {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: var(--text-title);
+            white-space: nowrap;
+        }
+        .etapa-mini-card.pago { border-left: 3px solid var(--ms-green); background: var(--ms-green-light); }
+        .etapa-mini-card.pago span { color: #065f46; }
+        .etapa-mini-card.apagar { border-left: 3px solid var(--ms-blue); background: var(--ms-blue-light); }
+        .etapa-mini-card.apagar span { color: #1e40af; }
+        .etapa-mini-card.saldo { border-left: 3px solid var(--ms-amber); background: var(--ms-amber-light); }
+        .etapa-mini-card.saldo span { color: #b45309; }
 
-        .os-cards-container { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
-        .os-mini-card { background: var(--bg-body); border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 8px 10px; }
-        .os-mini-card-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        @media (max-width: 480px) {
+            .etapa-contrato-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .aditivo-retratil-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.25s ease-out;
+            width: 100%;
+            clear: both;
+        }
+
+        .os-cards-container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 6px; 
+            margin-top: 4px; 
+            width: 100% !important;
+            padding-top: 8px;
+        }
+        .os-mini-card { 
+            background: var(--bg-body) !important; 
+            border: 1px solid var(--border-color) !important; 
+            border-radius: var(--radius-md) !important; 
+            padding: 8px 12px !important; 
+            width: 100% !important;
+            display: block;
+            clear: both;
+        }
+        .os-mini-card-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%; }
         .os-mini-card .os-card-title { font-size: 11px; font-weight: 700; flex: 1; }
         .os-mini-card-row .os-card-sei { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--brand-primary); }
         .os-mini-card-row .os-card-val { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; white-space: nowrap; }
@@ -442,13 +515,21 @@
     </div>
 
     <script>
-        const URL_API = "https://script.google.com/macros/s/AKfycbzkpANedLoyPTkBPqJHqxjRg99pHaUOHk90hTjehifToDlc8gIQUCVsWSF20IBJFizDaQ/exec";
+        const URL_API = "https://script.google.com/macros/s/AKfycbzI4JUVTzuJbPbcMKNBDTT3NbazIec7Wkw5jeXCZF7piZLjOWT-qBOW9zGnlE_v5CILiQ/exec";
         
         let navigationHistory = [];
         let backupDadosGerais = {}; 
         const formatarBRL = (v) => {
-            const num = parseFloat(v);
-            return isNaN(num) ? "R$ 0,00" : num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            let num = parseFloat(v);
+            if (isNaN(num)) return "R$ 0,00";
+            
+            // CORREÇÃO: Se o valor for menor que 1 centavo (positivo ou negativo), força para 0 absoluto.
+            // Isso elimina o "zero negativo" (-R$ 0,00) gerado por dízimas em ponto flutuante.
+            if (Math.abs(num) < 0.01) {
+                num = 0;
+            }
+            
+            return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         };
 
         function formatarValor(elemento, valor) {
@@ -506,17 +587,11 @@
                 return { label: "Vigência", classe: "regular" };
             }
             
-            // Força HOJE a começar exatamente à meia-noite local
             const hoje = new Date();
             hoje.setHours(0, 0, 0, 0);
-            
-            // Força a data da VIGÊNCIA a começar exatamente à meia-noite local
             dataVigencia.setHours(0, 0, 0, 0);
             
-            // Faz a diferença em milissegundos
             const diffTime = dataVigencia.getTime() - hoje.getTime();
-            
-            // Converte milissegundos em dias usando Math.round para evitar quebra de fuso/horas
             const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
             
             if (diffDays < 0) {
@@ -531,23 +606,16 @@
         async function sincronizarPainel() {
             try {
                 const urlComCacheBuster = `${URL_API}?_=${new Date().getTime()}`;
-                
-                const response = await fetch(urlComCacheBuster, { 
-                    method: "GET"
-                });
+                const response = await fetch(urlComCacheBuster, { method: "GET" });
                 
                 if (!response.ok) throw new Error(`Erro: ${response.status}`);
 
                 const textoBruto = await response.text();
                 const dadosBrutos = JSON.parse(textoBruto);
                 
-                // Normaliza o objeto recebido para evitar qualquer quebra de Case-Sensitive
                 backupDadosGerais = {};
                 Object.keys(dadosBrutos).forEach(k => {
-                    const chaveLimpa = k.toLowerCase()
-                                        .normalize("NFD")
-                                        .replace(/[\u0300-\u036f]/g, "")
-                                        .trim();
+                    const chaveLimpa = k.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
                     backupDadosGerais[chaveLimpa] = dadosBrutos[k];
                 });
 
@@ -565,7 +633,6 @@
                 let totalContratosCount = 0; let totalTedsCount = 0;
                 Object.values(containers).forEach(c => { if(c) c.innerHTML = ''; });
 
-                // Variáveis para somadores robustos caso as chaves fixas falhem
                 let somaPloa8753 = 0;
                 let somaPloa20yn = 0;
 
@@ -583,12 +650,9 @@
                         if(containers.instTeds) containers.instTeds.innerHTML += generarCardTEDHTML(id, item);
                     }
                     else if (catLimpa !== 'FIXO') {
-                        // Captura os valores de PLOA dinamicamente para os somatórios
                         if (catLimpa === 'PLOA_8753') somaPloa8753 += parseFloat(item.valor) || 0;
                         if (catLimpa === 'PLOA_20YN') somaPloa20yn += parseFloat(item.valor) || 0;
 
-                        // FILTRO CALIBRADO: Bloqueia apenas os saldos, dotações e totais finais. 
-                        // Permite explicitamente a exibição da linha de Remanejamento!
                         const ehTotalizadorFixo = id.includes('disponivel') || 
                                                   id.includes('final') || 
                                                   id.includes('geral') || 
@@ -596,7 +660,7 @@
                                                   id.includes('teto') || 
                                                   id.includes('dotacao') || 
                                                   id.includes('inicial') ||
-                                                  (id.includes('saldo') && !id.includes('remanejamento')); // Não bloqueia saldos de remanejamento
+                                                  (id.includes('saldo') && !id.includes('remanejamento'));
 
                         if (!ehTotalizadorFixo) {
                             const htmlLinhaComum = generarLinhaHTML(id, item.titulo, item.valor, item.status || item.vigencia);
@@ -613,7 +677,6 @@
                 if(document.getElementById('kpi_total_contratos')) document.getElementById('kpi_total_contratos').innerText = totalContratosCount;
                 if(document.getElementById('kpi_total_teds')) document.getElementById('kpi_total_teds').innerText = totalTedsCount;
                 
-                // Mapeador de Varredura por Substring (Segurança Máxima)
                 function buscarValorPlanilha(listaPalavras) {
                     const chaveEncontrada = Object.keys(backupDadosGerais).find(k => {
                         return listaPalavras.every(palavra => k.includes(palavra.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
@@ -621,7 +684,6 @@
                     return chaveEncontrada ? parseFloat(backupDadosGerais[chaveEncontrada].valor) : null;
                 }
 
-                // Resgate Inteligente dos Saldos
                 let saldoAtual8753 = buscarValorPlanilha(['disponivel', '8753']) ?? buscarValorPlanilha(['saldo', '8753']) ?? 0;
                 let saldoAtual20yn = buscarValorPlanilha(['disponivel', '20yn']) ?? buscarValorPlanilha(['saldo', '20yn']) ?? 0;
                 
@@ -636,7 +698,6 @@
                 
                 let tetoPloaGeral = buscarValorPlanilha(['teto', 'geral']) ?? buscarValorPlanilha(['teto', '2027']) ?? (somaPloa8753 + somaPloa20yn);
 
-                // Força os dados nas caixas visuais do ecrã
                 if (document.getElementById('exe_8753_dotacao')) document.getElementById('exe_8753_dotacao').innerText = formatarBRL(dotacao8753);
                 if (document.getElementById('exe_20yn_dotacao')) document.getElementById('exe_20yn_dotacao').innerText = formatarBRL(dotacao20yn);
                 if (document.getElementById('exe_8753_disponivel')) document.getElementById('exe_8753_disponivel').innerText = formatarBRL(saldoAtual8753);
@@ -680,19 +741,17 @@
             let tetoInicial = parseFloat(item.valor) || 0;
             let totalAditivosFinanceiros = extrairTotalAditivosMonetarios(aditValor);
             const saude = calcularSaudeVigencia(vigencia);
-
-            // Identifica dinamicamente o ano atual do sistema (Ex: "2026")
             const anoAtualStr = String(new Date().getFullYear());
 
             let ncsHTML = '';
             let cronogramaHTML = '';
             
-            let totalNCsGlobal = 0;       // Todas as NCs do instrumento
-            let totalNCsAnoAtual = 0;     // Apenas as NCs do ano corrente (Ex: 2026NC)
-            let totalCronogramaAnoAtual = 0; // Apenas o repasse planejado para o ano corrente (Ex: 2026)
+            let totalNCsGlobal = 0;
+            let totalNCsAnoAtual = 0;
+            let totalCronogramaAnoAtual = 0;
             let temCronograma = false;
 
-            if (historicoRaw !== '') {
+            if (historicoRaw && historicoRaw !== '' && historicoRaw !== '---') {
                 cronogramaHTML = `<div class="tabela-mobile-gaveta"><table class="cron-table"><thead><tr><th>Ano / Instrumento</th><th style="text-align: right;">Previsão / Repasse</th></tr></thead><tbody>`;
                 
                 historicoRaw.split(';').forEach(blocoTexto => {
@@ -700,44 +759,32 @@
                     const subPartes = blocoTexto.split('|');
                     if (subPartes.length < 2) return;
                     
-                    const identificador = subPartes[0].trim(); // Ex: "2026" ou "2026NC006963"
+                    const identificador = subPartes[0].trim();
                     let textoValor = subPartes[1].replace(/[R$\s]/g, '').replace(',', '.');
                     const valLimpo = parseFloat(textoValor) || 0;
                     
                     if (identificador.toUpperCase().includes('NC')) {
                         if (!isNaN(valLimpo) && valLimpo !== 0) {
                             totalNCsGlobal += valLimpo;
-                            
-                            // FILTRO DO ANO DA NC: Verifica se a nota pertence ao ano atual (Ex: "2026NC")
                             if (identificador.toUpperCase().includes(anoAtualStr + 'NC')) {
                                 totalNCsAnoAtual += valLimpo;
                             }
-                            
                             let classeNegativo = valLimpo < 0 ? 'class="negativo"' : '';
                             ncsHTML += `<div class="nc-row"><span>📄 ${identificador}</span><span ${classeNegativo}>${formatarBRL(valLimpo)}</span></div>`;
                         }
                     } else {
                         temCronograma = true;
-                        
-                        // FILTRO DO CRONOGRAMA: Se a linha for o ano atual puro (Ex: "2026"), isola o valor
                         if (identificador === anoAtualStr) {
                             totalCronogramaAnoAtual += valLimpo;
                         }
-                        
                         cronogramaHTML += `<tr><td style="font-weight: 600; color: var(--text-main);">📅 ${identificador}</td><td style="text-align: right; font-weight: 700; color: var(--brand-dark); font-family: 'JetBrains Mono', monospace;">${formatarBRL(valLimpo)}</td></tr>`;
                     }
                 });
-                
                 cronogramaHTML += `</tbody></table></div>`;
             }
 
-            // APLICAÇÃO DAS REGRAS CORRIGIDAS
-            // 1. Saldo Restante Global (Usa o histórico total de NCs)
             let saldoRestante = (tetoInicial + totalAditivosFinanceiros) - totalNCsGlobal;
-
-            // 2. Saldo a Descentralizar do Exercício (Apenas Cronograma do Ano - NCs do Ano)
             let saldoADescentralizar = totalCronogramaAnoAtual - totalNCsAnoAtual;
-
             let badgeStyle = saldoRestante < 0 ? 'negativo-badge' : '';
 
             return `
@@ -774,12 +821,10 @@
                                     <div class="field-row-edit"><small>Valor Base do TED</small><span class="edit-indicator">Editar ✏️</span></div>
                                     <span class="mono-val">${formatarBRL(tetoInicial)}</span>
                                 </div>
-                                
                                 <div class="ted-field" style="background: #fffbeb; border-color: #fef3c7;">
                                     <small style="color: #b45309;">📉 Saldo a Descentralizar (${anoAtualStr})</small>
                                     <span class="mono-val" style="font-size: 13px; color: #b45309; font-weight: 700;">${formatarBRL(saldoADescentralizar)}</span>
                                 </div>
-                                
                                 <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idTED}', 'vigencia', 'Data Final de Vigência', '${vigencia}')">
                                     <div class="field-row-edit"><small>Vigência Fim</small><span class="edit-indicator">Editar ✏️</span></div>
                                     <span>${vigencia}</span>
@@ -792,12 +837,10 @@
                                     <div class="field-row-edit"><small>Histórico / Aditivos de Valor</small><span class="edit-indicator">Editar ✏️</span></div>
                                     <span>${aditValor || '---'}</span>
                                 </div>
-                                
                                 <div class="ted-field" style="background: #f8fafc; border: 1px solid #e2e8f0; grid-column: span 2;">
                                     <small style="color: var(--brand-primary); margin-bottom: 4px;">📊 Cronograma de Desembolso / Repasses (Meta ${anoAtualStr}: ${formatarBRL(totalCronogramaAnoAtual)})</small>
                                     ${temCronograma ? cronogramaHTML : '<span style="font-size:11.5px; color:var(--text-muted); font-weight:500;">Nenhuma previsão anual detalhada.</span>'}
                                 </div>
-                                
                                 ${ncsHTML !== '' ? `<div class="nc-box" style="grid-column: span 2;"><div class="nc-title">Notas de Crédito Emitidas</div>${ncsHTML}</div>` : '<div class="nc-box" style="grid-column: span 2; text-align:center; color:var(--text-muted); font-size:11px;">Nenhuma Nota de Crédito cadastrada.</div>'}
                             </div>
                             <div class="card-action-bar">
@@ -811,95 +854,170 @@
         }
 
         function generarCardContratoHTML(idContrato, item) {
+            const instituicao = item.instituicao || '---';
             const areaTecnica = item.area_tecnica || '---';
             const vigencia = formatarDataBR(item.vigencia);
-            const aditPrazo   = item.adit_prazo || '---';
-            const aditValor   = item.adit_valor || '---';
+            const numeroSeiContrato = item.sei || '---';
             const historicoRaw = item.historico || '';
 
-            let totalPago = 0;
-            let osContratoInicial = { lista: [], total: 0, pago: 0, apagar: 0 };
-            let osPrimeiroAditivo = { lista: [], total: 0, pago: 0, apagar: 0 };
-            let osSegundoAditivo  = { lista: [], total: 0, pago: 0, apagar: 0 };
+            // Função interna robusta para conversão numérica de qualquer formato de texto monetário
+            function converterTextoParaNumero(texto) {
+                if (!texto) return 0;
+                if (typeof texto === 'number') return texto;
+                let limpo = String(texto).replace(/[R$\s]/g, '').trim();
+                // Se contiver vírgula e ponto, assume formato brasileiro (ex: 1.234,56)
+                if (limpo.includes(',') && limpo.includes('.')) {
+                    limpo = limpo.replace(/\./g, '').replace(',', '.');
+                } 
+                // Se só tiver vírgula, troca por ponto (ex: 353230,75 -> 353230.75)
+                else if (limpo.includes(',')) {
+                    limpo = limpo.replace(',', '.');
+                }
+                return parseFloat(limpo) || 0;
+            }
 
-            if (historicoRaw !== '') {
-                historicoRaw.split(';').forEach(osTexto => {
-                    if (osTexto.trim() === '' || !osTexto.includes('|')) return;
-                    const dadosOS = osTexto.split('|').map(d => d.trim());
-                    if (dadosOS.length < 4) return;
-                    let osValor = parseFloat(dadosOS[2].replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
-                    let statusPago = dadosOS[3].toLowerCase().includes('pago');
-                    totalPago += statusPago ? osValor : 0;
+            // CORREÇÃO CRÍTICA: Convertendo os valores vindos da planilha usando a função correta
+            let valorBaseContrato = converterTextoParaNumero(item.valor);
+            let valorAditivo1 = converterTextoParaNumero(item.adit_valor);
+            let valorAditivo2 = converterTextoParaNumero(item.adit_valor_2);
 
-                    let objetoOS = { nome: dadosOS[0], sei: dadosOS[1], valor: osValor, status: dadosOS[3] };
-                    const nL = dadosOS[0].toLowerCase();
+            const saude = calcularSaudeVigencia(vigencia);
+            const limpoId = idContrato.replace(/[^a-zA-Z0-9]/g, '');
+            
+            const valorOriginalInicial = item.valor ? String(item.valor).replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.') : '0';
+            const valorOriginalAditivo = item.adit_valor ? String(item.adit_valor).replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.') : '0';
+            const valorOriginalAditivo2 = item.adit_valor_2 ? String(item.adit_valor_2).replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.') : '0';
 
-                    if (nL.includes('1º') || nL.includes('1o') || nL.includes('1a')) {
-                        osPrimeiroAditivo.total += osValor;
-                        if (statusPago) osPrimeiroAditivo.pago += osValor; else osPrimeiroAditivo.apagar += osValor;
-                        osPrimeiroAditivo.lista.push(objetoOS);
-                    } else if (nL.includes('2º') || nL.includes('2o') || nL.includes('2a')) {
-                        osSegundoAditivo.total += osValor;
-                        if (statusPago) osSegundoAditivo.pago += osValor; else osSegundoAditivo.apagar += osValor;
-                        osSegundoAditivo.lista.push(objetoOS);
+            const etapas = {
+                inicial: { id: "ini_" + limpoId, nome: "📜 Contrato Inicial", campoValorPlanilha: "valor", valorParaEditar: valorOriginalInicial, total: valorBaseContrato, pago: 0, aPagar: 0, temDados: true, lancamentos: [] },
+                adit1: { id: "ad1_" + limpoId, nome: "➕ 1º Aditivo", campoValorPlanilha: "adit_valor", valorParaEditar: valorOriginalAditivo, total: valorAditivo1, pago: 0, aPagar: 0, temDados: true, lancamentos: [] },
+                adit2: { id: "ad2_" + limpoId, nome: "➕ 2º Aditivo", campoValorPlanilha: "adit_valor_2", valorParaEditar: valorOriginalAditivo2, total: valorAditivo2, pago: 0, aPagar: 0, temDados: true, lancamentos: [] }
+            };
+
+            if (historicoRaw && historicoRaw !== '' && historicoRaw !== '---') {
+                historicoRaw.split(';').forEach(blocoTexto => {
+                    if (blocoTexto.trim() === '' || !blocoTexto.includes('|')) return;
+                    
+                    const subPartes = blocoTexto.split('|');
+                    if (subPartes.length < 2) return;
+                    
+                    const identificador = subPartes[0].trim();
+                    const idUpper = identificador.toUpperCase();
+                    const osSei = subPartes.length >= 3 && subPartes[1].trim() !== '' ? subPartes[1].trim() : '';
+                    
+                    let textoValor = '';
+                    let statusTextoOriginal = '';
+                    
+                    if (subPartes.length >= 4) {
+                        textoValor = subPartes[2];
+                        statusTextoOriginal = subPartes[3].trim();
+                    } else if (subPartes.length === 3) {
+                        textoValor = subPartes[1];
+                        statusTextoOriginal = subPartes[2].trim();
                     } else {
-                        osContratoInicial.total += osValor;
-                        if (statusPago) osContratoInicial.pago += osValor; else osContratoInicial.apagar += osValor;
-                        osContratoInicial.lista.push(objetoOS);
+                        textoValor = subPartes[1];
+                    }
+                    
+                    let valLimpo = converterTextoParaNumero(textoValor);
+                    let alvo = null;
+
+                    if (idUpper.includes('2º') || idUpper.includes('SEGUNDO') || idUpper.includes('2O') || idUpper.includes('ADITIVO 2')) {
+                        alvo = etapas.adit2;
+                    } 
+                    else if (idUpper.includes('1º') || idUpper.includes('PRIMEIRO') || idUpper.includes('1O') || idUpper.includes('ADITIVO 1')) {
+                        alvo = etapas.adit1;
+                    } 
+                    else if (idUpper.includes('INICIAL') || idUpper.includes('CONTRATO')) {
+                        alvo = etapas.inicial;
+                    }
+
+                    if (alvo) {
+                        alvo.temDados = true;
+                        let statusCalculado = 'execucao';
+                        let statusUpper = statusTextoOriginal.toUpperCase();
+                        
+                        if (statusUpper.includes('PAGO')) {
+                            statusCalculado = 'pago';
+                        } else if (statusUpper.includes('AGUARDANDO') || statusUpper.includes('A PAGAR') || statusUpper.includes('PENDENTE')) {
+                            statusCalculado = 'aguardando';
+                        } else if (statusUpper.includes('EXECUÇÃO') || statusUpper.includes('EXECUCAO')) {
+                            statusCalculado = 'execucao';
+                        }
+
+                        alvo.lancamentos.push({ 
+                            label: identificador, 
+                            sei: osSei, 
+                            valor: valLimpo,
+                            status: statusCalculado,
+                            statusOriginal: statusTextoOriginal || (statusCalculado === 'pago' ? 'Pago' : statusCalculado === 'aguardando' ? 'Aguardando' : 'Em execução')
+                        });
+
+                        if (statusCalculado === 'pago') {
+                            alvo.pago += valLimpo;
+                        }
                     }
                 });
             }
 
-            let somaRealGlobal = osContratoInicial.total + osPrimeiroAditivo.total + osSegundoAditivo.total;
-            if(somaRealGlobal === 0) somaRealGlobal = parseFloat((item.valor || "0").toString().replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
-            
-            let totalAditivosExtras = extrairTotalAditivosMonetarios(aditValor);
-            let saldoContrato = (somaRealGlobal + totalAditivosExtras) - totalPago;
-            
-            const saude = calcularSaudeVigencia(vigencia);
+            let blocosFinanceirosHTML = '';
+            let saldoGlobalContrato = 0;
 
-            const renderBlocoAdit = (titInt, objMeta, idSub, col, prazo) => {
-                if (objMeta.lista.length === 0) return "";
-                return `
-                    <div class="card-aditivo-financeiro" style="border-left: 4px solid ${col};" onclick="event.stopPropagation(); toggleElemento('${idSub}', this)">
-                        <div class="aditivo-header-grid"><span class="aditivo-titulo-texto">${titInt}</span><span class="ted-arrow">▼</span></div>
-                        <div style="margin-bottom:6px; background:#fff; padding:4px 8px; border-radius:4px; font-size:10.5px; color:var(--text-muted); text-align:left;"><strong>Vigência:</strong> ${prazo}</div>
-                        <div class="aditivo-valores-mini-grid">
-                            <div class="mini-caixa-valor"><small>Total</small><span>${formatarBRL(objMeta.total)}</span></div>
-                            <div class="mini-caixa-valor"><small style="color:var(--ms-green);">Pago</small><span>${formatarBRL(objMeta.pago)}</span></div>
-                            <div class="mini-caixa-valor"><small style="color:var(--ms-amber);">A Pagar</small><span>${formatarBRL(objMeta.apagar)}</span></div>
-                            <div class="mini-caixa-valor"><small style="color:var(--brand-primary);">Saldo</small><span>${formatarBRL(objMeta.total - objMeta.pago)}</span></div>
-                        </div>
-                        <div id="${idSub}" class="aditivo-retratil-container" onclick="event.stopPropagation();">
-                            <div class="os-cards-container">
-                                ${objMeta.lista.map(os => {
-                                    let classeCorStatus = "execucao";
-                                    if(os.status.toLowerCase().includes('pago')) classeCorStatus = "pago";
-                                    else if(os.status.toLowerCase().includes('aguardando')) classeCorStatus = "aguardando";
-                                    return `
-                                    <div class="os-mini-card">
-                                        <div class="os-mini-card-row">
-                                            <span class="os-card-title">📌 ${os.nome}</span>
-                                            <span class="status-pill ${classeCorStatus}">${os.status}</span>
+            Object.keys(etapas).forEach(chave => {
+                const et = etapas[chave];
+                if (et.temDados) {
+                    et.aPagar = et.total - et.pago;
+                    saldoGlobalContrato += et.aPagar;
+
+                    let itensEtapaHTML = '';
+                    if (et.lancamentos.length > 0) {
+                        itensEtapaHTML = `<div class="aditivo-retratil-container" id="gaveta_etapa_${et.id}"><div class="os-cards-container">`;
+                        et.lancamentos.forEach(lan => {
+                            let linhaSeiHTML = lan.sei ? `<span style="font-size: 10px; color: var(--text-muted); background: var(--bg-body); padding: 1px 4px; border-radius: 3px; font-family: monospace;">📋 ${lan.sei}</span>` : '';
+                            itensEtapaHTML += `
+                                <div class="os-mini-card">
+                                    <div class="os-mini-card-row">
+                                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                                            <span class="os-card-title">🛠️ ${lan.label}</span>
+                                            ${linhaSeiHTML}
                                         </div>
-                                        <div class="os-mini-card-row" style="margin-top:2px;">
-                                            <span class="os-card-sei">${os.sei}</span>
-                                            <span class="os-card-val">${formatarBRL(os.valor)}</span>
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span class="status-pill ${lan.status}">${lan.statusOriginal}</span>
+                                            <span class="os-card-val ${lan.valor < 0 ? 'negativo' : ''}">${formatarBRL(lan.valor)}</span>
                                         </div>
                                     </div>
-                                `}).join('')}
+                                </div>
+                            `;
+                        });
+                        itensEtapaHTML += `</div></div>`;
+                    }
+
+                    blocosFinanceirosHTML += `
+                        <div class="etapa-contrato-bloco">
+                            <div class="etapa-contrato-titulo" onclick="event.stopPropagation(); toggleElemento('gaveta_etapa_${et.id}', this)" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none;">
+                                <span>${et.nome}</span>
+                                <span style="font-size: 9px; color: var(--brand-primary); font-weight: bold;">Ver Itens ▼</span>
                             </div>
+                            <div class="etapa-contrato-grid" style="grid-template-columns: repeat(3, 1fr);">
+                                <div class="etapa-mini-card" style="cursor: pointer; border: 1px dashed var(--brand-primary);" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${String(idContrato)}', '${et.campoValorPlanilha}', '${et.nome}', '${et.valorParaEditar}')">
+                                    <small style="color: var(--brand-primary);">Valor Total ✏️</small>
+                                    <span style="color: var(--brand-primary); font-weight: 700;">${formatarBRL(et.total)}</span>
+                                </div>
+                                <div class="etapa-mini-card pago">
+                                    <small>Pago</small>
+                                    <span>${formatarBRL(et.pago)}</span>
+                                </div>
+                                <div class="etapa-mini-card apagar">
+                                    <small>A Pagar</small>
+                                    <span>${formatarBRL(et.aPagar)}</span>
+                                </div>
+                            </div>
+                            ${itensEtapaHTML}
                         </div>
-                    </div>
-                `;
-            };
+                    `;
+                }
+            });
 
-            let aditHTML = "";
-            aditHTML += renderBlocoAdit("📋 Contrato Inicial", osContratoInicial, `sub_ini_${idContrato}`, "var(--brand-primary)", "Base");
-            aditHTML += renderBlocoAdit("🔸 1º Termo Aditivo", osPrimeiroAditivo, `sub_1a_${idContrato}`, "var(--ms-amber)", aditPrazo);
-            aditHTML += renderBlocoAdit("🔺 2º Termo Aditivo", osSegundoAditivo, `sub_2a_${idContrato}`, "var(--ms-red)", vigencia);
-
-            let badgeStyle = saldoContrato < 0 ? 'negativo-badge' : 'contrato-badge';
+            let badgeStyle = saldoGlobalContrato < 0 ? 'negativo-badge' : '';
 
             return `
                 <div class="ted-card" id="card_${idContrato}">
@@ -907,45 +1025,41 @@
                         <div class="ted-trigger-left">
                             <h3 class="ted-title">📄 ${item.titulo}</h3>
                             <div class="ted-meta-pill-box">
-                                <span class="meta-tag-pill area">🏛️ ${areaTecnica}</span>
+                                <span class="meta-tag-pill">🏛️ ${instituicao}</span>
+                                <span class="meta-tag-pill area">🧬 ${areaTecnica}</span>
                                 <span class="alert-badge ${saude.classe}">${saude.label}</span>
                             </div>
                         </div>
                         <div class="ted-trigger-right">
                             <div class="ted-quick-val-badge ${badgeStyle}">
-                                <small>Saldo Restante</small>
-                                <span>${formatarBRL(saldoContrato)}</span>
+                                <small>Saldo Global</small>
+                                <span>${formatarBRL(saldoGlobalContrato)}</span>
                             </div>
                             <span class="ted-arrow">▼</span>
                         </div>
                     </div>
                     <div class="ted-content" id="content_${idContrato}">
                         <div class="ted-content-inner">
-                            <div class="ted-grid">
-                                <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idContrato}', 'area_tecnica', 'Área Responsável', '${areaTecnica}')">
-                                    <div class="field-row-edit"><small>🏛️ Área Responsável</small><span class="edit-indicator">Editar ✏️</span></div>
-                                    <span>${areaTecnica}</span>
+                            <div class="ted-grid" style="display: flex; flex-direction: column; gap: 8px;">
+                                <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${String(idContrato)}', 'instituicao', 'Instituição', '${instituicao}')">
+                                    <div class="field-row-edit"><small>Instituição / Empresa</small><span class="edit-indicator">Editar ✏️</span></div>
+                                    <span>${instituicao}</span>
                                 </div>
-                                <div class="ted-field highlight" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idContrato}', 'valor', 'Valor Global do Contrato', '${somaRealGlobal}')">
-                                    <div class="field-row-edit"><small>💰 Valor Global Instrumento</small><span class="edit-indicator">Editar ✏️</span></div>
-                                    <span class="mono-val">${formatarBRL(somaRealGlobal)}</span>
+                                <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${String(idContrato)}', 'sei', 'Número SEI', '${numeroSeiContrato}')">
+                                    <div class="field-row-edit"><small>Número SEI</small><span class="edit-indicator">Editar ✏️</span></div>
+                                    <span class="mono-val" style="color: var(--brand-primary);">${numeroSeiContrato}</span>
                                 </div>
-                                <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idContrato}', 'vigencia', 'Final de Vigência', '${vigencia}')">
-                                    <div class="field-row-edit"><small>🗓️ Final de Vigência</small><span class="edit-indicator">Editar ✏️</span></div>
+                                <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${String(idContrato)}', 'vigencia', 'Data Final de Vigência', '${vigencia}')">
+                                    <div class="field-row-edit"><small>Vigência Fim</small><span class="edit-indicator">Editar ✏️</span></div>
                                     <span>${vigencia}</span>
                                 </div>
-                                <div class="ted-field success"><small>💡 Saldo Restante OS</small><span class="mono-val">${formatarBRL(saldoContrato)}</span></div>
-                                <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idContrato}', 'adit_valor', 'Histórico Adicional de Valor', '${aditValor}')">
-                                    <div class="field-row-edit"><small>Histórico / Aditivos de Valor</small><span class="edit-indicator">Editar ✏️</span></div>
-                                    <span style="font-size:11.5px; color:var(--text-muted); font-weight:600;">${aditValor || 'Sem histórico adicional'}</span>
+                                <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px; width: 100%;">
+                                    ${blocosFinanceirosHTML}
                                 </div>
                             </div>
-                            
-                            <div style="margin-top:10px;">${aditHTML}</div>
-                            
-                            <div class="card-action-bar">
-                                <button class="btn-card-action edit" onclick="event.stopPropagation(); abrirModalEdicaoCard('${idContrato}', 'CONTRATO')">⚙️ Painel Completo</button>
-                                <button class="btn-card-action add-member" onclick="event.stopPropagation(); abrirPromptInjecaoRapida('${idContrato}')">➕ Injetar OS rápido</button>
+                            <div class="card-action-bar" style="margin-top: 15px; clear: both;">
+                                <button class="btn-card-action edit" onclick="event.stopPropagation(); abrirModalEdicaoCard('${String(idContrato)}', 'CONTRATO')">⚙️ Painel Completo</button>
+                                <button class="btn-card-action add-member" onclick="event.stopPropagation(); abrirPromptInjecaoRapida('${String(idContrato)}')">➕ Injetar OS/Pago rápido</button>
                             </div>
                         </div>
                     </div>
@@ -1013,11 +1127,8 @@
                 conteudo: novoConteudo
             };
 
-            fetch(URL_API, { 
-                method: "POST", 
-                body: JSON.stringify(pacote) 
-            })
-            .then(res => res.text()) // Lendo como texto limpo para ignorar bloqueios visuais de redirecionamento do Chrome
+            fetch(URL_API, { method: "POST", body: JSON.stringify(pacote) })
+            .then(res => res.text())
             .then(textoResposta => {
                 try {
                     const res = JSON.parse(textoResposta);
@@ -1028,13 +1139,12 @@
                         alert("⚠️ Servidor recusou: " + (res.msg || "Verifique o ID da linha"));
                     }
                 } catch(e) {
-                    // Fallback caso a gravação ocorra, mas o JSON venha envelopado pelo redirecionamento do Google
                     alert("✅ Alteração sincronizada com a planilha!");
                     setTimeout(sincronizarPainel, 600);
                 }
             })
             .catch(err => {
-                alert("✅ Registro atualizado!");
+                alert("✅ Registro updated!");
                 setTimeout(sincronizarPainel, 800);
             });
         }
@@ -1115,17 +1225,10 @@
             let apenasNumeros = valRaw.replace(/\D/g, '');
             let numValor = parseFloat(apenasNumeros / 100) || 0;
 
-            if (éNegativo) {
-                numValor = -Math.abs(numValor);
-            }
+            if (éNegativo) numValor = -Math.abs(numValor);
 
             const pacote = {
-                acao: modo,
-                id: id,
-                senha: senha,
-                categoria: cat,
-                titulo: tit,
-                valor: numValor,
+                acao: modo, id: id, senha: senha, categoria: cat, titulo: tit, valor: numValor,
                 instituicao: document.getElementById('meta_ted_inst').value.trim() || "---",
                 sei: document.getElementById('meta_ted_sei').value.trim() || "---",
                 area_tecnica: document.getElementById('meta_ted_area').value.trim() || "---",
@@ -1155,15 +1258,18 @@
             const arrow = triggerEl.querySelector('.ted-arrow');
             if (!content) return;
             
-            if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+            const abrindo = !content.style.maxHeight || content.style.maxHeight === '0px';
+            const anteriorScrollHeight = content.scrollHeight;
+            
+            if (!abrindo) {
                 content.style.maxHeight = '0px';
                 if(arrow) arrow.style.transform = 'rotate(0deg)';
                 
                 let ancestral = content.parentElement;
                 while (ancestral) {
                     if (ancestral.classList && (ancestral.classList.contains('ted-content') || ancestral.classList.contains('aditivo-retratil-container'))) {
-                        if (ancestral.style.maxHeight && ancestral.style.maxHeight !== 'none') {
-                            ancestral.style.maxHeight = (ancestral.scrollHeight - content.scrollHeight) + "px";
+                        if (ancestral.style.maxHeight && ancestral.style.maxHeight !== 'none' && ancestral.style.maxHeight !== '0px') {
+                            ancestral.style.maxHeight = Math.max(0, (ancestral.scrollHeight - anteriorScrollHeight)) + "px";
                         }
                     }
                     ancestral = ancestral.parentElement;
@@ -1175,7 +1281,9 @@
                 let ancestral = content.parentElement;
                 while (ancestral) {
                     if (ancestral.classList && (ancestral.classList.contains('ted-content') || ancestral.classList.contains('aditivo-retratil-container'))) {
-                        ancestral.style.maxHeight = (ancestral.scrollHeight + content.scrollHeight) + "px";
+                        if (ancestral.style.maxHeight && ancestral.style.maxHeight !== 'none' && ancestral.style.maxHeight !== '0px') {
+                            ancestral.style.maxHeight = (ancestral.scrollHeight + content.scrollHeight) + "px";
+                        }
                     }
                     ancestral = ancestral.parentElement;
                 }
