@@ -192,6 +192,7 @@
         .alert-badge.atencao { background: var(--ms-amber-light); color: var(--ms-amber); border-color: #fde68a; }
         .alert-badge.critico { background: var(--ms-red-light); color: var(--ms-red); border-color: #fecaca; }
 
+        /* AJUSTE DAS 3 CAIXAS METRICAS DAS ETAPAS DO CONTRATO */
         .etapa-contrato-bloco {
             background: #ffffff;
             border: 1px solid var(--border-color);
@@ -214,29 +215,37 @@
         }
         .etapa-contrato-grid {
             display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 6px;
+            margin-bottom: 8px;
         }
         .etapa-mini-card {
             background: var(--bg-body);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
-            padding: 6px 8px;
+            padding: 8px 6px;
             display: flex;
             flex-direction: column;
             gap: 2px;
+            min-width: 0;
+            align-items: flex-start;
         }
         .etapa-mini-card small {
             font-size: 8px;
             font-weight: 700;
             color: var(--text-muted);
             text-transform: uppercase;
+            white-space: nowrap;
         }
         .etapa-mini-card span {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 10.5px;
+            font-size: 10px;
             font-weight: 700;
             color: var(--text-title);
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
         }
         .etapa-mini-card.pago { border-left: 3px solid var(--ms-green); background: var(--ms-green-light); }
         .etapa-mini-card.pago span { color: #065f46; }
@@ -253,7 +262,7 @@
             clear: both;
         }
 
-        /* COMPONENTE DE LANÇAMENTOS/OS TOTALMENTE CORRIGIDO PARA MOBILE */
+        /* COMPONENTE DE LANÇAMENTOS/OS TOTALMENTE BLINDADO CONTRA TEXTOS LONGOS */
         .os-cards-container { 
             display: flex; 
             flex-direction: column; 
@@ -276,7 +285,7 @@
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            gap: 10px; 
+            gap: 8px; 
             width: 100%; 
         }
         .os-info-left {
@@ -284,7 +293,7 @@
             flex-direction: column;
             gap: 4px;
             min-width: 0;
-            flex: 1;
+            flex: 1.2;
         }
         .os-mini-card .os-card-title { 
             font-size: 11px; 
@@ -296,20 +305,26 @@
         }
         .os-mini-card-row .os-card-sei { 
             font-family: 'JetBrains Mono', monospace; 
-            font-size: 9.5px; 
+            font-size: 9px; 
             color: var(--text-muted);
             background: #f1f5f9;
             padding: 2px 6px;
             border-radius: 4px;
             width: fit-content;
             white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
         }
         .os-values-right {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
             flex-shrink: 0;
+            min-width: 95px;
         }
+        
         .os-mini-card-row .os-card-val { 
             font-family: 'JetBrains Mono', monospace; 
             font-size: 11px; 
@@ -317,17 +332,17 @@
             white-space: nowrap; 
             color: var(--text-title);
             text-align: right;
-            min-width: 80px;
         }
         
         .status-pill { 
-            font-size: 8.5px; 
+            font-size: 8px; 
             font-weight: 800; 
-            padding: 3px 6px; 
+            padding: 2px 5px; 
             border-radius: 4px; 
             text-transform: uppercase; 
-            letter-spacing: 0.2px;
+            letter-spacing: 0.1px;
             white-space: nowrap;
+            text-align: center;
         }
         .status-pill.pago { background: var(--ms-green-light); color: var(--ms-green); }
         .status-pill.aguardando { background: var(--ms-amber-light); color: var(--ms-amber); }
@@ -369,15 +384,31 @@
         .btn-salvar-web { background: var(--ms-green); color: white; border: none; width: 100%; padding: 12px; border-radius: var(--radius-lg); font-weight: 700; font-size: 13.5px; cursor: pointer; margin-top: 14px; }
         .btn-cancelar { background: transparent; color: var(--ms-red); border: none; width: 100%; padding: 6px; font-weight: 700; font-size: 12.5px; margin-top: 4px; cursor: pointer; }
 
-        @media (max-width: 480px) {
-            .etapa-contrato-grid {
-                grid-template-columns: repeat(2, 1fr);
+        /* REGRAS DE MEDIA QUERIES APERFEIÇOADAS PARA MOBILE COMPACTO */
+        @media (min-width: 380px) {
+            .os-values-right {
+                flex-direction: row;
+                align-items: center;
+                gap: 8px;
+                min-width: 160px;
             }
         }
-        @media (max-width: 380px) {
+
+        @media (max-width: 400px) {
             .etapa-contrato-grid {
-                grid-template-columns: 1fr !important;
-                gap: 8px;
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+            .etapa-mini-card {
+                padding: 10px 12px;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .etapa-mini-card span {
+                text-align: right;
+                width: auto;
+                font-size: 11px;
             }
         }
     </style>
@@ -1027,7 +1058,6 @@
                     if (et.lancamentos.length > 0) {
                         itensEtapaHTML = `<div class="aditivo-retratil-container" id="gaveta_etapa_${et.id}"><div class="os-cards-container">`;
                         
-                        // HTML DINÂMICO E ESTRUTURADO DAS OSs CORRIGIDO
                         et.lancamentos.forEach(lan => {
                             let linhaSeiHTML = lan.sei ? `<span class="os-card-sei">📋 ${lan.sei}</span>` : '';
                             itensEtapaHTML += `
@@ -1054,7 +1084,7 @@
                                 <span>${et.nome}</span>
                                 <span style="font-size: 9px; color: var(--brand-primary); font-weight: bold;">Ver Itens ▼</span>
                             </div>
-                            <div class="etapa-contrato-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="etapa-contrato-grid">
                                 <div class="etapa-mini-card" style="cursor: pointer; border: 1px dashed var(--brand-primary);" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${String(idContrato)}', '${et.campoValorPlanilha}', '${et.nome}', '${et.valorParaEditar}')">
                                     <small style="color: var(--brand-primary);">Valor Total ✏️</small>
                                     <span style="color: var(--brand-primary); font-weight: 700;">${formatarBRL(et.total)}</span>
