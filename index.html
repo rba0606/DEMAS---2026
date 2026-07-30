@@ -370,6 +370,13 @@
         .nc-title { font-size: 8.5px; color: var(--text-title); font-weight: 700; text-transform: uppercase; margin-bottom: 4px; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; }
         .nc-row { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; padding: 2px 0; }
 
+        .ano-tabs-container { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 12px 2px; margin-bottom: 4px; -webkit-overflow-scrolling: touch; }
+        .ano-tabs-container::-webkit-scrollbar { display: none; }
+        .ano-tab { flex-shrink: 0; padding: 8px 16px; border-radius: 999px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-muted); font-weight: 700; font-size: 12.5px; cursor: pointer; box-shadow: var(--shadow-sm); white-space: nowrap; transition: background 0.15s, color 0.15s, border-color 0.15s; }
+        .ano-tab:active { background: var(--brand-primary-light); }
+        .ano-tab.active { background: var(--brand-primary); border-color: var(--brand-primary); color: white; }
+        .ano-tab-nota { font-size: 10.5px; color: var(--text-muted); text-align: center; padding: 8px 12px; background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: var(--radius-md); margin-bottom: 12px; }
+
         .unified-footer { background: var(--brand-dark); color: white; padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .unified-footer span { font-size: 9px; opacity: 0.7; text-transform: uppercase; text-align: center; }
         .unified-footer strong { display: block; font-size: 1.35rem; color: #4ade80; margin-top: 2px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; text-align: center; }
@@ -443,18 +450,18 @@
         </div>
 
         <div id="mainMenu" class="menu-grid">
-            <div class="menu-card" onclick="showSection('execucao', 'EXECUÇÃO 2026')">
+            <div class="menu-card" onclick="showSection('execucao', 'EXECUÇÃO')">
                 <span class="icon">📊</span>
                 <div class="menu-text">
-                    <h2>EXECUÇÃO 2026</h2>
-                    <p>Saldos de Conta Líquidos e Descentralizados</p>
+                    <h2>EXECUÇÃO</h2>
+                    <p>Saldos por ano de execução orçamentária</p>
                 </div>
             </div>
-            <div class="menu-card" onclick="showSection('planejamento', 'PLOA 2027')">
+            <div class="menu-card" onclick="showSection('planejamento', 'PLANEJAMENTO')">
                 <span class="icon">🗓️</span>
                 <div class="menu-text">
-                    <h2>PLOA 2027</h2>
-                    <p>Planejamento de Teto Orçamentário Inicial</p>
+                    <h2>PLANEJAMENTO</h2>
+                    <p>PLOA por ano (2027, 2028...)</p>
                 </div>
             </div>
             <div class="menu-card" onclick="showSection('instrumentos', 'INSTRUMENTOS')">
@@ -467,81 +474,13 @@
         </div>
 
         <section id="execucao" class="content-section">
-            <div class="unified-card">
-                <div class="card-header-main">📍 Recursos Descentralizados (Em Conta)</div>
-                <div class="action-group">
-                    <div class="action-tag">AÇÃO 8753</div>
-                    <div class="exe-panel-card dotacao-card">
-                        <div class="exe-panel-row"><span class="exe-panel-title">Dotação Inicial</span><span class="exe-panel-val val" id="exe_8753_dotacao">...</span></div>
-                    </div>
-                    <div id="container_8753" class="dinamic-data-list"></div> 
-                    <div class="exe-panel-card saldo-card">
-                        <div class="exe-panel-row"><span class="exe-panel-title">SALDO ATUAL 8753</span><span class="exe-panel-val val" id="exe_8753_disponivel">...</span></div>
-                    </div>
-                </div>
-                <div class="action-group">
-                    <div class="action-tag" style="background: var(--brand-slate); color: white;">AÇÃO 20YN</div>
-                    <div class="exe-panel-card dotacao-card">
-                        <div class="exe-panel-row"><span class="exe-panel-title">Dotação Inicial</span><span class="exe-panel-val val" id="exe_20yn_dotacao">...</span></div>
-                    </div>
-                    <div id="container_20yn" class="dinamic-data-list"></div> 
-                    <div class="exe-panel-card saldo-card">
-                        <div class="exe-panel-row"><span class="exe-panel-title">SALDO ATUAL 20YN</span><span class="exe-panel-val val" id="exe_20yn_disponivel">...</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="unified-card">
-                <div class="card-header-main">📉 Planejamento de Saídas (Projeção)</div>
-                <div class="action-group">
-                    <div class="action-tag">AÇÃO 8753</div>
-                    <div class="exe-panel-card dotacao-card">
-                        <div class="exe-panel-row"><span class="exe-panel-title">Saldo Atual Base</span><span class="exe-panel-val val" id="proj_8753_saldo">...</span></div>
-                    </div>
-                    <div id="container_proj_8753" class="dinamic-data-list"></div>
-                    <div class="exe-panel-card saldo-card">
-                        <div class="exe-panel-row"><span class="exe-panel-title">SALDO FINAL PROJETADO 8753</span><span class="exe-panel-val val" id="proj_8753_final">...</span></div>
-                    </div>
-                </div>
-                <div class="action-group">
-                    <div class="action-tag" style="background: var(--brand-slate); color: white;">AÇÃO 20YN</div>
-                    <div class="exe-panel-card dotacao-card">
-                        <div class="exe-panel-row"><span class="exe-panel-title">Saldo Atual Base</span><span class="exe-panel-val val" id="proj_20yn_saldo">...</span></div>
-                    </div>
-                    <div id="container_proj_20yn" class="dinamic-data-list"></div>
-                    <div class="exe-panel-card saldo-card">
-                        <div class="exe-panel-row"><span class="exe-panel-title">SALDO FINAL PROJETADO 20YN</span><span class="exe-panel-val val" id="proj_20yn_final">...</span></div>
-                    </div>
-                </div>
-                <div class="unified-footer">
-                    <span>SALDO FINAL PROJETADO 2026 GERAL</span>
-                    <strong id="proj_final_geral" class="val">...</strong>
-                </div>
-            </div>
+            <div id="execucaoAnoTabs" class="ano-tabs-container"></div>
+            <div id="execucaoConteudo"></div>
         </section>
 
         <section id="planejamento" class="content-section">
-            <div class="unified-card">
-                <div class="card-header-main">📈 Projeção Orçamentária 2027</div>
-                <div class="action-group">
-                    <div class="action-tag">AÇÃO 8753 - PLOA 2027</div>
-                    <div id="container_ploa_8753" class="dinamic-data-list"></div> 
-                    <div class="exe-panel-card saldo-card">
-                        <div class="exe-panel-row"><span class="exe-panel-title">TOTAL 8753</span><span class="exe-panel-val val" id="ploa_8753_total">...</span></div>
-                    </div>
-                </div>
-                <div class="action-group">
-                    <div class="action-tag" style="background: var(--brand-slate); color: white;">AÇÃO 20YN - PLOA 2027</div>
-                    <div id="container_ploa_20yn" class="dinamic-data-list"></div> 
-                    <div class="exe-panel-card saldo-card">
-                        <div class="exe-panel-row"><span class="exe-panel-title">TOTAL 20YN</span><span class="exe-panel-val val" id="ploa_20yn_total">...</span></div>
-                    </div>
-                </div>
-                <div class="unified-footer" style="background: #064e3b;">
-                    <span>Teto Geral Projetado PLOA 2027</span>
-                    <strong id="ploa_teto_geral" class="val">...</strong>
-                </div>
-            </div>
+            <div id="planejamentoAnoTabs" class="ano-tabs-container"></div>
+            <div id="planejamentoConteudo"></div>
         </section>
 
         <section id="instrumentos" class="content-section">
@@ -613,6 +552,193 @@
         
         let navigationHistory = [];
         let backupDadosGerais = {}; 
+
+        // Ano corrente (execucao) e ano seguinte (PLOA) usados no motor de calculo automatico.
+        const ANO_ATUAL = new Date().getFullYear();
+        const ANO_PROXIMO = ANO_ATUAL + 1;
+
+        // Converte valores em texto (R$, virgula/ponto) para numero. Usado tanto na renderizacao
+        // dos cards de contrato quanto no motor de calculo automatico (mantidos em sincronia).
+        function converterTextoParaNumero(texto) {
+            if (!texto) return 0;
+            if (typeof texto === 'number') return texto;
+            let limpo = String(texto).replace(/[R$\s]/g, '').trim();
+            if (limpo.includes(',') && limpo.includes('.')) {
+                limpo = limpo.replace(/\./g, '').replace(',', '.');
+            } else if (limpo.includes(',')) {
+                limpo = limpo.replace(',', '.');
+            }
+            return parseFloat(limpo) || 0;
+        }
+
+        /**
+         * Calcula, a partir do historico bruto de um TED, as NCs emitidas (por identificador)
+         * e o cronograma anual previsto (entradas do tipo "AAAA | valor").
+         */
+        function parseHistoricoTED(historicoRaw) {
+            const ncs = [];
+            const cronograma = {};
+            if (historicoRaw && historicoRaw !== '' && historicoRaw !== '---') {
+                historicoRaw.split(';').forEach(blocoTexto => {
+                    if (blocoTexto.trim() === '' || !blocoTexto.includes('|')) return;
+                    const subPartes = blocoTexto.split('|');
+                    if (subPartes.length < 2) return;
+                    const identificador = subPartes[0].trim();
+                    let textoValor = subPartes[1].replace(/[R$\s]/g, '').replace(',', '.');
+                    const valLimpo = parseFloat(textoValor) || 0;
+                    if (identificador.toUpperCase().includes('NC')) {
+                        ncs.push({ ident: identificador, valor: valLimpo });
+                    } else {
+                        const anoNum = parseInt(identificador, 10);
+                        if (!isNaN(anoNum)) cronograma[anoNum] = (cronograma[anoNum] || 0) + valLimpo;
+                    }
+                });
+            }
+            return { ncs, cronograma };
+        }
+
+        /**
+         * MOTOR AUTOMATICO - TED, GENERICO POR ANO (assume acao 8753):
+         * - execucao: soma das NCs emitidas no ano informado.
+         * - previsto: valor do cronograma do TED para o ano informado.
+         * Funciona para qualquer ano presente no histórico (passado, atual ou futuro).
+         */
+        function calcularMetricasTEDParaAno(item, ano) {
+            const { ncs, cronograma } = parseHistoricoTED(item.historico);
+            const execucao = ncs
+                .filter(n => n.ident.toUpperCase().includes(String(ano) + 'NC'))
+                .reduce((acc, n) => acc + n.valor, 0);
+            const previsto = cronograma[ano] || 0;
+            return { execucao, previsto, restante: previsto - execucao };
+        }
+
+        // Wrapper de compatibilidade: métricas do TED para o ano atual + próximo ano (usado na
+        // agregação padrão do painel e no card do instrumento).
+        function calcularMetricasTED(item) {
+            const teto = parseFloat(item.valor) || 0;
+            const totalAditivoFinanceiro = extrairTotalAditivosMonetarios(item.adit_valor);
+            const { ncs } = parseHistoricoTED(item.historico);
+            const totalNCsGlobal = ncs.reduce((acc, n) => acc + n.valor, 0);
+            const saldoRestante = teto + totalAditivoFinanceiro - totalNCsGlobal;
+            const atual = calcularMetricasTEDParaAno(item, ANO_ATUAL);
+            const proximo = calcularMetricasTEDParaAno(item, ANO_PROXIMO);
+            return {
+                execucaoAnoAtual: atual.execucao,
+                saldoADescentralizar: atual.restante,
+                saldoRestante,
+                ploaProximoAno: proximo.previsto
+            };
+        }
+
+        /**
+         * Parsing compartilhado dos lançamentos (OS) de um contrato: separa por etapa
+         * (inicial/1o aditivo/2o aditivo) e, quando disponível, pelo ano tageado no 5o campo.
+         */
+        function _parseLancamentosContrato(item) {
+            const etapasBase = [
+                { total: converterTextoParaNumero(item.valor), campo: 'inicial' },
+                { total: converterTextoParaNumero(item.adit_valor), campo: 'adit1' },
+                { total: converterTextoParaNumero(item.adit_valor_2), campo: 'adit2' }
+            ];
+            const pagoPorEtapa = { inicial: 0, adit1: 0, adit2: 0 };
+            const pagoPorEtapaEAno = {}; // { ano: { inicial, adit1, adit2 } }
+            const historicoRaw = item.historico || '';
+
+            if (historicoRaw && historicoRaw !== '' && historicoRaw !== '---') {
+                historicoRaw.split(';').forEach(blocoTexto => {
+                    if (blocoTexto.trim() === '' || !blocoTexto.includes('|')) return;
+                    const subPartes = blocoTexto.split('|');
+                    if (subPartes.length < 2) return;
+                    const idUpper = subPartes[0].trim().toUpperCase();
+
+                    let textoValor, statusTexto = '', anoTag = null;
+                    if (subPartes.length >= 5) {
+                        textoValor = subPartes[2];
+                        statusTexto = subPartes[3].trim();
+                        const anoParse = parseInt(subPartes[4].trim(), 10);
+                        anoTag = !isNaN(anoParse) ? anoParse : null;
+                    } else if (subPartes.length === 4) {
+                        textoValor = subPartes[2];
+                        statusTexto = subPartes[3].trim();
+                    } else if (subPartes.length === 3) {
+                        textoValor = subPartes[1];
+                        statusTexto = subPartes[2].trim();
+                    } else {
+                        textoValor = subPartes[1];
+                    }
+                    const v = converterTextoParaNumero(textoValor);
+
+                    let alvo = null;
+                    if (idUpper.includes('2º') || idUpper.includes('SEGUNDO') || idUpper.includes('2O') || idUpper.includes('ADITIVO 2')) alvo = 'adit2';
+                    else if (idUpper.includes('1º') || idUpper.includes('PRIMEIRO') || idUpper.includes('1O') || idUpper.includes('ADITIVO 1')) alvo = 'adit1';
+                    else if (idUpper.includes('INICIAL') || idUpper.includes('CONTRATO')) alvo = 'inicial';
+
+                    if (alvo && statusTexto.toUpperCase().includes('PAGO')) {
+                        pagoPorEtapa[alvo] += v;
+                        if (anoTag !== null) {
+                            if (!pagoPorEtapaEAno[anoTag]) pagoPorEtapaEAno[anoTag] = { inicial: 0, adit1: 0, adit2: 0 };
+                            pagoPorEtapaEAno[anoTag][alvo] += v;
+                        }
+                    }
+                });
+            }
+
+            return { etapasBase, pagoPorEtapa, pagoPorEtapaEAno };
+        }
+
+        /**
+         * MOTOR AUTOMATICO - CONTRATO, GENERICO POR ANO (assume acao 20YN):
+         * - execucao: soma das OS "Pago" cujo 5o campo de ano bate com o ano informado (só
+         *   funciona para OS já tageadas — OS sem tag continuam no ajuste manual).
+         * - saldoAPagarTotal: sempre o saldo total ainda não pago, independente do ano.
+         */
+        function calcularMetricasContratoParaAno(item, ano) {
+            const { etapasBase, pagoPorEtapa, pagoPorEtapaEAno } = _parseLancamentosContrato(item);
+            let saldoAPagarTotal = 0;
+            etapasBase.forEach(et => {
+                if (et.total !== 0 || pagoPorEtapa[et.campo] !== 0) {
+                    saldoAPagarTotal += (et.total - pagoPorEtapa[et.campo]);
+                }
+            });
+            const doAno = pagoPorEtapaEAno[ano] || { inicial: 0, adit1: 0, adit2: 0 };
+            const execucao = doAno.inicial + doAno.adit1 + doAno.adit2;
+            return { execucao, saldoAPagarTotal };
+        }
+
+        // Wrapper de compatibilidade: métricas do contrato para o ano atual (execução tageada) +
+        // 50% do saldo a pagar como PLOA do ano seguinte (regra de negócio).
+        function calcularMetricasContrato(item) {
+            const atual = calcularMetricasContratoParaAno(item, ANO_ATUAL);
+            return {
+                saldoAPagarTotal: atual.saldoAPagarTotal,
+                execucaoAnoAtual: atual.execucao,
+                ploaProximoAno: atual.saldoAPagarTotal / 2
+            };
+        }
+
+        /**
+         * Descobre quais anos têm dados relevantes na planilha (cronograma ou NCs de TEDs),
+         * para montar as abas de Execução (anos <= ano atual) e Planejamento/PLOA (anos futuros).
+         * Sempre garante a presença do ano atual e do ano seguinte, mesmo sem dados ainda.
+         */
+        function obterAnosDisponiveis() {
+            const anosSet = new Set([ANO_ATUAL, ANO_PROXIMO]);
+            Object.values(backupDadosGerais).forEach(item => {
+                if (!item || !item.categoria) return;
+                if (item.categoria.trim().toUpperCase() !== 'INST_TED') return;
+                const { ncs, cronograma } = parseHistoricoTED(item.historico);
+                Object.keys(cronograma).forEach(a => anosSet.add(parseInt(a, 10)));
+                ncs.forEach(n => {
+                    const m = n.ident.match(/(\d{4})\s*NC/i);
+                    if (m) anosSet.add(parseInt(m[1], 10));
+                });
+            });
+            const anos = Array.from(anosSet).filter(a => !isNaN(a)).sort((a, b) => a - b);
+            const anosExecucao = anos.filter(a => a <= ANO_ATUAL);
+            const anosPlanejamento = anos.filter(a => a > ANO_ATUAL);
+            return { anosExecucao, anosPlanejamento };
+        }
+
         const formatarBRL = (v) => {
             let num = parseFloat(v);
             if (isNaN(num)) return "R$ 0,00";
@@ -693,6 +819,256 @@
             return { label: "Vigência OK", classe: "regular" };
         }
 
+        // Junta uma lista de {id, titulo, valor, status} no HTML de linhas usando generarLinhaHTML.
+        function renderLinhas(lista) {
+            return lista.map(l => generarLinhaHTML(l.id, l.titulo, l.valor, l.status)).join('');
+        }
+
+        function semDadosHTML(ano) {
+            return `<div style="text-align:center;color:var(--text-muted);font-size:11.5px;padding:10px;">Nenhum lançamento para ${ano}.</div>`;
+        }
+
+        /**
+         * Agrega Execução para um ano qualquer: TEDs (NCs do ano) e Contratos (OS tageadas com
+         * o ano). Dotação Inicial e ajustes manuais (Crédito Adicional/Remanejamento) só existem
+         * registrados para o ano corrente na planilha.
+         */
+        function calcularAgregadoExecucaoAno(ano) {
+            let exec8753 = 0, exec20yn = 0;
+            let ajusteManual8753 = 0, ajusteManual20yn = 0;
+            let dotacao8753 = 0, dotacao20yn = 0;
+            const linhas8753 = [], linhas20yn = [];
+
+            Object.keys(backupDadosGerais).forEach(id => {
+                const item = backupDadosGerais[id];
+                if (!item) return;
+                const catLimpa = item.categoria ? item.categoria.trim().toUpperCase() : "";
+
+                if (catLimpa === 'INST_TED') {
+                    const m = calcularMetricasTEDParaAno(item, ano);
+                    if (m.execucao !== 0) {
+                        exec8753 += m.execucao;
+                        linhas8753.push({ id, titulo: `🤝 ${item.titulo} (NC ${ano})`, valor: -m.execucao, status: 'Auto · TED' });
+                    }
+                } else if (catLimpa === 'INST_CONTRATO') {
+                    const m = calcularMetricasContratoParaAno(item, ano);
+                    if (m.execucao !== 0) {
+                        exec20yn += m.execucao;
+                        linhas20yn.push({ id, titulo: `📄 ${item.titulo} (pago em ${ano})`, valor: -m.execucao, status: 'Auto · Contrato' });
+                    }
+                } else if (catLimpa === 'FIXO' && ano === ANO_ATUAL) {
+                    const idLower = id.toLowerCase();
+                    if (idLower.includes('dotacao') && idLower.includes('8753')) dotacao8753 = parseFloat(item.valor) || 0;
+                    if (idLower.includes('dotacao') && idLower.includes('20yn')) dotacao20yn = parseFloat(item.valor) || 0;
+                } else if (catLimpa === 'EXEC_8753' && ano === ANO_ATUAL) {
+                    ajusteManual8753 += (parseFloat(item.valor) || 0);
+                    linhas8753.push({ id, titulo: item.titulo, valor: item.valor, status: item.status || item.vigencia });
+                } else if (catLimpa === 'EXEC_20YN' && ano === ANO_ATUAL) {
+                    ajusteManual20yn += (parseFloat(item.valor) || 0);
+                    linhas20yn.push({ id, titulo: item.titulo, valor: item.valor, status: item.status || item.vigencia });
+                }
+            });
+
+            const saldoAtual8753 = dotacao8753 + ajusteManual8753 - exec8753;
+            const saldoAtual20yn = dotacao20yn + ajusteManual20yn - exec20yn;
+            return { dotacao8753, dotacao20yn, exec8753, exec20yn, saldoAtual8753, saldoAtual20yn, linhas8753, linhas20yn };
+        }
+
+        // Projeção de saídas (o que falta sair da conta até o fim do ano) — só faz sentido
+        // para o ano corrente; TEDs via cronograma, mais eventuais ajustes manuais PROJ_*.
+        function calcularProjecaoAnoAtual() {
+            let proj8753 = 0, proj20yn = 0;
+            const linhas8753 = [], linhas20yn = [];
+
+            Object.keys(backupDadosGerais).forEach(id => {
+                const item = backupDadosGerais[id];
+                if (!item) return;
+                const catLimpa = item.categoria ? item.categoria.trim().toUpperCase() : "";
+
+                if (catLimpa === 'INST_TED') {
+                    const m = calcularMetricasTEDParaAno(item, ANO_ATUAL);
+                    if (m.restante !== 0) {
+                        proj8753 += m.restante;
+                        linhas8753.push({ id, titulo: `🤝 ${item.titulo} (a descentralizar)`, valor: -m.restante, status: 'Auto · TED' });
+                    }
+                } else if (catLimpa === 'PROJ_8753') {
+                    proj8753 += (parseFloat(item.valor) || 0);
+                    linhas8753.push({ id, titulo: item.titulo + ' (ajuste manual)', valor: item.valor, status: item.status || item.vigencia });
+                } else if (catLimpa === 'PROJ_20YN') {
+                    proj20yn += (parseFloat(item.valor) || 0);
+                    linhas20yn.push({ id, titulo: item.titulo + ' (ajuste manual)', valor: item.valor, status: item.status || item.vigencia });
+                }
+            });
+
+            return { proj8753, proj20yn, linhas8753, linhas20yn };
+        }
+
+        /**
+         * Agrega Planejamento (PLOA) para um ano futuro: TEDs via cronograma; Contratos só têm
+         * modelagem automática para o ano seguinte (regra 50%) — anos além disso ficam só com TEDs.
+         */
+        function calcularAgregadoPlanejamentoAno(ano) {
+            let ploa8753 = 0, ploa20yn = 0;
+            const linhas8753 = [], linhas20yn = [];
+
+            Object.keys(backupDadosGerais).forEach(id => {
+                const item = backupDadosGerais[id];
+                if (!item) return;
+                const catLimpa = item.categoria ? item.categoria.trim().toUpperCase() : "";
+
+                if (catLimpa === 'INST_TED') {
+                    const m = calcularMetricasTEDParaAno(item, ano);
+                    if (m.previsto !== 0) {
+                        ploa8753 += m.previsto;
+                        linhas8753.push({ id, titulo: `🤝 ${item.titulo} (PLOA ${ano})`, valor: m.previsto, status: 'Auto · TED' });
+                    }
+                } else if (catLimpa === 'INST_CONTRATO' && ano === ANO_PROXIMO) {
+                    const m = calcularMetricasContrato(item);
+                    if (m.ploaProximoAno !== 0) {
+                        ploa20yn += m.ploaProximoAno;
+                        linhas20yn.push({ id, titulo: `📄 ${item.titulo} (50% PLOA ${ano})`, valor: m.ploaProximoAno, status: 'Auto · Contrato' });
+                    }
+                } else if (catLimpa === 'PLOA_8753' && ano === ANO_PROXIMO) {
+                    ploa8753 += (parseFloat(item.valor) || 0);
+                    linhas8753.push({ id, titulo: item.titulo + ' (ajuste manual)', valor: item.valor, status: item.status || item.vigencia });
+                } else if (catLimpa === 'PLOA_20YN' && ano === ANO_PROXIMO) {
+                    ploa20yn += (parseFloat(item.valor) || 0);
+                    linhas20yn.push({ id, titulo: item.titulo + ' (ajuste manual)', valor: item.valor, status: item.status || item.vigencia });
+                }
+            });
+
+            return { ploa8753, ploa20yn, linhas8753, linhas20yn };
+        }
+
+        function montarHtmlExecucaoAno(ano) {
+            const agr = calcularAgregadoExecucaoAno(ano);
+            const ehAnoAtual = ano === ANO_ATUAL;
+            const notaHistorica = !ehAnoAtual
+                ? `<div class="ano-tab-nota">📌 Dotação inicial e ajustes (crédito adicional/remanejamento) só estão registrados para ${ANO_ATUAL}. ${ano} mostra apenas o total efetivamente executado (NCs/OS) nesse ano.</div>`
+                : '';
+
+            let htmlProjecao = '';
+            if (ehAnoAtual) {
+                const proj = calcularProjecaoAnoAtual();
+                const projFinal8753 = agr.saldoAtual8753 - proj.proj8753;
+                const projFinal20yn = agr.saldoAtual20yn - proj.proj20yn;
+                htmlProjecao = `
+                <div class="unified-card">
+                    <div class="card-header-main">📉 Planejamento de Saídas (Projeção ${ano})</div>
+                    <div class="action-group">
+                        <div class="action-tag">AÇÃO 8753</div>
+                        <div class="exe-panel-card dotacao-card"><div class="exe-panel-row"><span class="exe-panel-title">Saldo Atual Base</span><span class="exe-panel-val val">${formatarBRL(agr.saldoAtual8753)}</span></div></div>
+                        <div class="dinamic-data-list">${renderLinhas(proj.linhas8753) || semDadosHTML(ano)}</div>
+                        <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">SALDO FINAL PROJETADO 8753</span><span class="exe-panel-val val">${formatarBRL(projFinal8753)}</span></div></div>
+                    </div>
+                    <div class="action-group">
+                        <div class="action-tag" style="background: var(--brand-slate); color: white;">AÇÃO 20YN</div>
+                        <div class="exe-panel-card dotacao-card"><div class="exe-panel-row"><span class="exe-panel-title">Saldo Atual Base</span><span class="exe-panel-val val">${formatarBRL(agr.saldoAtual20yn)}</span></div></div>
+                        <div class="dinamic-data-list">${renderLinhas(proj.linhas20yn) || semDadosHTML(ano)}</div>
+                        <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">SALDO FINAL PROJETADO 20YN</span><span class="exe-panel-val val">${formatarBRL(projFinal20yn)}</span></div></div>
+                    </div>
+                    <div class="unified-footer">
+                        <span>SALDO FINAL PROJETADO ${ano} GERAL</span>
+                        <strong class="val">${formatarBRL(projFinal8753 + projFinal20yn)}</strong>
+                    </div>
+                </div>`;
+            }
+
+            return `
+                ${notaHistorica}
+                <div class="unified-card">
+                    <div class="card-header-main">📍 Recursos Descentralizados (Em Conta) — ${ano}</div>
+                    <div class="action-group">
+                        <div class="action-tag">AÇÃO 8753</div>
+                        ${ehAnoAtual ? `<div class="exe-panel-card dotacao-card"><div class="exe-panel-row"><span class="exe-panel-title">Dotação Inicial</span><span class="exe-panel-val val">${formatarBRL(agr.dotacao8753)}</span></div></div>` : ''}
+                        <div class="dinamic-data-list">${renderLinhas(agr.linhas8753) || semDadosHTML(ano)}</div>
+                        <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">${ehAnoAtual ? 'SALDO ATUAL 8753' : 'TOTAL EXECUTADO 8753'}</span><span class="exe-panel-val val">${formatarBRL(ehAnoAtual ? agr.saldoAtual8753 : agr.exec8753)}</span></div></div>
+                    </div>
+                    <div class="action-group">
+                        <div class="action-tag" style="background: var(--brand-slate); color: white;">AÇÃO 20YN</div>
+                        ${ehAnoAtual ? `<div class="exe-panel-card dotacao-card"><div class="exe-panel-row"><span class="exe-panel-title">Dotação Inicial</span><span class="exe-panel-val val">${formatarBRL(agr.dotacao20yn)}</span></div></div>` : ''}
+                        <div class="dinamic-data-list">${renderLinhas(agr.linhas20yn) || semDadosHTML(ano)}</div>
+                        <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">${ehAnoAtual ? 'SALDO ATUAL 20YN' : 'TOTAL EXECUTADO 20YN'}</span><span class="exe-panel-val val">${formatarBRL(ehAnoAtual ? agr.saldoAtual20yn : agr.exec20yn)}</span></div></div>
+                    </div>
+                </div>
+                ${htmlProjecao}
+            `;
+        }
+
+        function montarHtmlPlanejamentoAno(ano) {
+            const agr = calcularAgregadoPlanejamentoAno(ano);
+            const notaContrato = ano !== ANO_PROXIMO
+                ? `<div class="ano-tab-nota">📌 Contratos administrativos só têm planejamento automático para ${ANO_PROXIMO} (regra 50%). ${ano} mostra apenas TEDs com cronograma cadastrado.</div>`
+                : '';
+
+            return `
+                ${notaContrato}
+                <div class="unified-card">
+                    <div class="card-header-main">📈 Projeção Orçamentária PLOA ${ano}</div>
+                    <div class="action-group">
+                        <div class="action-tag">AÇÃO 8753 - PLOA ${ano}</div>
+                        <div class="dinamic-data-list">${renderLinhas(agr.linhas8753) || semDadosHTML(ano)}</div>
+                        <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">TOTAL 8753</span><span class="exe-panel-val val">${formatarBRL(agr.ploa8753)}</span></div></div>
+                    </div>
+                    <div class="action-group">
+                        <div class="action-tag" style="background: var(--brand-slate); color: white;">AÇÃO 20YN - PLOA ${ano}</div>
+                        <div class="dinamic-data-list">${renderLinhas(agr.linhas20yn) || semDadosHTML(ano)}</div>
+                        <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">TOTAL 20YN</span><span class="exe-panel-val val">${formatarBRL(agr.ploa20yn)}</span></div></div>
+                    </div>
+                    <div class="unified-footer" style="background: #064e3b;">
+                        <span>Teto Geral Projetado PLOA ${ano}</span>
+                        <strong class="val">${formatarBRL(agr.ploa8753 + agr.ploa20yn)}</strong>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderizarAbasAno() {
+            const { anosExecucao, anosPlanejamento } = obterAnosDisponiveis();
+
+            const tabsExecEl = document.getElementById('execucaoAnoTabs');
+            if (tabsExecEl) {
+                tabsExecEl.innerHTML = anosExecucao.map(a =>
+                    `<div class="ano-tab ${a === ANO_ATUAL ? 'active' : ''}" data-ano="${a}" onclick="selecionarAnoExecucao(${a})">${a}</div>`
+                ).join('');
+            }
+
+            const tabsPlanEl = document.getElementById('planejamentoAnoTabs');
+            if (tabsPlanEl) {
+                tabsPlanEl.innerHTML = anosPlanejamento.map(a =>
+                    `<div class="ano-tab ${a === ANO_PROXIMO ? 'active' : ''}" data-ano="${a}" onclick="selecionarAnoPlanejamento(${a})">PLOA ${a}</div>`
+                ).join('');
+            }
+
+            selecionarAnoExecucao(ANO_ATUAL);
+            selecionarAnoPlanejamento(ANO_PROXIMO);
+        }
+
+        function selecionarAnoExecucao(ano) {
+            const container = document.getElementById('execucaoConteudo');
+            if (container) container.innerHTML = montarHtmlExecucaoAno(ano);
+            document.querySelectorAll('#execucaoAnoTabs .ano-tab').forEach(el => {
+                el.classList.toggle('active', parseInt(el.dataset.ano, 10) === ano);
+            });
+            aplicarClassesPositivoNegativo();
+        }
+
+        function selecionarAnoPlanejamento(ano) {
+            const container = document.getElementById('planejamentoConteudo');
+            if (container) container.innerHTML = montarHtmlPlanejamentoAno(ano);
+            document.querySelectorAll('#planejamentoAnoTabs .ano-tab').forEach(el => {
+                el.classList.toggle('active', parseInt(el.dataset.ano, 10) === ano);
+            });
+            aplicarClassesPositivoNegativo();
+        }
+
+        function aplicarClassesPositivoNegativo() {
+            document.querySelectorAll('.val').forEach(el => {
+                if (el.innerText.includes('-')) { el.classList.add('negativo'); el.classList.remove('positivo'); }
+                else if (el.innerText !== "..." && el.innerText !== "R$ 0,00") { el.classList.add('positivo'); el.classList.remove('negativo'); }
+            });
+        }
+
         async function sincronizarPainel() {
             try {
                 const urlComCacheBuster = `${URL_API}?_=${new Date().getTime()}`;
@@ -710,110 +1086,35 @@
                 });
 
                 const containers = {
-                    exec8753: document.getElementById('container_8753'),
-                    exec20yn: document.getElementById('container_20yn'),
-                    proj8753: document.getElementById('container_proj_8753'),
-                    proj20yn: document.getElementById('container_proj_20yn'),
-                    ploa8753: document.getElementById('container_ploa_8753'),
-                    ploa20yn: document.getElementById('container_ploa_20yn'),
                     instTeds: document.getElementById('container_inst_teds'),
                     instContratos: document.getElementById('container_inst_contratos')
                 };
+                Object.values(containers).forEach(c => { if (c) c.innerHTML = ''; });
 
-                let totalContratosCount = 0; let totalTedsCount = 0;
-                Object.values(containers).forEach(c => { if(c) c.innerHTML = ''; });
-
-                let somaPloa8753 = 0;
-                let somaPloa20yn = 0;
-
+                let totalContratosCount = 0, totalTedsCount = 0;
                 Object.keys(backupDadosGerais).forEach(id => {
                     const item = backupDadosGerais[id];
                     if (!item) return;
                     const catLimpa = item.categoria ? item.categoria.trim().toUpperCase() : "";
-
-                    if (catLimpa.includes('CONTRATO')) {
-                        totalContratosCount++;
-                        if(containers.instContratos) containers.instContratos.innerHTML += generarCardContratoHTML(id, item);
-                    } 
-                    else if (catLimpa.includes('TED')) {
+                    if (catLimpa === 'INST_TED') {
                         totalTedsCount++;
-                        if(containers.instTeds) containers.instTeds.innerHTML += generarCardTEDHTML(id, item);
-                    }
-                    else if (catLimpa !== 'FIXO') {
-                        if (catLimpa === 'PLOA_8753') somaPloa8753 += parseFloat(item.valor) || 0;
-                        if (catLimpa === 'PLOA_20YN') somaPloa20yn += parseFloat(item.valor) || 0;
-
-                        const ehTotalizadorFixo = id.includes('disponivel') || 
-                                                  id.includes('final') || 
-                                                  id.includes('geral') || 
-                                                  id.includes('total') || 
-                                                  id.includes('teto') || 
-                                                  id.includes('dotacao') || 
-                                                  id.includes('inicial') ||
-                                                  (id.includes('saldo') && !id.includes('remanejamento'));
-
-                        if (!ehTotalizadorFixo) {
-                            const htmlLinhaComum = generarLinhaHTML(id, item.titulo, item.valor, item.status || item.vigencia);
-                            if (catLimpa === 'EXEC_8753') containers.exec8753.innerHTML += htmlLinhaComum;
-                            else if (catLimpa === 'EXEC_20YN') containers.exec20yn.innerHTML += htmlLinhaComum;
-                            else if (catLimpa === 'PROJ_8753') containers.proj8753.innerHTML += htmlLinhaComum;
-                            else if (catLimpa === 'PROJ_20YN') containers.proj20yn.innerHTML += htmlLinhaComum;
-                            else if (catLimpa === 'PLOA_8753') containers.ploa8753.innerHTML += htmlLinhaComum;
-                            else if (catLimpa === 'PLOA_20YN') containers.ploa20yn.innerHTML += htmlLinhaComum;
-                        }
+                        if (containers.instTeds) containers.instTeds.innerHTML += generarCardTEDHTML(id, item);
+                    } else if (catLimpa === 'INST_CONTRATO') {
+                        totalContratosCount++;
+                        if (containers.instContratos) containers.instContratos.innerHTML += generarCardContratoHTML(id, item);
                     }
                 });
 
-                if(document.getElementById('kpi_total_contratos')) document.getElementById('kpi_total_contratos').innerText = totalContratosCount;
-                if(document.getElementById('kpi_total_teds')) document.getElementById('kpi_total_teds').innerText = totalTedsCount;
-                
-                function buscarValorPlanilha(listaPalavras) {
-                    const chaveEncontrada = Object.keys(backupDadosGerais).find(k => {
-                        return listaPalavras.every(palavra => k.includes(palavra.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")));
-                    });
-                    return chaveEncontrada ? parseFloat(backupDadosGerais[chaveEncontrada].valor) : null;
-                }
+                if (document.getElementById('kpi_total_contratos')) document.getElementById('kpi_total_contratos').innerText = totalContratosCount;
+                if (document.getElementById('kpi_total_teds')) document.getElementById('kpi_total_teds').innerText = totalTedsCount;
 
-                let saldoAtual8753 = buscarValorPlanilha(['disponivel', '8753']) ?? buscarValorPlanilha(['saldo', '8753']) ?? 0;
-                let saldoAtual20yn = buscarValorPlanilha(['disponivel', '20yn']) ?? buscarValorPlanilha(['saldo', '20yn']) ?? 0;
-                
-                let dotacao8753   = buscarValorPlanilha(['dotacao', '8753']) ?? buscarValorPlanilha(['inicial', '8753']) ?? buscarValorPlanilha(['orçamento', '8753']) ?? 0;
-                let dotacao20yn   = buscarValorPlanilha(['dotacao', '20yn']) ?? buscarValorPlanilha(['inicial', '20yn']) ?? buscarValorPlanilha(['orçamento', '20yn']) ?? 0;
+                const agrExecAtual = calcularAgregadoExecucaoAno(ANO_ATUAL);
+                const agrPlanProximo = calcularAgregadoPlanejamentoAno(ANO_PROXIMO);
+                if (document.getElementById('kpi_saldo_disponivel')) document.getElementById('kpi_saldo_disponivel').innerText = formatarBRL(agrExecAtual.saldoAtual8753 + agrExecAtual.saldoAtual20yn);
+                if (document.getElementById('kpi_teto_ploa2027')) document.getElementById('kpi_teto_ploa2027').innerText = formatarBRL(agrPlanProximo.ploa8753 + agrPlanProximo.ploa20yn);
 
-                let proj8753Base  = buscarValorPlanilha(['base', '8753']) ?? saldoAtual8753;
-                let proj20ynBase  = buscarValorPlanilha(['base', '20yn']) ?? saldoAtual20yn;
-                
-                let projFinal8753 = buscarValorPlanilha(['final', '8753']) ?? 0;
-                let projFinal20yn = buscarValorPlanilha(['final', '20yn']) ?? 0;
-                
-                let tetoPloaGeral = buscarValorPlanilha(['teto', 'geral']) ?? buscarValorPlanilha(['teto', '2027']) ?? (somaPloa8753 + somaPloa20yn);
-
-                if (document.getElementById('exe_8753_dotacao')) document.getElementById('exe_8753_dotacao').innerText = formatarBRL(dotacao8753);
-                if (document.getElementById('exe_20yn_dotacao')) document.getElementById('exe_20yn_dotacao').innerText = formatarBRL(dotacao20yn);
-                if (document.getElementById('exe_8753_disponivel')) document.getElementById('exe_8753_disponivel').innerText = formatarBRL(saldoAtual8753);
-                if (document.getElementById('exe_20yn_disponivel')) document.getElementById('exe_20yn_disponivel').innerText = formatarBRL(saldoAtual20yn);
-
-                if (document.getElementById('proj_8753_saldo')) document.getElementById('proj_8753_saldo').innerText = formatarBRL(proj8753Base);
-                if (document.getElementById('proj_20yn_saldo')) document.getElementById('proj_20yn_saldo').innerText = formatarBRL(proj20ynBase);
-                if (document.getElementById('proj_8753_final')) document.getElementById('proj_8753_final').innerText = formatarBRL(projFinal8753);
-                if (document.getElementById('proj_20yn_final')) document.getElementById('proj_20yn_final').innerText = formatarBRL(projFinal20yn);
-
-                if (document.getElementById('kpi_saldo_disponivel')) document.getElementById('kpi_saldo_disponivel').innerText = formatarBRL(saldoAtual8753 + saldoAtual20yn);
-                if (document.getElementById('kpi_teto_ploa2027')) document.getElementById('kpi_teto_ploa2027').innerText = formatarBRL(tetoPloaGeral);
-                if (document.getElementById('ploa_teto_geral')) document.getElementById('ploa_teto_geral').innerText = formatarBRL(tetoPloaGeral);
-                
-                let ploa8753Total = buscarValorPlanilha(['total', '8753']) ?? somaPloa8753;
-                let ploa20ynTotal = buscarValorPlanilha(['total', '20yn']) ?? somaPloa20yn;
-                let projFinalGeral = buscarValorPlanilha(['final', 'geral']) ?? (projFinal8753 + projFinal20yn);
-
-                if (document.getElementById('ploa_8753_total')) document.getElementById('ploa_8753_total').innerText = formatarBRL(ploa8753Total);
-                if (document.getElementById('ploa_20yn_total')) document.getElementById('ploa_20yn_total').innerText = formatarBRL(ploa20ynTotal);
-                if (document.getElementById('proj_final_geral')) document.getElementById('proj_final_geral').innerText = formatarBRL(projFinalGeral);
-
-                document.querySelectorAll('.val').forEach(el => {
-                    if (el.innerText.includes('-')) { el.classList.add('negativo'); el.classList.remove('positivo'); }
-                    else if (el.innerText !== "..." && el.innerText !== "R$ 0,00") { el.classList.add('positivo'); el.classList.remove('negativo'); }
-                });
+                renderizarAbasAno();
+                aplicarClassesPositivoNegativo();
             } catch (e) { 
                 console.error("Erro crítico na sincronização do Painel:", e); 
             }
@@ -949,19 +1250,8 @@
             const vigencia = formatarDataBR(item.vigencia);
             const numeroSeiContrato = item.sei || '---';
             const historicoRaw = item.historico || '';
-
-            function converterTextoParaNumero(texto) {
-                if (!texto) return 0;
-                if (typeof texto === 'number') return texto;
-                let limpo = String(texto).replace(/[R$\s]/g, '').trim();
-                if (limpo.includes(',') && limpo.includes('.')) {
-                    limpo = limpo.replace(/\./g, '').replace(',', '.');
-                } 
-                else if (limpo.includes(',')) {
-                    limpo = limpo.replace(',', '.');
-                }
-                return parseFloat(limpo) || 0;
-            }
+            // converterTextoParaNumero agora é global (definida no topo do script) para ser
+            // reaproveitada também pelo motor de cálculo automático (calcularMetricasContrato).
 
             let valorBaseContrato = converterTextoParaNumero(item.valor);
             let valorAditivo1 = converterTextoParaNumero(item.adit_valor);
@@ -993,8 +1283,15 @@
                     
                     let textoValor = '';
                     let statusTextoOriginal = '';
+                    let anoTag = null; // NOVO: 5º campo opcional "| ano" (ex: 2026) — permite apurar
+                                       // com precisão em qual ano fiscal a OS foi paga.
                     
-                    if (subPartes.length >= 4) {
+                    if (subPartes.length >= 5) {
+                        textoValor = subPartes[2];
+                        statusTextoOriginal = subPartes[3].trim();
+                        const anoParse = parseInt(subPartes[4].trim(), 10);
+                        anoTag = !isNaN(anoParse) ? anoParse : null;
+                    } else if (subPartes.length === 4) {
                         textoValor = subPartes[2];
                         statusTextoOriginal = subPartes[3].trim();
                     } else if (subPartes.length === 3) {
@@ -1035,7 +1332,8 @@
                             sei: osSei, 
                             valor: valLimpo,
                             status: statusCalculado,
-                            statusOriginal: statusTextoOriginal || (statusCalculado === 'pago' ? 'Pago' : statusCalculado === 'aguardando' ? 'Aguardando' : 'Em execução')
+                            statusOriginal: statusTextoOriginal || (statusCalculado === 'pago' ? 'Pago' : statusCalculado === 'aguardando' ? 'Aguardando' : 'Em execução'),
+                            ano: anoTag
                         });
 
                         if (statusCalculado === 'pago') {
@@ -1059,13 +1357,14 @@
                         itensEtapaHTML = `<div class="aditivo-retratil-container" id="gaveta_etapa_${et.id}"><div class="os-cards-container">`;
                         
                         et.lancamentos.forEach(lan => {
+                            let anoBadgeHTML = lan.ano ? `<span class="os-card-sei" style="background:#eef2ff;color:var(--brand-primary);">🗓️ ${lan.ano}</span>` : '';
                             let linhaSeiHTML = lan.sei ? `<span class="os-card-sei">📋 ${lan.sei}</span>` : '';
                             itensEtapaHTML += `
                                 <div class="os-mini-card">
                                     <div class="os-mini-card-row">
                                         <div class="os-info-left">
                                             <span class="os-card-title">🛠️ ${lan.label}</span>
-                                            ${linhaSeiHTML}
+                                            ${linhaSeiHTML}${anoBadgeHTML}
                                         </div>
                                         <div class="os-values-right">
                                             <span class="status-pill ${lan.status}">${lan.statusOriginal}</span>
@@ -1282,7 +1581,7 @@
         }
 
         function abrirPromptInjecaoRapida(id) {
-            const novaNC = prompt("✏️ Digite o novo membro no padrão (Nome | SEI | Valor | Status):\nEx para Contrato: OS 13 - 1º Aditivo | 25000.111/2026-00 | 359265,54 | Pago\nEx para TED: 2026NC00555 | 150000\nEx para Ano/Previsão: 2026 | 750000");
+            const novaNC = prompt(`✏️ Digite o novo membro no padrão (Nome | SEI | Valor | Status | Ano):\nEx para Contrato (com ano — recomendado): OS 13 - 1º Aditivo | 25000.111/2026-00 | 359265,54 | Pago | ${ANO_ATUAL}\nEx para Contrato (sem ano — cai no ajuste manual): OS 13 - 1º Aditivo | 25000.111/2026-00 | 359265,54 | Pago\nEx para TED: ${ANO_ATUAL}NC00555 | 150000\nEx para Ano/Previsão do TED: ${ANO_PROXIMO} | 750000`);
             if (!novaNC) return;
 
             const senha = prompt("🔑 Confirmar Senha Master:");
@@ -1290,9 +1589,24 @@
 
             const pacote = { acao: "ADICIONAR_NC_OS", id: id, senha: senha, novaStringMembro: novaNC.trim() };
 
-            fetch(URL_API, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(pacote) })
-            .then(() => { alert("✅ Elemento enviado!"); sincronizarPainel(); })
-            .catch(err => { alert("✅ Registro processado!"); sincronizarPainel(); });
+            fetch(URL_API, { method: "POST", body: JSON.stringify(pacote) })
+            .then(res => res.text())
+            .then(textoResposta => {
+                try {
+                    const res = JSON.parse(textoResposta);
+                    if (res.success) {
+                        alert("✅ Elemento adicionado com sucesso!");
+                        setTimeout(sincronizarPainel, 400);
+                    } else {
+                        alert("⚠️ Servidor recusou: " + (res.msg || "Verifique o ID do instrumento"));
+                    }
+                } catch (e) {
+                    alert("⚠️ Resposta inesperada do servidor. Confira manualmente na planilha.");
+                }
+            })
+            .catch(err => {
+                alert("❌ Falha de comunicação com o servidor. O elemento pode não ter sido salvo.");
+            });
         }
 
         function processarEnvioFormularioMestre() {
@@ -1325,16 +1639,24 @@
                 historico: document.getElementById('meta_ted_raw_history').value.trim() || "---"
             };
 
-            fetch(URL_API, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(pacote) })
-            .then(() => {
-                alert("🚀 Formulário completo enviado! Atualizando dados...");
-                fecharCadastroWeb();
-                setTimeout(sincronizarPainel, 1500);
+            fetch(URL_API, { method: "POST", body: JSON.stringify(pacote) })
+            .then(res => res.text())
+            .then(textoResposta => {
+                try {
+                    const res = JSON.parse(textoResposta);
+                    if (res.success) {
+                        alert("🚀 Formulário salvo com sucesso!" + (res.id ? ("\nID gerado: " + res.id) : ""));
+                        fecharCadastroWeb();
+                        setTimeout(sincronizarPainel, 800);
+                    } else {
+                        alert("⚠️ Servidor recusou: " + (res.msg || "Verifique os dados e tente novamente"));
+                    }
+                } catch (e) {
+                    alert("⚠️ Resposta inesperada do servidor. Confira manualmente na planilha antes de tentar novamente.");
+                }
             })
             .catch(err => {
-                alert("✅ Lançamento concluído com sucesso!");
-                fecharCadastroWeb();
-                setTimeout(sincronizarPainel, 1500);
+                alert("❌ Falha de comunicação com o servidor. O registro pode não ter sido salvo.");
             });
         }
 
