@@ -631,8 +631,17 @@
         }
 
         /**
-         * Parsing compartilhado dos lançamentos (OS) de um contrato: separa por etapa
-         * (inicial/1o aditivo/2o aditivo) e, quando disponível, pelo ano tageado no 5o campo.
+         * Parsing compartilhado dos lançamentos de um contrato. O histórico pode misturar dois
+         * tipos de lançamento no mesmo campo, separados por ';':
+         *
+         * 1) OS (pagamento por etapa): "Identificador | SEI | Valor | Status [| Ano]"
+         *    Usadas para apurar quanto já foi pago por etapa (inicial/1º/2º aditivo) -> alimenta
+         *    o saldo a pagar (PLOA).
+         *
+         * 2) NC (liberação/empenho orçamentário do ano): "AnoNCxxxxx | Valor" — MESMO FORMATO
+         *    usado nos TEDs. Representa o quanto foi de fato liberado pra esse contrato naquele
+         *    ano — é a fonte MAIS CONFIÁVEL de execução anual (não depende de status de OS
+         *    individual). Quando existir NC pro ano, ela tem prioridade sobre a soma de OS pagas.
          */
         function _parseLancamentosContrato(item) {
             const etapasBase = [
@@ -642,6 +651,8 @@
             ];
             const pagoPorEtapa = { inicial: 0, adit1: 0, adit2: 0 };
             const pagoPorEtapaEAno = {}; // { ano: { inicial, adit1, adit2 } }
+            const ncsPorAno = {}; // { ano: valorTotal } — liberações orçamentárias (formato TED)
+            let totalOSPendente = 0; // soma das OS já lançadas com status != Pago (Aguardando/Em Execução)
             const historicoRaw = item.historico || '';
 
             if (historicoRaw && historicoRaw !== '' && historicoRaw !== '---') {
@@ -649,8 +660,21 @@
                     if (blocoTexto.trim() === '' || !blocoTexto.includes('|')) return;
                     const subPartes = blocoTexto.split('|');
                     if (subPartes.length < 2) return;
-                    const idUpper = subPartes[0].trim().toUpperCase();
+                    const identificadorBruto = subPartes[0].trim();
+                    const idUpper = identificadorBruto.toUpperCase();
 
+                    // Formato NC (2 campos, igual ao TED): "AAAANCxxxxx | Valor"
+                    if (subPartes.length === 2 && idUpper.includes('NC')) {
+                        const m = identificadorBruto.match(/(\d{4})\s*NC/i);
+                        const anoNc = m ? parseInt(m[1], 10) : null;
+                        const valorNc = converterTextoParaNumero(subPartes[1]);
+                        if (anoNc) {
+                            ncsPorAno[anoNc] = (ncsPorAno[anoNc] || 0) + valorNc;
+                        }
+                        return;
+                    }
+
+                    // Formato OS (3, 4 ou 5 campos)
                     let textoValor, statusTexto = '', anoTag = null;
                     if (subPartes.length >= 5) {
                         textoValor = subPartes[2];
@@ -673,68 +697,108 @@
                     else if (idUpper.includes('1º') || idUpper.includes('PRIMEIRO') || idUpper.includes('1O') || idUpper.includes('ADITIVO 1')) alvo = 'adit1';
                     else if (idUpper.includes('INICIAL') || idUpper.includes('CONTRATO')) alvo = 'inicial';
 
-                    if (alvo && statusTexto.toUpperCase().includes('PAGO')) {
-                        pagoPorEtapa[alvo] += v;
-                        if (anoTag !== null) {
-                            if (!pagoPorEtapaEAno[anoTag]) pagoPorEtapaEAno[anoTag] = { inicial: 0, adit1: 0, adit2: 0 };
-                            pagoPorEtapaEAno[anoTag][alvo] += v;
+                    if (alvo) {
+                        if (statusTexto.toUpperCase().includes('PAGO')) {
+                            pagoPorEtapa[alvo] += v;
+                            if (anoTag !== null) {
+                                if (!pagoPorEtapaEAno[anoTag]) pagoPorEtapaEAno[anoTag] = { inicial: 0, adit1: 0, adit2: 0 };
+                                pagoPorEtapaEAno[anoTag][alvo] += v;
+                            }
+                        } else if (statusTexto !== '') {
+                            // OS já lançada mas ainda não paga (Aguardando/Em Execução) — valor
+                            // concreto e conhecido, mais preciso do que estimar por percentual.
+                            totalOSPendente += v;
                         }
                     }
                 });
             }
 
-            return { etapasBase, pagoPorEtapa, pagoPorEtapaEAno };
+            return { etapasBase, pagoPorEtapa, pagoPorEtapaEAno, ncsPorAno, totalOSPendente };
         }
 
         /**
          * MOTOR AUTOMATICO - CONTRATO, GENERICO POR ANO (assume acao 20YN):
-         * - execucao: soma das OS "Pago" cujo 5o campo de ano bate com o ano informado (só
-         *   funciona para OS já tageadas — OS sem tag continuam no ajuste manual).
-         * - saldoAPagarTotal: sempre o saldo total ainda não pago, independente do ano.
+         * - execucao: se houver NC lançada pro ano (liberação orçamentária), usa a soma delas —
+         *   é a fonte mais confiável. Sem NC pro ano, cai no fallback: soma das OS "Pago" cujo
+         *   5º campo de ano bate com o ano informado.
+         * - saldoAPagarTotal: sempre o saldo total ainda não pago (por etapa), independente do ano.
          */
         function calcularMetricasContratoParaAno(item, ano) {
-            const { etapasBase, pagoPorEtapa, pagoPorEtapaEAno } = _parseLancamentosContrato(item);
+            const { etapasBase, pagoPorEtapa, pagoPorEtapaEAno, ncsPorAno, totalOSPendente } = _parseLancamentosContrato(item);
+
+            // Saldo baseado em OS "Pago" — mantido para o card (Total/Pago/A Pagar por etapa)
+            // e como fallback quando o contrato ainda não tem nenhuma NC lançada.
             let saldoAPagarTotal = 0;
             etapasBase.forEach(et => {
                 if (et.total !== 0 || pagoPorEtapa[et.campo] !== 0) {
                     saldoAPagarTotal += (et.total - pagoPorEtapa[et.campo]);
                 }
             });
-            const doAno = pagoPorEtapaEAno[ano] || { inicial: 0, adit1: 0, adit2: 0 };
-            const execucao = doAno.inicial + doAno.adit1 + doAno.adit2;
-            return { execucao, saldoAPagarTotal };
+
+            // Saldo baseado em NC (liberação orçamentária) — o que ainda NÃO foi comprometido
+            // do valor total contratado. Usado como base pro PLOA do ano seguinte (projeção).
+            const totalNCsGlobal = Object.values(ncsPorAno).reduce((a, b) => a + b, 0);
+            const temNC = Object.keys(ncsPorAno).length > 0;
+            const tetoTotal = etapasBase.reduce((acc, et) => acc + et.total, 0);
+            const saldoRestante = temNC ? (tetoTotal - totalNCsGlobal) : saldoAPagarTotal;
+
+            let execucao, fonte;
+            if (ncsPorAno[ano]) {
+                execucao = ncsPorAno[ano];
+                fonte = 'NC';
+            } else {
+                const doAno = pagoPorEtapaEAno[ano] || { inicial: 0, adit1: 0, adit2: 0 };
+                execucao = doAno.inicial + doAno.adit1 + doAno.adit2;
+                fonte = 'OS';
+            }
+            return { execucao, saldoAPagarTotal, saldoRestante, totalOSPendente, fonte };
         }
 
-        // Wrapper de compatibilidade: métricas do contrato para o ano atual (execução tageada) +
-        // 50% do saldo a pagar como PLOA do ano seguinte (regra de negócio).
+        // Wrapper de compatibilidade: métricas do contrato para o ano atual.
+        // "Ainda falta descentralizar este ano" agora usa o valor CONCRETO das OS já lançadas
+        // e ainda não pagas (Aguardando/Em Execução) — muito mais preciso do que estimar um
+        // percentual do saldo total não comprometido. Aditivos novos ainda não lançados no
+        // sistema (ex: um aditivo futuro só parcialmente atribuível a este ano) devem ser
+        // adicionados como ajuste manual em PROJ_20YN, não estimados automaticamente aqui.
+        // O PLOA do ano seguinte continua na regra 50% do saldo ainda não comprometido (NC).
         function calcularMetricasContrato(item) {
             const atual = calcularMetricasContratoParaAno(item, ANO_ATUAL);
             return {
                 saldoAPagarTotal: atual.saldoAPagarTotal,
+                saldoRestante: atual.saldoRestante,
                 execucaoAnoAtual: atual.execucao,
-                ploaProximoAno: atual.saldoAPagarTotal / 2
+                restanteEsteAno: atual.totalOSPendente,
+                ploaProximoAno: atual.saldoRestante / 2
             };
         }
 
         /**
-         * Descobre quais anos têm dados relevantes na planilha (cronograma ou NCs de TEDs),
-         * para montar as abas de Execução (anos <= ano atual) e Planejamento/PLOA (anos futuros).
-         * Sempre garante a presença do ano atual e do ano seguinte, mesmo sem dados ainda.
+         * Descobre quais anos têm dados relevantes na planilha (cronograma/NCs de TEDs, NCs de
+         * contratos), para montar as abas de Execução e Planejamento/PLOA. Execução mostra TODOS
+         * os anos com dado (passado, atual ou futuro — um "2027NC..." lançado adiantado já aparece
+         * lá assim que existir). Planejamento continua só com anos futuros (é sempre uma proposta,
+         * nunca um fato). Sempre garante a presença do ano atual e do ano seguinte.
          */
         function obterAnosDisponiveis() {
             const anosSet = new Set([ANO_ATUAL, ANO_PROXIMO]);
             Object.values(backupDadosGerais).forEach(item => {
                 if (!item || !item.categoria) return;
-                if (item.categoria.trim().toUpperCase() !== 'INST_TED') return;
-                const { ncs, cronograma } = parseHistoricoTED(item.historico);
-                Object.keys(cronograma).forEach(a => anosSet.add(parseInt(a, 10)));
-                ncs.forEach(n => {
-                    const m = n.ident.match(/(\d{4})\s*NC/i);
-                    if (m) anosSet.add(parseInt(m[1], 10));
-                });
+                const cat = item.categoria.trim().toUpperCase();
+
+                if (cat === 'INST_TED') {
+                    const { ncs, cronograma } = parseHistoricoTED(item.historico);
+                    Object.keys(cronograma).forEach(a => anosSet.add(parseInt(a, 10)));
+                    ncs.forEach(n => {
+                        const m = n.ident.match(/(\d{4})\s*NC/i);
+                        if (m) anosSet.add(parseInt(m[1], 10));
+                    });
+                } else if (cat === 'INST_CONTRATO') {
+                    const { ncsPorAno } = _parseLancamentosContrato(item);
+                    Object.keys(ncsPorAno).forEach(a => anosSet.add(parseInt(a, 10)));
+                }
             });
             const anos = Array.from(anosSet).filter(a => !isNaN(a)).sort((a, b) => a - b);
-            const anosExecucao = anos.filter(a => a <= ANO_ATUAL);
+            const anosExecucao = anos; // Execução mostra o intervalo completo de anos com dado.
             const anosPlanejamento = anos.filter(a => a > ANO_ATUAL);
             return { anosExecucao, anosPlanejamento };
         }
@@ -836,7 +900,7 @@
         function calcularAgregadoExecucaoAno(ano) {
             let exec8753 = 0, exec20yn = 0;
             let ajusteManual8753 = 0, ajusteManual20yn = 0;
-            let dotacao8753 = 0, dotacao20yn = 0;
+            let dotacao8753Manual = null, dotacao20ynManual = null;
             const linhas8753 = [], linhas20yn = [];
 
             Object.keys(backupDadosGerais).forEach(id => {
@@ -854,12 +918,13 @@
                     const m = calcularMetricasContratoParaAno(item, ano);
                     if (m.execucao !== 0) {
                         exec20yn += m.execucao;
-                        linhas20yn.push({ id, titulo: `📄 ${item.titulo} (pago em ${ano})`, valor: -m.execucao, status: 'Auto · Contrato' });
+                        const rotulo = m.fonte === 'NC' ? `NC ${ano}` : `pago em ${ano}`;
+                        linhas20yn.push({ id, titulo: `📄 ${item.titulo} (${rotulo})`, valor: -m.execucao, status: m.fonte === 'NC' ? 'Auto · Contrato (NC)' : 'Auto · Contrato' });
                     }
                 } else if (catLimpa === 'FIXO' && ano === ANO_ATUAL) {
                     const idLower = id.toLowerCase();
-                    if (idLower.includes('dotacao') && idLower.includes('8753')) dotacao8753 = parseFloat(item.valor) || 0;
-                    if (idLower.includes('dotacao') && idLower.includes('20yn')) dotacao20yn = parseFloat(item.valor) || 0;
+                    if (idLower.includes('dotacao') && idLower.includes('8753')) dotacao8753Manual = parseFloat(item.valor) || 0;
+                    if (idLower.includes('dotacao') && idLower.includes('20yn')) dotacao20ynManual = parseFloat(item.valor) || 0;
                 } else if (catLimpa === 'EXEC_8753' && ano === ANO_ATUAL) {
                     ajusteManual8753 += (parseFloat(item.valor) || 0);
                     linhas8753.push({ id, titulo: item.titulo, valor: item.valor, status: item.status || item.vigencia });
@@ -869,9 +934,22 @@
                 }
             });
 
+            // Dotação Inicial: se não houver valor digitado manualmente pra esse ano, usa por
+            // padrão o total da PLOA calculada pra esse ano (regra: "PLOA aprovada vira dotação
+            // do ano seguinte"). Assim que alguém digitar o valor real (ex: após aprovação
+            // oficial, que pode diferir da proposta), o manual passa a valer sempre.
+            const ploaDoAno = calcularAgregadoPlanejamentoAno(ano);
+            const dotacao8753 = dotacao8753Manual !== null ? dotacao8753Manual : ploaDoAno.ploa8753;
+            const dotacao20yn = dotacao20ynManual !== null ? dotacao20ynManual : ploaDoAno.ploa20yn;
+            const dotacao8753EhEstimativa = dotacao8753Manual === null;
+            const dotacao20ynEhEstimativa = dotacao20ynManual === null;
+
             const saldoAtual8753 = dotacao8753 + ajusteManual8753 - exec8753;
             const saldoAtual20yn = dotacao20yn + ajusteManual20yn - exec20yn;
-            return { dotacao8753, dotacao20yn, exec8753, exec20yn, saldoAtual8753, saldoAtual20yn, linhas8753, linhas20yn };
+            return {
+                dotacao8753, dotacao20yn, dotacao8753EhEstimativa, dotacao20ynEhEstimativa,
+                exec8753, exec20yn, saldoAtual8753, saldoAtual20yn, linhas8753, linhas20yn
+            };
         }
 
         // Projeção de saídas (o que falta sair da conta até o fim do ano) — só faz sentido
@@ -891,11 +969,21 @@
                         proj8753 += m.restante;
                         linhas8753.push({ id, titulo: `🤝 ${item.titulo} (a descentralizar)`, valor: -m.restante, status: 'Auto · TED' });
                     }
+                } else if (catLimpa === 'INST_CONTRATO') {
+                    const m = calcularMetricasContrato(item);
+                    if (m.restanteEsteAno !== 0) {
+                        proj20yn += m.restanteEsteAno;
+                        linhas20yn.push({ id, titulo: `📄 ${item.titulo} (OS pendentes)`, valor: -m.restanteEsteAno, status: 'Auto · Contrato' });
+                    }
                 } else if (catLimpa === 'PROJ_8753') {
-                    proj8753 += (parseFloat(item.valor) || 0);
+                    // Mesma convenção de sinal do resto da planilha: valor NEGATIVO = dinheiro
+                    // que vai sair da conta (reduz o saldo final projetado). Por isso subtrai
+                    // aqui (em vez de somar) — um valor negativo digitado aumenta proj8753,
+                    // que depois é subtraído do saldo atual.
+                    proj8753 -= (parseFloat(item.valor) || 0);
                     linhas8753.push({ id, titulo: item.titulo + ' (ajuste manual)', valor: item.valor, status: item.status || item.vigencia });
                 } else if (catLimpa === 'PROJ_20YN') {
-                    proj20yn += (parseFloat(item.valor) || 0);
+                    proj20yn -= (parseFloat(item.valor) || 0);
                     linhas20yn.push({ id, titulo: item.titulo + ' (ajuste manual)', valor: item.valor, status: item.status || item.vigencia });
                 }
             });
@@ -943,8 +1031,14 @@
         function montarHtmlExecucaoAno(ano) {
             const agr = calcularAgregadoExecucaoAno(ano);
             const ehAnoAtual = ano === ANO_ATUAL;
+            const ehAnoFuturo = ano > ANO_ATUAL;
             const notaHistorica = !ehAnoAtual
-                ? `<div class="ano-tab-nota">📌 Dotação inicial e ajustes (crédito adicional/remanejamento) só estão registrados para ${ANO_ATUAL}. ${ano} mostra apenas o total efetivamente executado (NCs/OS) nesse ano.</div>`
+                ? (ehAnoFuturo
+                    ? `<div class="ano-tab-nota">📌 ${ano} ainda não começou — mostrando apenas NCs/OS eventualmente já lançadas adiantadas para esse ano, se houver. Dotação Inicial e saldo de conta só existem depois que o ano começa oficialmente.</div>`
+                    : `<div class="ano-tab-nota">📌 Dotação inicial e ajustes (crédito adicional/remanejamento) só estão registrados para ${ANO_ATUAL}. ${ano} mostra apenas o total efetivamente executado (NCs/OS) nesse ano.</div>`)
+                : '';
+            const notaDotacaoEstimada = (ehAnoAtual && (agr.dotacao8753EhEstimativa || agr.dotacao20ynEhEstimativa))
+                ? `<div class="ano-tab-nota">💡 Dotação Inicial ainda não confirmada manualmente para ${ano} — mostrando o total da PLOA ${ano} como estimativa. Assim que a lei orçamentária for sancionada, digite o valor oficial na planilha (linha "Dotação Inicial") para substituir esta estimativa.</div>`
                 : '';
 
             let htmlProjecao = '';
@@ -976,17 +1070,18 @@
 
             return `
                 ${notaHistorica}
+                ${notaDotacaoEstimada}
                 <div class="unified-card">
                     <div class="card-header-main">📍 Recursos Descentralizados (Em Conta) — ${ano}</div>
                     <div class="action-group">
                         <div class="action-tag">AÇÃO 8753</div>
-                        ${ehAnoAtual ? `<div class="exe-panel-card dotacao-card"><div class="exe-panel-row"><span class="exe-panel-title">Dotação Inicial</span><span class="exe-panel-val val">${formatarBRL(agr.dotacao8753)}</span></div></div>` : ''}
+                        ${ehAnoAtual ? `<div class="exe-panel-card dotacao-card"><div class="exe-panel-row"><span class="exe-panel-title">Dotação Inicial${agr.dotacao8753EhEstimativa ? ' (estimada · PLOA)' : ''}</span><span class="exe-panel-val val">${formatarBRL(agr.dotacao8753)}</span></div></div>` : ''}
                         <div class="dinamic-data-list">${renderLinhas(agr.linhas8753) || semDadosHTML(ano)}</div>
                         <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">${ehAnoAtual ? 'SALDO ATUAL 8753' : 'TOTAL EXECUTADO 8753'}</span><span class="exe-panel-val val">${formatarBRL(ehAnoAtual ? agr.saldoAtual8753 : agr.exec8753)}</span></div></div>
                     </div>
                     <div class="action-group">
                         <div class="action-tag" style="background: var(--brand-slate); color: white;">AÇÃO 20YN</div>
-                        ${ehAnoAtual ? `<div class="exe-panel-card dotacao-card"><div class="exe-panel-row"><span class="exe-panel-title">Dotação Inicial</span><span class="exe-panel-val val">${formatarBRL(agr.dotacao20yn)}</span></div></div>` : ''}
+                        ${ehAnoAtual ? `<div class="exe-panel-card dotacao-card"><div class="exe-panel-row"><span class="exe-panel-title">Dotação Inicial${agr.dotacao20ynEhEstimativa ? ' (estimada · PLOA)' : ''}</span><span class="exe-panel-val val">${formatarBRL(agr.dotacao20yn)}</span></div></div>` : ''}
                         <div class="dinamic-data-list">${renderLinhas(agr.linhas20yn) || semDadosHTML(ano)}</div>
                         <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">${ehAnoAtual ? 'SALDO ATUAL 20YN' : 'TOTAL EXECUTADO 20YN'}</span><span class="exe-panel-val val">${formatarBRL(ehAnoAtual ? agr.saldoAtual20yn : agr.exec20yn)}</span></div></div>
                     </div>
@@ -1270,6 +1365,8 @@
                 adit2: { id: "ad2_" + limpoId, nome: "➕ 2º Aditivo", campoValorPlanilha: "adit_valor_2", valorParaEditar: valorOriginalAditivo2, total: valorAditivo2, pago: 0, aPagar: 0, temDados: true, lancamentos: [] }
             };
 
+            const ncsContrato = []; // Notas de Crédito (liberação orçamentária) — formato TED, exibidas à parte
+
             if (historicoRaw && historicoRaw !== '' && historicoRaw !== '---') {
                 historicoRaw.split(';').forEach(blocoTexto => {
                     if (blocoTexto.trim() === '' || !blocoTexto.includes('|')) return;
@@ -1279,6 +1376,14 @@
                     
                     const identificador = subPartes[0].trim();
                     const idUpper = identificador.toUpperCase();
+
+                    // Formato NC (2 campos, igual ao TED): "AAAANCxxxxx | Valor" — liberação
+                    // orçamentária do ano, mais confiável que o status das OS pra fins de execução.
+                    if (subPartes.length === 2 && idUpper.includes('NC')) {
+                        ncsContrato.push({ ident: identificador, valor: converterTextoParaNumero(subPartes[1]) });
+                        return;
+                    }
+
                     const osSei = subPartes.length >= 3 && subPartes[1].trim() !== '' ? subPartes[1].trim() : '';
                     
                     let textoValor = '';
@@ -1442,6 +1547,11 @@
                                 <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px; width: 100%;">
                                     ${blocosFinanceirosHTML}
                                 </div>
+                                ${ncsContrato.length > 0 ? `
+                                <div class="nc-box" style="margin-top: 6px;">
+                                    <div class="nc-title">💰 Notas de Crédito (liberação orçamentária)</div>
+                                    ${ncsContrato.map(nc => `<div class="nc-row"><span>📄 ${nc.ident}</span><span>${formatarBRL(nc.valor)}</span></div>`).join('')}
+                                </div>` : ''}
                             </div>
                             <div class="card-action-bar" style="margin-top: 15px; clear: both;">
                                 <button class="btn-card-action edit" onclick="event.stopPropagation(); abrirModalEdicaoCard('${String(idContrato)}', 'CONTRATO')">⚙️ Painel Completo</button>
@@ -1581,7 +1691,7 @@
         }
 
         function abrirPromptInjecaoRapida(id) {
-            const novaNC = prompt(`✏️ Digite o novo membro no padrão (Nome | SEI | Valor | Status | Ano):\nEx para Contrato (com ano — recomendado): OS 13 - 1º Aditivo | 25000.111/2026-00 | 359265,54 | Pago | ${ANO_ATUAL}\nEx para Contrato (sem ano — cai no ajuste manual): OS 13 - 1º Aditivo | 25000.111/2026-00 | 359265,54 | Pago\nEx para TED: ${ANO_ATUAL}NC00555 | 150000\nEx para Ano/Previsão do TED: ${ANO_PROXIMO} | 750000`);
+            const novaNC = prompt(`✏️ Digite o novo membro no padrão:\nEx OS de Contrato (com ano — recomendado): OS 13 - 1º Aditivo | 25000.111/2026-00 | 359265,54 | Pago | ${ANO_ATUAL}\nEx NC de Contrato (liberação orçamentária, mais confiável): ${ANO_ATUAL}NC00555 | 150000\nEx NC de TED: ${ANO_ATUAL}NC00555 | 150000\nEx Ano/Previsão do TED: ${ANO_PROXIMO} | 750000`);
             if (!novaNC) return;
 
             const senha = prompt("🔑 Confirmar Senha Master:");
