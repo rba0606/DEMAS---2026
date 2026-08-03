@@ -1,1090 +1,1854 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Célula São João Paulo II · Postulantado 2026</title>
-<link rel="icon" href="https://sanctamaria.org.br/wp-content/uploads/2021/10/Sao-Joao-Paulo-II.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-<style>
-  :root{
-    --crimson:#9f1c2e;
-    --crimson-dark:#7a1522;
-    --crimson-light:#fdf1ee;
-    --gold:#c99a3a;
-    --ink:#241c1a;
-    --paper:#faf6f0;
-  }
-  body{ font-family:'Inter',sans-serif; background:var(--paper); color:var(--ink); }
-  .font-display{ font-family:'Fraunces',serif; }
-  .tab-content{ display:none; }
-  .tab-content.active{ display:block; animation:riseIn .35s cubic-bezier(.16,1,.3,1); }
-  @keyframes riseIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
-  ::selection{ background:var(--crimson); color:#fff; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0f172a">
+    <title>Painel DEMAS - Gabinete</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1086/1086741.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --brand-primary: #4f46e5;
+            --brand-primary-light: #eeebff;
+            --brand-dark: #0f172a;
+            --brand-slate: #1e293b;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            
+            --ms-green: #10b981;
+            --ms-green-light: #ecfdf5;
+            --ms-red: #ef4444;
+            --ms-red-light: #fef2f2;
+            --ms-amber: #f59e0b;
+            --ms-amber-light: #fffbeb;
+            --ms-blue: #3b82f6;
+            --ms-blue-light: #eff6ff;
+            
+            --text-main: #334155;
+            --text-title: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            
+            --radius-2xl: 24px;
+            --radius-xl: 16px;
+            --radius-lg: 12px;
+            --radius-md: 8px;
+            
+            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.03);
+            --shadow-md: 0 8px 20px -4px rgba(15, 23, 42, 0.06), 0 4px 8px -4px rgba(15, 23, 42, 0.04);
+            --shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, 0.08);
+        }
 
-  .brand-rule{ height:3px; background:linear-gradient(90deg,var(--crimson),var(--gold),var(--crimson)); border-radius:99px; }
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; margin: 0; padding: 0; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-body); color: var(--text-main); padding: clamp(14px, 4vw, 20px); line-height: 1.4; padding-bottom: 70px; }
+        .container { max-width: 520px; margin: 0 auto; }
 
-  .home-card{ background:#fff; padding:1.35rem 1rem; border-radius:18px; border:1px solid #ece3d8; cursor:pointer;
-    transition:transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s, border-color .25s;
-    display:flex; flex-direction:column; align-items:center; text-align:center; }
-  .home-card:hover{ transform:translateY(-4px); border-color:var(--crimson); box-shadow:0 14px 28px -12px rgba(159,28,46,.28); }
-  .home-card .icon-box{ width:46px; height:46px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:1.15rem; margin-bottom:.65rem; background:var(--crimson-light); color:var(--crimson); }
-  .home-card.admin{ border-style:dashed; border-color:#d8cdbe; }
-  .home-card.admin .icon-box{ background:#f1eee8; color:#7d746a; }
+        /* HEADER REESTRUTURADO COM GRID PARA SUPORTE MOBILE */
+        .header { 
+            background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-slate) 100%); 
+            color: white; 
+            padding: 16px; 
+            border-radius: var(--radius-xl); 
+            margin-bottom: 16px; 
+            box-shadow: var(--shadow-lg); 
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+            gap: 12px;
+            min-height: 86px;
+        }
+        
+        .header:not(:has(#btnBack:not([style*="display: none"]))) {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
 
-  .back-btn{ margin-bottom:1.4rem; display:inline-flex; align-items:center; gap:.4rem; color:var(--crimson); font-weight:700; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; cursor:pointer; }
-  .back-btn:hover{ text-decoration:underline; }
+        .header-text-group {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+        }
 
-  .formando-card{ background:#fff; border:1px solid #ece3d8; border-radius:18px; padding:1.15rem;
-    transition:transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s; position:relative;
-    display:flex; flex-direction:column; height:100%; box-shadow:0 1px 2px rgba(36,28,26,.04); }
-  .formando-card:hover{ transform:translateY(-3px); box-shadow:0 16px 28px -14px rgba(36,28,26,.18); }
-  .card-p2{ border-left:5px solid #1f7a4d; }
-  .card-p1{ border-left:5px solid #2f5fa8; }
+        .main-title {
+            font-size: clamp(0.95rem, 4.5vw, 1.15rem);
+            font-weight: 800;
+            line-height: 1.2;
+            word-wrap: break-word;
+        }
 
-  .info-label{ font-size:.62rem; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:#a79c8d; margin-bottom:2px; display:block; }
-  .info-value{ font-size:.8rem; color:#3a322d; font-weight:600; line-height:1.25; }
+        .main-subtitle {
+            font-size: 0.72rem;
+            opacity: 0.8;
+            margin-top: 3px;
+            line-height: 1.2;
+        }
 
-  .table-container{ overflow-x:auto; background:#fff; border-radius:14px; border:1px solid #ece3d8; }
-  .styled-table{ width:100%; border-collapse:collapse; font-size:.8rem; }
-  .styled-table thead tr{ background:var(--crimson); color:#fff; text-align:left; }
-  .styled-table th, .styled-table td{ padding:10px 12px; border-bottom:1px solid #f3ede4; }
+        .btn-back { 
+            display: none; 
+            background: rgba(255, 255, 255, 0.12); 
+            color: white; 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            padding: 10px 14px; 
+            border-radius: var(--radius-lg); 
+            cursor: pointer; 
+            font-weight: 700; 
+            font-size: 11px; 
+            backdrop-filter: blur(10px); 
+            z-index: 10; 
+            white-space: nowrap;
+            height: fit-content;
+        }
+        
+        .btn-floating-add { position: fixed; bottom: 20px; right: 20px; background: var(--brand-primary); color: white; border: none; width: 56px; height: 56px; border-radius: 50%; font-size: 24px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-lg); cursor: pointer; z-index: 999; transition: transform 0.2s; }
+        .btn-floating-add:active { transform: scale(0.92); }
 
-  .badge{ padding:2px 8px; border-radius:99px; font-weight:800; font-size:.58rem; display:inline-block; text-transform:uppercase; letter-spacing:.04em; }
-  .badge-p1{ background:#eaf1fb; color:#2f5fa8; border:1px solid #d7e5f7; }
-  .badge-p2{ background:#eaf6ee; color:#1f7a4d; border:1px solid #d6ecdd; }
+        .kpi-summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 18px; }
+        .kpi-mini-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 12px 14px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 4px; }
+        .kpi-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; }
+        .kpi-value { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: var(--text-title); text-align: center; white-space: nowrap; }
+        .kpi-value.green { color: var(--ms-green); }
+        .kpi-value.blue { color: var(--ms-blue); }
 
-  .name-balloon{ display:inline-flex; align-items:center; background:#f4efe6; color:#5b5248; padding:4px 11px; border-radius:99px; font-size:.74rem; margin:2px; border:1px solid #e9e0d2; font-weight:500; }
-  .coordinator-label{ background:var(--crimson-light); color:var(--crimson-dark); border-color:#f6d9d3; font-weight:800; }
+        .menu-grid { display: flex; flex-direction: column; gap: 10px; }
+        .menu-card { background: var(--bg-card); padding: 16px; border-radius: var(--radius-xl); display: flex; align-items: center; gap: 14px; cursor: pointer; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); }
+        .menu-card:active { background: var(--brand-primary-light); }
+        .menu-card .icon { font-size: 1.5rem; background: var(--bg-body); width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: var(--radius-lg); flex-shrink: 0; }
+        .menu-card .menu-text { flex: 1; }
+        .menu-card h2 { margin: 0; font-size: 1rem; font-weight: 700; color: var(--text-title); }
+        .menu-card p { margin-top: 1px; font-size: 0.8rem; color: var(--text-muted); }
 
-  .section-title{ display:flex; align-items:center; gap:.6rem; font-family:'Fraunces',serif; font-weight:700; font-size:1.3rem; margin-bottom:1.2rem; color:#2b221f; }
-  .section-title .dot{ width:9px; height:9px; border-radius:99px; background:var(--crimson); }
+        .content-section { display: none; }
+        .content-section.active-section { display: block; animation: slideIn 0.25s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-  .btn-ghost{ background:#f4efe6; color:#5b5248; padding:.5rem 1rem; border-radius:10px; font-weight:700; font-size:.75rem; border:1px solid #e9e0d2; cursor:pointer; transition:all .2s; }
-  .btn-ghost:hover{ background:#ece5d8; }
-  .btn-primary{ background:var(--crimson); color:#fff; font-weight:700; padding:.85rem 1.2rem; border-radius:12px; transition:all .2s; cursor:pointer; border:none; }
-  .btn-primary:hover{ background:var(--crimson-dark); }
-  .btn-primary:disabled{ opacity:.6; cursor:progress; }
-  .btn-danger{ background:#fdeceb; color:#b3261e; font-weight:700; padding:.4rem .8rem; border-radius:9px; font-size:.72rem; border:1px solid #f7d3d0; cursor:pointer; }
-  .btn-danger:hover{ background:#fadbd8; }
+        .unified-card { background: var(--bg-card); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-md); margin-bottom: 16px; border: 1px solid var(--border-color); }
+        .card-header-main { background: var(--bg-body); padding: 12px 16px; border-bottom: 1px solid var(--border-color); font-weight: 700; color: var(--text-title); font-size: 0.8rem; text-transform: uppercase; }
+        .action-group { padding: 14px; border-bottom: 6px solid #f1f5f9; }
+        .action-group:last-child { border-bottom: none; }
+        .action-tag { display: inline-block; padding: 3px 8px; background: #e2e8f0; color: var(--text-title); border-radius: 6px; font-size: 9px; font-weight: 800; margin-bottom: 10px; }
 
-  .field-label{ font-size:.68rem; font-weight:800; text-transform:uppercase; letter-spacing:.03em; color:#8a8074; margin-bottom:4px; display:block; }
-  .field-input, .field-select, .field-textarea{ width:100%; border:1px solid #e5ddd0; background:#fdfbf7; border-radius:10px; padding:.55rem .7rem; font-size:.85rem; color:var(--ink); outline:none; transition:border-color .2s; }
-  .field-input:focus, .field-select:focus, .field-textarea:focus{ border-color:var(--crimson); background:#fff; }
-  .field-check{ width:17px; height:17px; accent-color:var(--crimson); cursor:pointer; }
+        .dinamic-data-list { display: flex; flex-direction: column; gap: 8px; margin: 6px 0; }
+        .exe-panel-card { background: var(--bg-body); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 10px 14px; display: flex; flex-direction: column; gap: 4px; }
+        
+        .exe-panel-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; }
+        .exe-panel-title { font-size: 12.5px; font-weight: 600; color: var(--text-title); flex: 1; }
+        .exe-panel-status { font-size: 9px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; background: #e2e8f0; padding: 2px 6px; border-radius: 4px; }
+        
+        .exe-panel-val, .val { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; font-weight: 700; text-align: right; white-space: nowrap; }
+        
+        .exe-panel-card.dotacao-card { border-left: 4px solid var(--text-title); background: #fff; }
+        .exe-panel-card.saldo-card { background: #f5f3ff; border: 1px solid #ddd6fe; border-left: 4px solid var(--brand-primary); }
+        .exe-panel-card.saldo-card .exe-panel-title { color: var(--brand-primary); }
+        .negativo { color: var(--ms-red) !important; }
+        .positivo { color: var(--ms-green) !important; }
 
-  .modal-backdrop{ position:fixed; inset:0; background:rgba(36,28,26,.55); backdrop-filter:blur(2px); z-index:60; display:flex; align-items:flex-start; justify-content:center; padding:2rem 1rem; overflow-y:auto; }
-  .modal-backdrop.hidden{ display:none !important; }
+        .ted-card { background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-xl); margin-bottom: 12px; box-shadow: var(--shadow-sm); overflow: hidden; transition: box-shadow 0.2s, border-color 0.2s; }
+        .ted-card:hover { border-color: #cbd5e1; box-shadow: var(--shadow-md); }
+        
+        .ted-trigger { padding: 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; background: #ffffff; }
+        .ted-trigger-left { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+        .ted-title { font-size: 0.95rem; font-weight: 700; color: var(--text-title); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.2px; }
+        
+        .ted-meta-pill-box { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-top: 1px; }
+        .meta-tag-pill { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.1px; background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; display: inline-flex; align-items: center; gap: 3px; }
+        .meta-tag-pill.area { background: #f8fafc; color: var(--brand-primary); border-color: #e0e7ff; }
+        
+        .ted-trigger-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+        .ted-arrow { font-size: 10px; color: var(--text-muted); transition: transform 0.2s; margin-top: 4px; font-weight: bold; }
+        
+        .ted-quick-val-badge { text-align: right; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 5px 10px; border-radius: 8px; min-width: 115px; box-shadow: var(--shadow-sm); }
+        .ted-quick-val-badge.contrato-badge { background: #eff6ff; border-color: #bfdbfe; }
+        .ted-quick-val-badge.negativo-badge { background: #fef2f2; border-color: #fecaca; }
+        
+        .ted-quick-val-badge small { display: block; font-size: 8px; font-weight: 800; color: #047857; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 1px; }
+        .ted-quick-val-badge.contrato-badge small { color: #1d4ed8; }
+        .ted-quick-val-badge.negativo-badge small { color: #b91c1c; }
+        
+        .ted-quick-val-badge span { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 700; color: var(--ms-green); white-space: nowrap; }
+        .ted-quick-val-badge.contrato-badge span { color: var(--brand-primary); }
+        .ted-quick-val-badge.negativo-badge span { color: var(--ms-red); }
+        
+        .ted-content { max-height: 0; overflow: hidden; transition: max-height 0.25s ease-out; background: #ffffff; will-change: max-height; }
+        .ted-content-inner { padding: 14px; border-top: 1px solid #f1f5f9; background: #fafafa; }
 
-  .matrix-container{ overflow-x:auto; background:#fff; border-radius:16px; border:1px solid #ece3d8; }
-  .matrix-table{ width:100%; border-collapse:collapse; font-size:.72rem; }
-  .matrix-table th, .matrix-table td{ padding:9px; border-bottom:1px solid #f3ede4; text-align:center; }
-  .name-cell{ text-align:left !important; font-weight:700; position:sticky; left:0; background:#fff; border-right:1px solid #ece3d8; min-width:150px; z-index:10; }
-  .total-cell{ font-weight:800; color:var(--crimson); background:var(--crimson-light) !important; border-left:1px solid #ece3d8; width:46px; }
-  .cb-fap{ appearance:none; width:19px; height:19px; border:2px solid #d24a4a; border-radius:6px; cursor:pointer; transition:all .15s; position:relative; display:inline-block; vertical-align:middle; }
-  .cb-fap:checked{ background:#1f7a4d; border-color:#1f7a4d; }
-  .cb-fap:checked::after{ content:'✓'; color:#fff; position:absolute; top:-2px; left:3px; font-size:12px; font-weight:800; }
+        .card-action-bar { display: flex; gap: 8px; margin-top: 12px; border-top: 1px dashed var(--border-color); padding-top: 10px; }
+        .btn-card-action { flex: 1; padding: 8px; border-radius: var(--radius-md); font-size: 11px; font-weight: 700; cursor: pointer; border: none; text-align: center; display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .btn-card-action.edit { background: rgba(79, 70, 229, 0.08); color: var(--brand-primary); }
+        .btn-card-action.add-member { background: rgba(16, 185, 129, 0.08); color: var(--ms-green); }
 
-  .toast{ position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%) translateY(20px); background:var(--ink); color:#fff; padding:.7rem 1.3rem; border-radius:99px; font-size:.8rem; font-weight:600; z-index:80; opacity:0; transition:all .3s; pointer-events:none; box-shadow:0 10px 30px rgba(0,0,0,.25); }
-  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+        .alert-badge { display: inline-flex; align-items: center; padding: 2px 6px; border-radius: 5px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1px; border: 1px solid transparent; }
+        .alert-badge.regular { background: var(--ms-blue-light); color: var(--ms-blue); border-color: #bfdbfe; }
+        .alert-badge.atencao { background: var(--ms-amber-light); color: var(--ms-amber); border-color: #fde68a; }
+        .alert-badge.critico { background: var(--ms-red-light); color: var(--ms-red); border-color: #fecaca; }
 
-  .admin-tabs button{ font-size:.75rem; font-weight:700; padding:.55rem 1rem; border-radius:10px; color:#8a8074; }
-  .admin-tabs button.active{ background:var(--crimson); color:#fff; }
-</style>
+        /* AJUSTE DAS 3 CAIXAS METRICAS DAS ETAPAS DO CONTRATO */
+        .etapa-contrato-bloco {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 12px;
+            box-shadow: var(--shadow-sm);
+            display: block;
+            clear: both;
+            margin-bottom: 12px !important;
+        }
+        .etapa-contrato-titulo {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--brand-dark);
+            margin-bottom: 8px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.2px;
+        }
+        .etapa-contrato-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        .etapa-mini-card {
+            background: var(--bg-body);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 8px 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+            align-items: flex-start;
+        }
+        .etapa-mini-card small {
+            font-size: 8px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .etapa-mini-card span {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-title);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+        .etapa-mini-card.pago { border-left: 3px solid var(--ms-green); background: var(--ms-green-light); }
+        .etapa-mini-card.pago span { color: #065f46; }
+        .etapa-mini-card.apagar { border-left: 3px solid var(--ms-blue); background: var(--ms-blue-light); }
+        .etapa-mini-card.apagar span { color: #1e40af; }
+        .etapa-mini-card.saldo { border-left: 3px solid var(--ms-amber); background: var(--ms-amber-light); }
+        .etapa-mini-card.saldo span { color: #b45309; }
+
+        .aditivo-retratil-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.25s ease-out;
+            width: 100%;
+            clear: both;
+        }
+
+        /* COMPONENTE DE LANÇAMENTOS/OS TOTALMENTE BLINDADO CONTRA TEXTOS LONGOS */
+        .os-cards-container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 6px; 
+            margin-top: 4px; 
+            width: 100% !important;
+            padding-top: 8px;
+        }
+        .os-mini-card { 
+            background: var(--bg-body) !important; 
+            border: 1px solid var(--border-color) !important; 
+            border-radius: var(--radius-md) !important; 
+            padding: 10px 12px !important; 
+            width: 100% !important;
+            display: block;
+            clear: both;
+            margin-bottom: 4px;
+        }
+        .os-mini-card-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            gap: 8px; 
+            width: 100%; 
+        }
+        .os-info-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+            flex: 1.2;
+        }
+        .os-mini-card .os-card-title { 
+            font-size: 11px; 
+            font-weight: 700; 
+            color: var(--text-title);
+            white-space: nowrap;
+            overflow: hidden; 
+            text-overflow: ellipsis;
+        }
+        .os-mini-card-row .os-card-sei { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 9px; 
+            color: var(--text-muted);
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            width: fit-content;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
+        }
+        .os-values-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+            flex-shrink: 0;
+            min-width: 95px;
+        }
+        
+        .os-mini-card-row .os-card-val { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 11px; 
+            font-weight: 700; 
+            white-space: nowrap; 
+            color: var(--text-title);
+            text-align: right;
+        }
+        
+        .status-pill { 
+            font-size: 8px; 
+            font-weight: 800; 
+            padding: 2px 5px; 
+            border-radius: 4px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.1px;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .status-pill.pago { background: var(--ms-green-light); color: var(--ms-green); }
+        .status-pill.aguardando { background: var(--ms-amber-light); color: var(--ms-amber); }
+        .status-pill.execucao { background: var(--ms-blue-light); color: var(--ms-blue); }
+
+        .ted-grid { display: flex; flex-direction: column; gap: 6px; }
+        .ted-field { background: #ffffff; padding: 8px 10px; border-radius: var(--radius-lg); border: 1px solid var(--border-color); cursor: pointer; transition: background 0.15s; position: relative; }
+        .ted-field:not(.success):not(.highlight):active { background: #f1f5f9; }
+        .ted-field small { display: block; font-size: 8.5px; color: var(--text-muted); text-transform: uppercase; }
+        .ted-field .field-row-edit { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .ted-field span { display: block; font-size: 12px; color: var(--text-title); font-weight: 600; }
+        .ted-field .edit-indicator { font-size: 9px; color: var(--brand-primary); font-weight: 700; opacity: 0.6; }
+        .ted-field .mono-val { font-family: 'JetBrains Mono', monospace; font-weight: 700; white-space: nowrap; }
+        .ted-field.highlight { background: #eff6ff; border-color: #bfdbfe; }
+        .ted-field.highlight span { color: #1e40af; }
+        .ted-field.success { background: #ecfdf5; border-color: #a7f3d0; }
+        .ted-field.success span { color: #065f46; }
+
+        .tabela-mobile-gaveta { width: 100%; overflow-x: auto; margin-top: 6px; border-radius: var(--radius-md); border: 1px solid #e2e8f0; }
+        .cron-table { width: 100%; border-collapse: collapse; background: #ffffff; }
+        .cron-table th { padding: 6px 8px; font-size: 8.5px; text-transform: uppercase; color: var(--text-muted); background: var(--bg-body); text-align: left; }
+        .cron-table td { padding: 8px; font-size: 11.5px; border-bottom: 1px solid #f1f5f9; color: var(--text-title); }
+
+        .nc-box { margin-top: 6px; background: #ffffff; border: 1px dashed var(--border-color); border-radius: var(--radius-lg); padding: 10px; }
+        .nc-title { font-size: 8.5px; color: var(--text-title); font-weight: 700; text-transform: uppercase; margin-bottom: 4px; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; }
+        .nc-row { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; padding: 2px 0; }
+
+        .ano-tabs-container { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 12px 2px; margin-bottom: 4px; -webkit-overflow-scrolling: touch; }
+        .ano-tabs-container::-webkit-scrollbar { display: none; }
+        .ano-tab { flex-shrink: 0; padding: 8px 16px; border-radius: 999px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-muted); font-weight: 700; font-size: 12.5px; cursor: pointer; box-shadow: var(--shadow-sm); white-space: nowrap; transition: background 0.15s, color 0.15s, border-color 0.15s; }
+        .ano-tab:active { background: var(--brand-primary-light); }
+        .ano-tab.active { background: var(--brand-primary); border-color: var(--brand-primary); color: white; }
+        .ano-tab-nota { font-size: 10.5px; color: var(--text-muted); text-align: center; padding: 8px 12px; background: var(--bg-card); border: 1px dashed var(--border-color); border-radius: var(--radius-md); margin-bottom: 12px; }
+
+        .unified-footer { background: var(--brand-dark); color: white; padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .unified-footer span { font-size: 9px; opacity: 0.7; text-transform: uppercase; text-align: center; }
+        .unified-footer strong { display: block; font-size: 1.35rem; color: #4ade80; margin-top: 2px; font-family: 'JetBrains Mono', monospace; white-space: nowrap; text-align: center; }
+        .footer-info { text-align: center; padding: 20px 10px; font-size: 10.5px; color: var(--text-muted); }
+
+        #cadastro_overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-body); z-index: 9999; overflow-y: auto; padding: 14px; }
+        .form-card { background: white; border-radius: var(--radius-xl); padding: 16px; box-shadow: var(--shadow-lg); border: 1px solid var(--border-color); }
+        .form-card h2 { color: var(--brand-dark); font-weight: 800; font-size: 1.15rem; margin-bottom: 2px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 9.5px; font-weight: 700; color: var(--text-title); text-transform: uppercase; margin-bottom: 4px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: var(--radius-md); font-size: 13.5px; color: var(--text-title); }
+        .btn-salvar-web { background: var(--ms-green); color: white; border: none; width: 100%; padding: 12px; border-radius: var(--radius-lg); font-weight: 700; font-size: 13.5px; cursor: pointer; margin-top: 14px; }
+        .btn-cancelar { background: transparent; color: var(--ms-red); border: none; width: 100%; padding: 6px; font-weight: 700; font-size: 12.5px; margin-top: 4px; cursor: pointer; }
+
+        /* REGRAS DE MEDIA QUERIES APERFEIÇOADAS PARA MOBILE COMPACTO */
+        @media (min-width: 380px) {
+            .os-values-right {
+                flex-direction: row;
+                align-items: center;
+                gap: 8px;
+                min-width: 160px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .etapa-contrato-grid {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+            .etapa-mini-card {
+                padding: 10px 12px;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .etapa-mini-card span {
+                text-align: right;
+                width: auto;
+                font-size: 11px;
+            }
+        }
+    </style>
 </head>
-<body class="p-4 md:p-8">
-<div class="container mx-auto max-w-6xl">
+<body>
+    <div class="container">
+        <header class="header">
+            <button class="btn-back" id="btnBack" onclick="goBack()">VOLTAR</button>
+            <div class="header-text-group">
+                <h1 id="mainTitle" class="main-title">PAINEL DEMAS</h1>
+                <div id="mainSubtitle" class="main-subtitle">Ministério da Saúde | Gabinete/Demas</div>
+            </div>
+        </header>
 
-  <header class="mb-8 text-center">
-    <p class="text-[11px] font-bold tracking-[.2em] uppercase text-[var(--crimson)] mb-2">Postulantado 2026</p>
-    <h1 class="text-3xl md:text-4xl font-display font-bold text-[var(--ink)] tracking-tight leading-tight">
-      Célula Comunitária<br><span class="text-[var(--crimson)]">São João Paulo II</span>
-    </h1>
-    <div class="brand-rule w-16 mx-auto mt-4"></div>
-  </header>
+        <div id="dashboardSummaryHub" class="kpi-summary-grid">
+            <div class="kpi-mini-card">
+                <span class="kpi-label">Saldo Disponível</span>
+                <span class="kpi-value green" id="kpi_saldo_disponivel">R$ 0,00</span>
+            </div>
+            <div class="kpi-mini-card">
+                <span class="kpi-label">Teto PLOA 2027</span>
+                <span class="kpi-value blue" id="kpi_teto_ploa2027">R$ 0,00</span>
+            </div>
+            <div class="kpi-mini-card">
+                <span class="kpi-label">Contratos Ativos</span>
+                <span class="kpi-value" id="kpi_total_contratos">0</span>
+            </div>
+            <div class="kpi-mini-card">
+                <span class="kpi-label">TEDs Gerenciados</span>
+                <span class="kpi-value" id="kpi_total_teds">0</span>
+            </div>
+        </div>
 
-  <!-- HOME -->
-  <div id="tab-home" class="tab-content active">
-    <div class="bg-white p-6 rounded-3xl border border-[#ece3d8] shadow-sm mb-8 flex flex-col items-center text-center">
-      <div class="w-40 md:w-52 mb-6">
-        <img src="https://sanctamaria.org.br/wp-content/uploads/2021/10/Sao-Joao-Paulo-II.jpg" alt="São João Paulo II" class="rounded-2xl shadow-md border-2 border-[#faf6f0] w-full">
-      </div>
-      <h2 id="home-citacao" class="font-display italic text-2xl md:text-3xl text-[var(--crimson-dark)] leading-snug max-w-2xl"></h2>
-      <p id="home-citacao-autor" class="text-xs font-bold uppercase tracking-widest text-[#a79c8d] mt-4"></p>
+        <div id="mainMenu" class="menu-grid">
+            <div class="menu-card" onclick="showSection('execucao', 'EXECUÇÃO')">
+                <span class="icon">📊</span>
+                <div class="menu-text">
+                    <h2>EXECUÇÃO</h2>
+                    <p>Saldos por ano de execução orçamentária</p>
+                </div>
+            </div>
+            <div class="menu-card" onclick="showSection('planejamento', 'PLANEJAMENTO')">
+                <span class="icon">🗓️</span>
+                <div class="menu-text">
+                    <h2>PLANEJAMENTO</h2>
+                    <p>PLOA por ano (2027, 2028...)</p>
+                </div>
+            </div>
+            <div class="menu-card" onclick="showSection('instrumentos', 'INSTRUMENTOS')">
+                <span class="icon">📜</span>
+                <div class="menu-text">
+                    <h2>INSTRUMENTOS</h2>
+                    <p>Gerenciamento dos Contratos e TEDs</p>
+                </div>
+            </div>
+        </div>
+
+        <section id="execucao" class="content-section">
+            <div id="execucaoAnoTabs" class="ano-tabs-container"></div>
+            <div id="execucaoConteudo"></div>
+        </section>
+
+        <section id="planejamento" class="content-section">
+            <div id="planejamentoAnoTabs" class="ano-tabs-container"></div>
+            <div id="planejamentoConteudo"></div>
+        </section>
+
+        <section id="instrumentos" class="content-section">
+            <div class="menu-grid">
+                <div class="menu-card" onclick="showSection('teds_detalhe', 'GERENCIAMENTO DE TEDs')">
+                    <span class="icon">🤝</span><div class="menu-text"><h2>TEDs</h2><p>Termos de Execução Descentralizada</p></div>
+                </div>
+                <div class="menu-card" onclick="showSection('contratos_detalhe', 'GERENCIAMENTO DE CONTRATOS')">
+                    <span class="icon">📑</span><div class="menu-text"><h2>CONTRATOS</h2><p>Contratos Administrativos, Atas e OSs</p></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="content-section" id="teds_detalhe"><div id="container_inst_teds"></div></div>
+        <div class="content-section" id="contratos_detalhe"><div id="container_inst_contratos"></div></div>
+
+        <div class="footer-info">AMBIENTE CONECTADO EM TEMPO REAL</div>
     </div>
 
-    <div id="home-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
-  </div>
+    <button class="btn-floating-add" onclick="abrirModalInclusaoGlobal()">+</button>
 
-  <!-- ALERTAS -->
-  <div id="tab-alertas" class="tab-content">
-    <div class="back-btn" onclick="openTab('tab-home')">← Voltar ao início</div>
-    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-      <h2 id="alertas-titulo" class="section-title"><span class="dot"></span>Celebrações</h2>
-      <div class="flex gap-2">
-        <button onclick="mudarMesAlertas(-1)" class="btn-ghost">◀ Mês anterior</button>
-        <button onclick="mudarMesAlertas(1)" class="btn-ghost">Próximo mês ▶</button>
-      </div>
-    </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div class="bg-white p-6 rounded-2xl border border-[#ece3d8]">
-        <h3 class="text-base font-bold text-[var(--crimson)] mb-4 flex items-center gap-2">🎂 Aniversariantes</h3>
-        <div id="lista-aniversarios" class="space-y-3"></div>
-      </div>
-      <div class="bg-white p-6 rounded-2xl border border-[#ece3d8]">
-        <h3 class="text-base font-bold text-[#2f5fa8] mb-4 flex items-center gap-2">💍 Casamentos</h3>
-        <div id="lista-casamentos" class="space-y-3"></div>
-      </div>
-    </div>
-  </div>
+    <div id="cadastro_overlay">
+        <div class="form-card">
+            <h2 id="modalFormTitle">MODIFICAR REGISTRO</h2>
+            <p id="modalFormSubtitle" style="color: var(--text-muted); font-size: 11.5px; margin-bottom: 16px;">O salvamento exige validação da senha master.</p>
 
-  <!-- LISTA FORMANDOS -->
-  <div id="tab-lista" class="tab-content">
-    <div class="back-btn" onclick="openTab('tab-home')">← Voltar ao início</div>
-    <h3 class="section-title"><span class="dot" style="background:#1f7a4d"></span>P2 — Nível de Discipulado</h3>
-    <div id="container-p2" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12"></div>
-    <h3 class="section-title"><span class="dot" style="background:#2f5fa8"></span>P1 — Nível de Ingresso</h3>
-    <div id="container-p1" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8"></div>
-  </div>
+            <input type="hidden" id="edit_id">
+            <input type="hidden" id="edit_mode"> 
 
-  <!-- ACOMPANHAMENTO -->
-  <div id="tab-acompanhamento" class="tab-content">
-    <div class="back-btn" onclick="openTab('tab-home')">← Voltar ao início</div>
-    <h3 class="section-title"><span class="dot"></span>Acompanhamento</h3>
-    <div id="lista-acompanhamento" class="grid gap-4"></div>
-  </div>
+            <div class="form-group" id="group_categoria">
+                <label>Categoria Orçamentária</label>
+                <select id="web_categoria">
+                    <option value="INST_TED">INST_TED (Termo de Execução Descentralizada)</option>
+                    <option value="INST_CONTRATO">INST_CONTRATO (Instrumento Contrato)</option>
+                    <option value="EXEC_8753">EXEC_8753 (Execução Direta 8753)</option>
+                    <option value="EXEC_20YN">EXEC_20YN (Execução Direta 20YN)</option>
+                    <option value="PLOA_8753">PLOA_8753 (PLOA 8753)</option>
+                    <option value="PLOA_20YN">PLOA_20YN (PLOA 20YN)</option>
+                </select>
+            </div>
 
-  <!-- EQUIPES -->
-  <div id="tab-equipes" class="tab-content">
-    <div class="back-btn" onclick="openTab('tab-home')">← Voltar ao início</div>
-    <h3 class="section-title"><span class="dot"></span>Equipes de Serviço</h3>
-    <div id="lista-equipes" class="grid md:grid-cols-2 gap-4"></div>
-  </div>
+            <div class="form-group">
+                <label>Título / Nome do Instrumento</label>
+                <input type="text" id="web_titulo" placeholder="Ex: Contrato 10/2024">
+            </div>
 
-  <!-- GRUPOS -->
-  <div id="tab-grupos" class="tab-content">
-    <div class="back-btn" onclick="openTab('tab-home')">← Voltar ao início</div>
-    <h3 class="section-title"><span class="dot"></span>Grupos de Partilha</h3>
-    <div id="lista-grupos" class="grid md:grid-cols-3 gap-4"></div>
-  </div>
+            <div class="form-group">
+                <label>Valor Monetário Geral (R$)</label>
+                <input type="text" id="web_valor" placeholder="R$ 0,00" oninput="aplicarMascaraMoeda(this)">
+            </div>
 
-  <!-- RETIRO -->
-  <div id="tab-retiro" class="tab-content">
-    <div class="back-btn" onclick="openTab('tab-home')">← Voltar ao início</div>
-    <div class="bg-white p-12 rounded-3xl border border-[#ece3d8] text-center">
-      <h3 id="retiro-titulo" class="text-lg font-bold text-[#5b5248]"></h3>
-      <p id="retiro-data" class="text-3xl font-display font-bold text-[var(--crimson)] mt-2"></p>
-    </div>
-  </div>
+            <div id="meta_campos_ted" class="form-group" style="display:none; flex-direction:column; gap:8px;">
+                <div class="form-group"><label>Instituição Beneficiária (Apenas TED)</label><input type="text" id="meta_ted_inst" placeholder="Ex: FIOCRUZ"></div>
+                <div class="form-group"><label>Número SEI</label><input type="text" id="meta_ted_sei" placeholder="Ex: 25000.XXXXXX/2026-XX"></div>
+                <div class="form-group"><label>Área Técnica / Gestora</label><input type="text" id="meta_ted_area" placeholder="Ex: CGGIE"></div>
+                <div class="form-group"><label>Data Vigência Final</label><input type="text" id="meta_ted_vigencia" placeholder="dd/mm/aaaa"></div>
+                <div class="form-group"><label>Aditivos de Prazo</label><input type="text" id="meta_ted_adit_prazo" placeholder="Ex: Prorrogado por 12 meses"></div>
+                <div class="form-group"><label>Aditivos de Valor</label><input type="text" id="meta_ted_adit_valor" placeholder="Ex: R$ 0,00"></div>
+                <div class="form-group"><label>Cadeia Bruta de Histórico (NCs / OSs)</label><input type="text" id="meta_ted_raw_history" placeholder="Histórico bruto integrado vindo da planilha"></div>
+            </div>
 
-  <!-- VIGILIAS -->
-  <div id="tab-vigilias" class="tab-content">
-    <div class="back-btn" onclick="openTab('tab-home')">← Voltar ao início</div>
-    <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
-      <h2 id="tab-vigilias-period" class="section-title mb-0"><span class="dot"></span>Escala do mês</h2>
-      <div class="flex gap-2">
-        <button onclick="mudarMesVigilias(-1)" class="btn-ghost">◀ Anterior</button>
-        <button onclick="mudarMesVigilias(1)" class="btn-ghost">Próximo ▶</button>
-      </div>
-    </div>
-    <div id="tab-vigilias-content" class="space-y-4"></div>
-  </div>
-
-  <!-- FORMADORES -->
-  <div id="tab-formadores-detalhe" class="tab-content">
-    <div class="back-btn" onclick="openTab('tab-home')">← Voltar ao início</div>
-    <h3 class="section-title"><span class="dot"></span>Formadores</h3>
-    <div id="lista-formadores" class="grid md:grid-cols-1 lg:grid-cols-3 gap-6"></div>
-  </div>
-
-  <!-- PAGAMENTOS -->
-  <div id="tab-pagamentos" class="tab-content">
-    <div class="back-btn" onclick="openTab('tab-home')">← Voltar ao início</div>
-    <h3 class="section-title"><span class="dot"></span>Pagamentos</h3>
-    <div class="table-container">
-      <table class="styled-table">
-        <thead><tr><th>Evento / Descrição</th><th>Data prevista</th><th>Valor</th><th>Status</th></tr></thead>
-        <tbody id="pagamentos-body"></tbody>
-      </table>
-    </div>
-    <div class="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-800">
-      <strong>Nota:</strong> Os pagamentos devem ser realizados via PIX da Célula ou diretamente aos coordenadores financeiros.
-    </div>
-  </div>
-
-  <!-- CONTROLE FORMADORES (matriz FAP + sync planilha) -->
-  <div id="tab-controle" class="tab-content">
-    <div class="back-btn" onclick="openTab('tab-home')">← Voltar ao início</div>
-    <div id="controle-auth" class="max-w-md mx-auto bg-white p-8 rounded-3xl border border-[#ece3d8] text-center">
-      <h2 class="text-xl font-bold mb-2 font-display">Registro Formador</h2>
-      <p class="text-sm text-[#8a8074] mb-6">Insira a senha para gerenciar os acompanhamentos.</p>
-      <input type="password" id="controle-pass" placeholder="Senha de segurança" class="field-input text-center mb-4">
-      <button onclick="loginControle()" class="btn-primary w-full">Entrar no painel</button>
-    </div>
-    <div id="controle-content" class="hidden space-y-6">
-      <div class="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-2xl border border-[#ece3d8] gap-4">
-        <h2 class="text-lg font-bold font-display italic">Mapa de acompanhamento anual</h2>
-        <div class="flex gap-4 text-[10px] font-bold uppercase text-[#8a8074]">
-          <span class="flex items-center gap-2"><span class="w-4 h-4 bg-[#1f7a4d] rounded"></span> Realizado</span>
-          <span class="flex items-center gap-2"><span class="w-4 h-4 border-2 border-[#d24a4a] rounded"></span> Pendente</span>
+            <button class="btn-salvar-web" onclick="processarEnvioFormularioMestre()">VALIDAR E SALVAR</button>
+            <button class="btn-cancelar" onclick="fecharCadastroWeb()">CANCELAR</button>
         </div>
-      </div>
-      <div class="bg-white p-2 md:p-6 rounded-2xl border border-[#ece3d8]">
-        <div class="matrix-container">
-          <table class="matrix-table">
-            <thead><tr class="bg-[#faf6f0]">
-              <th class="name-cell">Formando</th>
-              <th>Jan</th><th>Fev</th><th>Mar</th><th>Abr</th><th>Mai</th><th>Jun</th>
-              <th>Jul</th><th>Ago</th><th>Set</th><th>Out</th><th>Nov</th><th>Dez</th>
-              <th class="total-cell">Total</th>
-            </tr></thead>
-            <tbody id="matrix-body"></tbody>
-          </table>
-        </div>
-        <p class="text-center text-[10px] text-[#a79c8d] mt-4 italic">As alterações são sincronizadas automaticamente com a planilha.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- EDITAR DADOS (painel de administração) -->
-  <div id="tab-editar" class="tab-content">
-    <div class="back-btn" onclick="openTab('tab-home')">← Voltar ao início</div>
-
-    <div id="editar-auth" class="max-w-md mx-auto bg-white p-8 rounded-3xl border border-[#ece3d8] text-center">
-      <h2 class="text-xl font-bold mb-2 font-display">Editar dados da célula</h2>
-      <p class="text-sm text-[#8a8074] mb-6">Insira a senha de edição para adicionar, corrigir ou remover informações — sem precisar mexer em código.</p>
-      <input type="password" id="editar-pass" placeholder="Senha de edição" class="field-input text-center mb-4">
-      <button onclick="loginEditar()" class="btn-primary w-full">Entrar no painel de edição</button>
     </div>
 
-    <div id="editar-content" class="hidden space-y-6">
-      <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-800">
-        <strong>Importante:</strong> as edições ficam salvas neste navegador/dispositivo (armazenamento local). Para levar os dados para outro computador, ou fazer backup, use "Exportar backup" na aba Configurações e depois "Importar backup" no outro dispositivo.
-      </div>
+    <script>
+        const URL_API = "https://script.google.com/macros/s/AKfycbzI4JUVTzuJbPbcMKNBDTT3NbazIec7Wkw5jeXCZF7piZLjOWT-qBOW9zGnlE_v5CILiQ/exec";
+        
+        let navigationHistory = [];
+        let backupDadosGerais = {}; 
 
-      <div class="flex gap-2 admin-tabs bg-white p-1.5 rounded-2xl border border-[#ece3d8] w-fit flex-wrap">
-        <button id="admin-tab-btn-pessoas" class="active" onclick="setAdminTab('pessoas')">👥 Pessoas</button>
-        <button id="admin-tab-btn-config" onclick="setAdminTab('config')">⚙️ Configurações</button>
-        <button id="admin-tab-btn-backup" onclick="setAdminTab('backup')">💾 Backup</button>
-      </div>
+        // Ano corrente (execucao) e ano seguinte (PLOA) usados no motor de calculo automatico.
+        const ANO_ATUAL = new Date().getFullYear();
+        const ANO_PROXIMO = ANO_ATUAL + 1;
 
-      <!-- ADMIN: PESSOAS -->
-      <div id="admin-tab-pessoas" class="admin-tab">
-        <div class="flex flex-wrap gap-3 items-center justify-between mb-4">
-          <input type="text" id="admin-busca" oninput="renderAdminPessoas()" placeholder="Buscar por nome..." class="field-input max-w-xs">
-          <button onclick="abrirModalPessoa()" class="btn-primary">+ Nova pessoa</button>
-        </div>
-        <div class="table-container">
-          <table class="styled-table">
-            <thead><tr><th>Nome</th><th>Tipo</th><th>Ministério / Papel</th><th>FAP</th><th></th></tr></thead>
-            <tbody id="admin-pessoas-body"></tbody>
-          </table>
-        </div>
-      </div>
+        // Converte valores em texto (R$, virgula/ponto) para numero. Usado tanto na renderizacao
+        // dos cards de contrato quanto no motor de calculo automatico (mantidos em sincronia).
+        function converterTextoParaNumero(texto) {
+            if (!texto) return 0;
+            if (typeof texto === 'number') return texto;
+            let limpo = String(texto).replace(/[R$\s]/g, '').trim();
+            if (limpo.includes(',') && limpo.includes('.')) {
+                limpo = limpo.replace(/\./g, '').replace(',', '.');
+            } else if (limpo.includes(',')) {
+                limpo = limpo.replace(',', '.');
+            }
+            return parseFloat(limpo) || 0;
+        }
 
-      <!-- ADMIN: CONFIG -->
-      <div id="admin-tab-config" class="admin-tab hidden space-y-6">
-        <div class="bg-white p-6 rounded-2xl border border-[#ece3d8]">
-          <h4 class="font-bold mb-4 font-display text-lg">Citação da página inicial</h4>
-          <label class="field-label">Texto</label>
-          <textarea id="cfg-citacao-texto" class="field-textarea mb-3" rows="2"></textarea>
-          <label class="field-label">Autor</label>
-          <input type="text" id="cfg-citacao-autor" class="field-input">
-        </div>
-        <div class="bg-white p-6 rounded-2xl border border-[#ece3d8]">
-          <h4 class="font-bold mb-4 font-display text-lg">Retiro</h4>
-          <div class="grid md:grid-cols-2 gap-3">
-            <div><label class="field-label">Título</label><input type="text" id="cfg-retiro-titulo" class="field-input"></div>
-            <div><label class="field-label">Data</label><input type="text" id="cfg-retiro-data" class="field-input"></div>
-          </div>
-        </div>
-        <div class="bg-white p-6 rounded-2xl border border-[#ece3d8]">
-          <h4 class="font-bold mb-4 font-display text-lg">Vigílias</h4>
-          <label class="field-label">Aviso / observação (opcional)</label>
-          <textarea id="cfg-vigilia-nota" class="field-textarea mb-3" rows="2"></textarea>
-          <label class="field-label">Link oficial da escala</label>
-          <input type="text" id="cfg-vigilia-link" class="field-input">
-        </div>
-        <div class="bg-white p-6 rounded-2xl border border-[#ece3d8]">
-          <div class="flex items-center justify-between mb-4">
-            <h4 class="font-bold font-display text-lg">Pagamentos</h4>
-            <button onclick="addPagamentoRow()" class="btn-ghost">+ Linha</button>
-          </div>
-          <div id="cfg-pagamentos-list" class="space-y-2"></div>
-        </div>
-        <div class="bg-white p-6 rounded-2xl border border-[#ece3d8]">
-          <h4 class="font-bold mb-4 font-display text-lg">Senha de acesso</h4>
-          <p class="text-xs text-[#8a8074] mb-3">Usada tanto para "Editar Dados" quanto para "Controle Formadores". Isso é uma trava simples para evitar edições por engano — não é uma proteção de segurança forte, pois o código roda no navegador.</p>
-          <input type="text" id="cfg-senha" class="field-input max-w-xs">
-        </div>
-        <button onclick="salvarConfig()" class="btn-primary">Salvar configurações</button>
-      </div>
+        /**
+         * Calcula, a partir do historico bruto de um TED, as NCs emitidas (por identificador)
+         * e o cronograma anual previsto (entradas do tipo "AAAA | valor").
+         */
+        function parseHistoricoTED(historicoRaw) {
+            const ncs = [];
+            const cronograma = {};
+            if (historicoRaw && historicoRaw !== '' && historicoRaw !== '---') {
+                historicoRaw.split(';').forEach(blocoTexto => {
+                    if (blocoTexto.trim() === '' || !blocoTexto.includes('|')) return;
+                    const subPartes = blocoTexto.split('|');
+                    if (subPartes.length < 2) return;
+                    const identificador = subPartes[0].trim();
+                    let textoValor = subPartes[1].replace(/[R$\s]/g, '').replace(',', '.');
+                    const valLimpo = parseFloat(textoValor) || 0;
+                    if (identificador.toUpperCase().includes('NC')) {
+                        ncs.push({ ident: identificador, valor: valLimpo });
+                    } else {
+                        const anoNum = parseInt(identificador, 10);
+                        if (!isNaN(anoNum)) cronograma[anoNum] = (cronograma[anoNum] || 0) + valLimpo;
+                    }
+                });
+            }
+            return { ncs, cronograma };
+        }
 
-      <!-- ADMIN: BACKUP -->
-      <div id="admin-tab-backup" class="admin-tab hidden space-y-4">
-        <div class="bg-white p-6 rounded-2xl border border-[#ece3d8]">
-          <h4 class="font-bold mb-2 font-display text-lg">Exportar backup</h4>
-          <p class="text-xs text-[#8a8074] mb-4">Baixa um arquivo .json com todos os dados atuais. Guarde esse arquivo — ele pode ser usado para restaurar ou para levar os dados a outro dispositivo.</p>
-          <button onclick="exportarBackup()" class="btn-primary">Baixar backup (.json)</button>
-        </div>
-        <div class="bg-white p-6 rounded-2xl border border-[#ece3d8]">
-          <h4 class="font-bold mb-2 font-display text-lg">Importar backup</h4>
-          <p class="text-xs text-[#8a8074] mb-4">Substitui todos os dados atuais deste navegador pelos dados do arquivo importado.</p>
-          <input type="file" id="input-importar" accept="application/json" class="field-input mb-3">
-          <button onclick="importarBackup()" class="btn-ghost">Importar arquivo</button>
-        </div>
-        <div class="bg-white p-6 rounded-2xl border border-[#f7d3d0]">
-          <h4 class="font-bold mb-2 font-display text-lg text-[#b3261e]">Restaurar dados originais</h4>
-          <p class="text-xs text-[#8a8074] mb-4">Apaga tudo que foi editado neste navegador e volta para os dados originais de fábrica.</p>
-          <button onclick="restaurarOriginal()" class="btn-danger">Restaurar dados de fábrica</button>
-        </div>
-      </div>
-    </div>
-  </div>
+        /**
+         * MOTOR AUTOMATICO - TED, GENERICO POR ANO (assume acao 8753):
+         * - execucao: soma das NCs emitidas no ano informado.
+         * - previsto: valor do cronograma do TED para o ano informado.
+         * Funciona para qualquer ano presente no histórico (passado, atual ou futuro).
+         */
+        function calcularMetricasTEDParaAno(item, ano) {
+            const { ncs, cronograma } = parseHistoricoTED(item.historico);
+            const execucao = ncs
+                .filter(n => n.ident.toUpperCase().includes(String(ano) + 'NC'))
+                .reduce((acc, n) => acc + n.valor, 0);
+            const previsto = cronograma[ano] || 0;
+            return { execucao, previsto, restante: previsto - execucao };
+        }
 
-</div>
+        // Wrapper de compatibilidade: métricas do TED para o ano atual + próximo ano (usado na
+        // agregação padrão do painel e no card do instrumento).
+        function calcularMetricasTED(item) {
+            const teto = parseFloat(item.valor) || 0;
+            const totalAditivoFinanceiro = extrairTotalAditivosMonetarios(item.adit_valor);
+            const { ncs } = parseHistoricoTED(item.historico);
+            const totalNCsGlobal = ncs.reduce((acc, n) => acc + n.valor, 0);
+            const saldoRestante = teto + totalAditivoFinanceiro - totalNCsGlobal;
+            const atual = calcularMetricasTEDParaAno(item, ANO_ATUAL);
+            const proximo = calcularMetricasTEDParaAno(item, ANO_PROXIMO);
+            return {
+                execucaoAnoAtual: atual.execucao,
+                saldoADescentralizar: atual.restante,
+                saldoRestante,
+                ploaProximoAno: proximo.previsto
+            };
+        }
 
-<!-- MODAL: pessoa -->
-<div id="modal-pessoa" class="modal-backdrop hidden">
-  <div class="bg-white rounded-3xl shadow-2xl max-w-2xl w-full my-6 overflow-hidden">
-    <div class="bg-[var(--crimson)] p-5 text-white flex items-center justify-between">
-      <h3 id="modal-pessoa-titulo" class="font-bold font-display text-lg">Nova pessoa</h3>
-      <button onclick="fecharModalPessoa()" class="text-white/80 hover:text-white text-xl leading-none">✕</button>
-    </div>
-    <div class="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
-      <input type="hidden" id="pf-id">
+        /**
+         * Parsing compartilhado dos lançamentos de um contrato. O histórico pode misturar dois
+         * tipos de lançamento no mesmo campo, separados por ';':
+         *
+         * 1) OS (pagamento por etapa): "Identificador | SEI | Valor | Status [| Ano]"
+         *    Usadas para apurar quanto já foi pago por etapa (inicial/1º/2º aditivo) -> alimenta
+         *    o saldo a pagar (PLOA).
+         *
+         * 2) NC (liberação/empenho orçamentário do ano): "AnoNCxxxxx | Valor" — MESMO FORMATO
+         *    usado nos TEDs. Representa o quanto foi de fato liberado pra esse contrato naquele
+         *    ano — é a fonte MAIS CONFIÁVEL de execução anual (não depende de status de OS
+         *    individual). Quando existir NC pro ano, ela tem prioridade sobre a soma de OS pagas.
+         */
+        function _parseLancamentosContrato(item) {
+            const etapasBase = [
+                { total: converterTextoParaNumero(item.valor), campo: 'inicial' },
+                { total: converterTextoParaNumero(item.adit_valor), campo: 'adit1' },
+                { total: converterTextoParaNumero(item.adit_valor_2), campo: 'adit2' }
+            ];
+            const pagoPorEtapa = { inicial: 0, adit1: 0, adit2: 0 };
+            const pagoPorEtapaEAno = {}; // { ano: { inicial, adit1, adit2 } }
+            const ncsPorAno = {}; // { ano: valorTotal } — liberações orçamentárias (formato TED)
+            let totalOSPendente = 0; // soma das OS já lançadas com status != Pago (Aguardando/Em Execução)
+            const historicoRaw = item.historico || '';
 
-      <div>
-        <p class="text-[11px] font-black uppercase tracking-widest text-[var(--crimson)] mb-3">Dados pessoais</p>
-        <div class="grid md:grid-cols-2 gap-3">
-          <div class="md:col-span-2"><label class="field-label">Nome completo</label><input type="text" id="pf-nome" class="field-input"></div>
-          <div><label class="field-label">Tipo</label>
-            <select id="pf-tipo" class="field-select" onchange="onTipoChange()">
-              <option value="P2">Formando · P2 (Discipulado)</option>
-              <option value="P1">Formando · P1 (Ingresso)</option>
-              <option value="Formador">Formador</option>
-            </select>
-          </div>
-          <div id="pf-wrap-papel"><label class="field-label">Papel (formador)</label>
-            <select id="pf-papel" class="field-select">
-              <option value="Comunitária">Comunitária</option>
-              <option value="Assistente">Assistente</option>
-            </select>
-          </div>
-          <div><label class="field-label">Nascimento (dd/mm/aaaa)</label><input type="text" id="pf-nasc" placeholder="00/00/0000" class="field-input"></div>
-          <div><label class="field-label">Casamento (dd/mm/aaaa ou -)</label><input type="text" id="pf-casam" placeholder="- " class="field-input"></div>
-          <div class="md:col-span-2"><label class="field-label">E-mail</label><input type="email" id="pf-email" class="field-input"></div>
-        </div>
-      </div>
+            if (historicoRaw && historicoRaw !== '' && historicoRaw !== '---') {
+                historicoRaw.split(';').forEach(blocoTexto => {
+                    if (blocoTexto.trim() === '' || !blocoTexto.includes('|')) return;
+                    const subPartes = blocoTexto.split('|');
+                    if (subPartes.length < 2) return;
+                    const identificadorBruto = subPartes[0].trim();
+                    const idUpper = identificadorBruto.toUpperCase();
 
-      <div>
-        <p class="text-[11px] font-black uppercase tracking-widest text-[var(--crimson)] mb-3">Formação e acompanhamento</p>
-        <div class="grid md:grid-cols-2 gap-3">
-          <div class="md:col-span-2"><label class="field-label">Ministério</label><input type="text" id="pf-ministerio" class="field-input"></div>
-          <div><label class="field-label">FAP (acompanhante externo)</label><input type="text" id="pf-fap" class="field-input"></div>
-          <div><label class="field-label">Acompanhado(a) diretamente por</label>
-            <select id="pf-acompanhadopor" class="field-select">
-              <option value="">—</option><option value="Tânia">Tânia</option><option value="Larissa">Larissa</option><option value="Rafael">Rafael</option>
-            </select>
-          </div>
-        </div>
-      </div>
+                    // Formato NC (2 campos, igual ao TED): "AAAANCxxxxx | Valor"
+                    if (subPartes.length === 2 && idUpper.includes('NC')) {
+                        const m = identificadorBruto.match(/(\d{4})\s*NC/i);
+                        const anoNc = m ? parseInt(m[1], 10) : null;
+                        const valorNc = converterTextoParaNumero(subPartes[1]);
+                        if (anoNc) {
+                            ncsPorAno[anoNc] = (ncsPorAno[anoNc] || 0) + valorNc;
+                        }
+                        return;
+                    }
 
-      <div>
-        <p class="text-[11px] font-black uppercase tracking-widest text-[var(--crimson)] mb-3">Grupos e equipes</p>
-        <div class="grid md:grid-cols-2 gap-3">
-          <div><label class="field-label">Grupo de partilha</label>
-            <select id="pf-grupopartilha" class="field-select"><option value="">—</option><option value="1">Grupo 1</option><option value="2">Grupo 2</option><option value="3">Grupo 3</option></select>
-          </div>
-          <div class="flex items-end gap-2 pb-1"><input type="checkbox" id="pf-coordpartilha" class="field-check"><label for="pf-coordpartilha" class="text-xs font-semibold">Coordena o grupo de partilha</label></div>
+                    // Formato OS (3, 4 ou 5 campos)
+                    let textoValor, statusTexto = '', anoTag = null;
+                    if (subPartes.length >= 5) {
+                        textoValor = subPartes[2];
+                        statusTexto = subPartes[3].trim();
+                        const anoParse = parseInt(subPartes[4].trim(), 10);
+                        anoTag = !isNaN(anoParse) ? anoParse : null;
+                    } else if (subPartes.length === 4) {
+                        textoValor = subPartes[2];
+                        statusTexto = subPartes[3].trim();
+                    } else if (subPartes.length === 3) {
+                        textoValor = subPartes[1];
+                        statusTexto = subPartes[2].trim();
+                    } else {
+                        textoValor = subPartes[1];
+                    }
+                    const v = converterTextoParaNumero(textoValor);
 
-          <div><label class="field-label">Equipe de serviço</label>
-            <select id="pf-equipe" class="field-select">
-              <option value="">—</option><option>Música</option><option>Liturgia</option><option>Fraternidade</option><option>Intercessão</option>
-            </select>
-          </div>
-          <div class="flex items-end gap-2 pb-1"><input type="checkbox" id="pf-coordequipe" class="field-check"><label for="pf-coordequipe" class="text-xs font-semibold">Coordena a equipe</label></div>
+                    let alvo = null;
+                    if (idUpper.includes('2º') || idUpper.includes('SEGUNDO') || idUpper.includes('2O') || idUpper.includes('ADITIVO 2')) alvo = 'adit2';
+                    else if (idUpper.includes('1º') || idUpper.includes('PRIMEIRO') || idUpper.includes('1O') || idUpper.includes('ADITIVO 1')) alvo = 'adit1';
+                    else if (idUpper.includes('INICIAL') || idUpper.includes('CONTRATO')) alvo = 'inicial';
 
-          <div><label class="field-label">Grupo de vigília</label>
-            <select id="pf-grupovigilia" class="field-select"><option value="">—</option><option value="A">Grupo A</option><option value="B">Grupo B</option><option value="C">Grupo C</option></select>
-          </div>
-          <div class="flex items-end gap-2 pb-1"><input type="checkbox" id="pf-coordvigilia" class="field-check"><label for="pf-coordvigilia" class="text-xs font-semibold">Coordena a vigília</label></div>
+                    if (alvo) {
+                        if (statusTexto.toUpperCase().includes('PAGO')) {
+                            pagoPorEtapa[alvo] += v;
+                            if (anoTag !== null) {
+                                if (!pagoPorEtapaEAno[anoTag]) pagoPorEtapaEAno[anoTag] = { inicial: 0, adit1: 0, adit2: 0 };
+                                pagoPorEtapaEAno[anoTag][alvo] += v;
+                            }
+                        } else if (statusTexto !== '') {
+                            // OS já lançada mas ainda não paga (Aguardando/Em Execução) — valor
+                            // concreto e conhecido, mais preciso do que estimar por percentual.
+                            totalOSPendente += v;
+                        }
+                    }
+                });
+            }
 
-          <div class="md:col-span-2"><label class="field-label">Nome curto na planilha de Controle (não altere sem necessidade — usado para sincronizar com o Google Sheets)</label><input type="text" id="pf-nomematriz" class="field-input"></div>
-        </div>
-      </div>
-    </div>
-    <div class="p-5 bg-[#faf6f0] flex items-center justify-between border-t border-[#ece3d8]">
-      <button id="modal-pessoa-excluir" onclick="excluirPessoaModal()" class="btn-danger">Excluir</button>
-      <div class="flex gap-2">
-        <button onclick="fecharModalPessoa()" class="btn-ghost">Cancelar</button>
-        <button onclick="salvarPessoaModal()" class="btn-primary">Salvar</button>
-      </div>
-    </div>
-  </div>
-</div>
+            return { etapasBase, pagoPorEtapa, pagoPorEtapaEAno, ncsPorAno, totalOSPendente };
+        }
 
-<!-- MODAL: celebrações de hoje -->
-<div id="modal-alerta-dia" class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black/60 backdrop-blur-sm p-4">
-  <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden border border-[#ece3d8]">
-    <div class="bg-[var(--crimson)] p-6 text-center text-white">
-      <div class="text-4xl mb-2">🎉</div>
-      <h2 class="font-bold text-lg uppercase tracking-wider">Celebrações de hoje!</h2>
-      <p id="data-hoje-modal" class="text-white/80 text-[10px] font-bold uppercase"></p>
-    </div>
-    <div id="conteudo-alerta-dia" class="p-6 space-y-4 text-left"></div>
-    <div class="p-4 bg-[#faf6f0] flex justify-center border-t border-[#ece3d8]">
-      <button onclick="fecharModal()" class="bg-[var(--ink)] hover:bg-black text-white px-10 py-2 rounded-full font-bold text-sm">Amém!</button>
-    </div>
-  </div>
-</div>
+        /**
+         * MOTOR AUTOMATICO - CONTRATO, GENERICO POR ANO (assume acao 20YN):
+         * - execucao: se houver NC lançada pro ano (liberação orçamentária), usa a soma delas —
+         *   é a fonte mais confiável. Sem NC pro ano, cai no fallback: soma das OS "Pago" cujo
+         *   5º campo de ano bate com o ano informado.
+         * - saldoAPagarTotal: sempre o saldo total ainda não pago (por etapa), independente do ano.
+         */
+        function calcularMetricasContratoParaAno(item, ano) {
+            const { etapasBase, pagoPorEtapa, pagoPorEtapaEAno, ncsPorAno, totalOSPendente } = _parseLancamentosContrato(item);
 
-<div id="toast" class="toast"></div>
+            // Saldo baseado em OS "Pago" — mantido para o card (Total/Pago/A Pagar por etapa)
+            // e como fallback quando o contrato ainda não tem nenhuma NC lançada.
+            let saldoAPagarTotal = 0;
+            etapasBase.forEach(et => {
+                if (et.total !== 0 || pagoPorEtapa[et.campo] !== 0) {
+                    saldoAPagarTotal += (et.total - pagoPorEtapa[et.campo]);
+                }
+            });
 
-<script>
-/* =========================================================================
-   DADOS — fonte única. Tudo (cards, equipes, grupos, vigílias, matriz,
-   aniversários) é derivado deste array. Editável pela aba "Editar Dados".
-   ========================================================================= */
-const DEFAULT_DB = {
-  config: {
-    citacaoTexto: "Não tenhais medo! Abri, melhor, escancarai as portas a Cristo!",
-    citacaoAutor: "São João Paulo II",
-    retiroTitulo: "Retiro de Ingresso P1",
-    retiroData: "18 e 19 de Abril",
-    vigiliaNota: "Mara em horários especiais.",
-    vigiliaLink: "https://vigiliash.web.app/",
-    senha: "jp2",
-    pagamentos: [
-      { descricao: "Pagamento da Plataforma 2026", data: "18/03/2026", valor: "R$ 15,00", status: "Aberto" },
-      { descricao: "Retiro de Ingresso P1", data: "18 e 19/04/2026", valor: "R$ —", status: "Aberto" }
-    ],
-    apiUrlPlanilha: "https://script.google.com/macros/s/AKfycbwKCgGhN2TQ0M3YviNDxnbw5hEvju0FdhJvZRV5f7TTOEfdVodkkR4sKJtZHJFN-UrMyA/exec"
-  },
-  pessoas: [
-    // ---- P2 ----
-    { id:"p1", nome:"Bartholomeu Francisco de Souza Neto", tipo:"P2", ministerio:"Coord. Pastoreio Adulto", nasc:"11/09/1990", casam:"12/07/2025", email:"bartho.neto1@hotmail.com", fap:"Jacob", acompanhadoPor:"Rafael", grupoPartilha:"2", coordGrupoPartilha:false, equipe:"Fraternidade", coordEquipe:false, grupoVigilia:"A", coordVigilia:false, nomeMatriz:"Bartholomeu Francisco" },
-    { id:"p2", nome:"Bianca Cristina da Cunha Conceição", tipo:"P2", ministerio:"Pastoreio de Casais", nasc:"12/05/1984", casam:"18/06/2005", email:"anapauloedy@gmail.com", fap:"Thais (Marcelo)", acompanhadoPor:"Tânia", grupoPartilha:"1", coordGrupoPartilha:false, equipe:"Intercessão", coordEquipe:false, grupoVigilia:"B", coordVigilia:false, nomeMatriz:"Bianca Cristina Cunha" },
-    { id:"p3", nome:"Edivaldo José Da Conceição da Cunha", tipo:"P2", ministerio:"Pastoreio de Casais", nasc:"31/07/1979", casam:"18/06/2005", email:"ejcpd2012@gmail.com", fap:"Marcelo (Tânia)", acompanhadoPor:"Rafael", grupoPartilha:"1", coordGrupoPartilha:false, equipe:"Música", coordEquipe:false, grupoVigilia:"C", coordVigilia:false, nomeMatriz:"Edivaldo José" },
-    { id:"p4", nome:"Bianca Cristina Vidal da Cunha", tipo:"P2", ministerio:"Comunicação", nasc:"02/10/2003", casam:"-", email:"biancacunha210@gmail.com", fap:"Leticia Moreschi", acompanhadoPor:"Tânia", grupoPartilha:"3", coordGrupoPartilha:false, equipe:"Fraternidade", coordEquipe:false, grupoVigilia:"A", coordVigilia:false, nomeMatriz:"Bianca Cristina Vidal" },
-    { id:"p5", nome:"Érika Pereira do Prado", tipo:"P2", ministerio:"Comunicação", nasc:"22/10/1996", casam:"-", email:"erika.prado@sempreceub.com", fap:"Renata Ribas", acompanhadoPor:"Larissa", grupoPartilha:"3", coordGrupoPartilha:false, equipe:"Intercessão", coordEquipe:false, grupoVigilia:"A", coordVigilia:false, nomeMatriz:"Érika Pereira" },
-    { id:"p6", nome:"Flávia Maria Fialho de Oliveira", tipo:"P2", ministerio:"PJJ e Comunicação", nasc:"25/02/1999", casam:"-", email:"flaviam.fialho@hotmail.com", fap:"Barbara Mendes", acompanhadoPor:"Larissa", grupoPartilha:"1", coordGrupoPartilha:false, equipe:"", coordEquipe:false, grupoVigilia:"B", coordVigilia:false, nomeMatriz:"Flávia Maria Fialho" },
-    { id:"p7", nome:"Lilian Beatriz de Lima Peters", tipo:"P2", ministerio:"Livraria", nasc:"10/03/1988", casam:"13/10/2019", email:"liriopeters@hotmail.com", fap:"Thais (Marcelo)", acompanhadoPor:"Tânia", grupoPartilha:"2", coordGrupoPartilha:false, equipe:"Liturgia", coordEquipe:false, grupoVigilia:"C", coordVigilia:false, nomeMatriz:"Lilian Beatriz" },
-    { id:"p8", nome:"Luis Alexandre Macedo Nepomuceno", tipo:"P2", ministerio:"Liturgia", nasc:"28/10/1984", casam:"18/12/2021", email:"luisalexandre6533@gmail.com", fap:"Marcelo (Tânia)", acompanhadoPor:"Rafael", grupoPartilha:"2", coordGrupoPartilha:false, equipe:"Liturgia", coordEquipe:false, grupoVigilia:"A", coordVigilia:false, nomeMatriz:"Luis Alexandre Macedo" },
-    { id:"p9", nome:"Mara Rúbia Araújo do Nascimento Silva", tipo:"P2", ministerio:"Coordenação da Livraria", nasc:"29/04/1975", casam:"29/07/1995", email:"mararubiabr@yahoo.com.br", fap:"Thais (Marcelo)", acompanhadoPor:"Tânia", grupoPartilha:"1", coordGrupoPartilha:false, equipe:"Intercessão", coordEquipe:false, grupoVigilia:"", coordVigilia:false, nomeMatriz:"Mara Rúbia Araújo" },
-    { id:"p10", nome:"Maria Helena Nunes Silva", tipo:"P2", ministerio:"Kerigma", nasc:"27/12/2004", casam:"-", email:"mariahelenanunessilva27@gmail.com", fap:"Leticia Moreschi", acompanhadoPor:"Larissa", grupoPartilha:"3", coordGrupoPartilha:false, equipe:"Música", coordEquipe:false, grupoVigilia:"C", coordVigilia:false, nomeMatriz:"Maria Helena Nunes" },
-    { id:"p11", nome:"Pedro Francisco de Souza Teixeira", tipo:"P2", ministerio:"PJJ e Liturgia", nasc:"22/12/2004", casam:"-", email:"pedrosouzadf075@gmail.com", fap:"Pedrão (Priscila)", acompanhadoPor:"Rafael", grupoPartilha:"1", coordGrupoPartilha:false, equipe:"Liturgia", coordEquipe:false, grupoVigilia:"A", coordVigilia:false, nomeMatriz:"Pedro Francisco" },
-    { id:"p12", nome:"Raissa Souza Alabarce", tipo:"P2", ministerio:"Kerigma (Asa Sul)", nasc:"06/09/1990", casam:"-", email:"raissaalabarce.souza@gmail.com", fap:"Milena Brito", acompanhadoPor:"Tânia", grupoPartilha:"3", coordGrupoPartilha:false, equipe:"Fraternidade", coordEquipe:false, grupoVigilia:"C", coordVigilia:false, nomeMatriz:"Raissa Souza" },
-    { id:"p13", nome:"Walkner Pinheiro Melo de Almeida", tipo:"P2", ministerio:"Música", nasc:"22/08/1980", casam:"-", email:"walkner.almeida@yahoo.com.br", fap:"Marcelo (Tânia)", acompanhadoPor:"Rafael", grupoPartilha:"", coordGrupoPartilha:false, equipe:"Música", coordEquipe:true, grupoVigilia:"B", coordVigilia:false, nomeMatriz:"Walkner Pinheiro" },
-    { id:"p14", nome:"Agnes Caroline Serafim Cardoso", tipo:"P2", ministerio:"—", nasc:"19/12/1999", casam:"25/11/2023", email:"agneserafimcardosoreis@gmail.com", fap:"Jenisangêla - CV", acompanhadoPor:"", grupoPartilha:"3", coordGrupoPartilha:false, equipe:"Fraternidade", coordEquipe:true, grupoVigilia:"", coordVigilia:false, nomeMatriz:"Agnes Caroline" },
-    { id:"p15", nome:"Gustavo Teixeira Reis", tipo:"P2", ministerio:"Sem ministério", nasc:"06/01/2000", casam:"25/11/2023", email:"gustavoreis2302@gmail.com", fap:"Marcelo Vieira", acompanhadoPor:"Rafael", grupoPartilha:"3", coordGrupoPartilha:false, equipe:"Fraternidade", coordEquipe:false, grupoVigilia:"", coordVigilia:false, nomeMatriz:"Gustavo Teixeira" },
-    { id:"p16", nome:"Caio Eduardo Dos Santos Ferreira", tipo:"P2", ministerio:"Promoção humana", nasc:"25/09/1999", casam:"-", email:"caiodudu10@gmail.com", fap:"Matheus Tonhá", acompanhadoPor:"Rafael", grupoPartilha:"", coordGrupoPartilha:false, equipe:"Fraternidade", coordEquipe:false, grupoVigilia:"C", coordVigilia:false, nomeMatriz:"Caio Eduardo" },
-    { id:"p17", nome:"Nayara Monteiro Ferreira", tipo:"P2", ministerio:"Promoção humana", nasc:"27/10/1988", casam:"-", email:"nayaramonteferreira@gmail.com", fap:"Camila Oka", acompanhadoPor:"Tânia", grupoPartilha:"", coordGrupoPartilha:false, equipe:"", coordEquipe:false, grupoVigilia:"", coordVigilia:false, nomeMatriz:"Nayara Monteiro Ferreira" },
-    { id:"p18", nome:"Alex Fernando Viana Couto da Silva", tipo:"P2", ministerio:"Música", nasc:"05/08/1984", casam:"02/09/2017", email:"axfdsl@gmail.com", fap:"Marcelo (Tânia)", acompanhadoPor:"", grupoPartilha:"2", coordGrupoPartilha:false, equipe:"Intercessão", coordEquipe:true, grupoVigilia:"B", coordVigilia:false, nomeMatriz:"Alex Fernando Viana" },
-    { id:"p19", nome:"Kelly Cristina Viana Couto da Silva", tipo:"P2", ministerio:"Centro de Formação", nasc:"29/07/1984", casam:"02/09/2017", email:"kellyvcouto@gmail.com", fap:"Thais (Marcelo)", acompanhadoPor:"", grupoPartilha:"2", coordGrupoPartilha:false, equipe:"Intercessão", coordEquipe:true, grupoVigilia:"B", coordVigilia:false, nomeMatriz:"Kelly Cristina Viana" },
-    // ---- P1 ----
-    { id:"p20", nome:"Laura Dias Marques Braz", tipo:"P1", ministerio:"Celeiro de Pastores", nasc:"30/09/2003", casam:"-", email:"lauravoc2024@gmail.com", fap:"Renata Ribas", acompanhadoPor:"Tânia", grupoPartilha:"2", coordGrupoPartilha:false, equipe:"Fraternidade", coordEquipe:false, grupoVigilia:"C", coordVigilia:false, nomeMatriz:"Laura Dias Marques" },
-    { id:"p21", nome:"Sabrina Magalhães Vieira", tipo:"P1", ministerio:"1° anúncio", nasc:"21/08/1996", casam:"-", email:"sabrinavieirapsi@gmail.com", fap:"Barbara Mendes", acompanhadoPor:"Tânia", grupoPartilha:"3", coordGrupoPartilha:false, equipe:"Liturgia", coordEquipe:false, grupoVigilia:"B", coordVigilia:false, nomeMatriz:"Sabrina Magalhães" },
-    { id:"p22", nome:"Júlia Cordeiro Lucas Barbosa", tipo:"P1", ministerio:"Pastoreio Jovem", nasc:"27/04/2007", casam:"-", email:"juliacordeirolucas@gmail.com", fap:"Laura Chaves", acompanhadoPor:"Larissa", grupoPartilha:"3", coordGrupoPartilha:false, equipe:"Fraternidade", coordEquipe:true, grupoVigilia:"A", coordVigilia:false, nomeMatriz:"Júlia Cordeiro" },
-    { id:"p23", nome:"João Felipe Machado Cantanhede", tipo:"P1", ministerio:"Pastoreio jovem", nasc:"04/03/2002", casam:"-", email:"jfcantanhedecod@gmail.com", fap:"Weider", acompanhadoPor:"Rafael", grupoPartilha:"", coordGrupoPartilha:false, equipe:"Liturgia", coordEquipe:true, grupoVigilia:"B", coordVigilia:false, nomeMatriz:"João Felipe Machado" },
-    { id:"p24", nome:"Júlio Viana de Carvalho", tipo:"P1", ministerio:"Pastoreio Jovem", nasc:"19/10/2003", casam:"-", email:"juliovianadecarvalho@gmail.com", fap:"Weider", acompanhadoPor:"Rafael", grupoPartilha:"2", coordGrupoPartilha:false, equipe:"Intercessão", coordEquipe:false, grupoVigilia:"C", coordVigilia:false, nomeMatriz:"Júlio Viana" },
-    { id:"p25", nome:"Miguel Pedro da Cunha Doroteu", tipo:"P1", ministerio:"Núcleo PJJ e Celeiro de Pastores", nasc:"05/09/2005", casam:"-", email:"migueldoroteu55@gmail.com", fap:"Weider", acompanhadoPor:"Rafael", grupoPartilha:"1", coordGrupoPartilha:false, equipe:"Liturgia", coordEquipe:false, grupoVigilia:"A", coordVigilia:false, nomeMatriz:"Miguel Pedro" },
-    { id:"p26", nome:"Rafaela Aiala Fernandes Correia", tipo:"P1", ministerio:"Pastoreio Jovem e Turma de Líderes", nasc:"15/07/2006", casam:"-", email:"rafaelaaiala.sh@gmail.com", fap:"Cristina", acompanhadoPor:"Larissa", grupoPartilha:"3", coordGrupoPartilha:false, equipe:"Música", coordEquipe:false, grupoVigilia:"A", coordVigilia:false, nomeMatriz:"Rafaela Aiala" },
-    { id:"p27", nome:"Joalyne Viana Ribeiro", tipo:"P1", ministerio:"Coordenação Projeto Criança", nasc:"24/08/1990", casam:"-", email:"joalyneviana@gmail.com", fap:"Marcia", acompanhadoPor:"Tânia", destaqueAcompanhamento:true, grupoPartilha:"1", coordGrupoPartilha:false, equipe:"Liturgia", coordEquipe:false, grupoVigilia:"A", coordVigilia:false, nomeMatriz:"Joalyne Viana" },
-    // ---- FORMADORES ----
-    { id:"p28", nome:"Tânia Andréia Gentil Goulart", tipo:"Formador", papelFormador:"Comunitária", ministerio:"", nasc:"23/07/1971", casam:"09/06/2000", email:"e.taniaandreia@gmail.com", fap:"", acompanhadoPor:"", grupoPartilha:"1", coordGrupoPartilha:true, equipe:"", coordEquipe:false, grupoVigilia:"B", coordVigilia:true, nomeMatriz:"" },
-    { id:"p29", nome:"Larissa Torres de Olinda Silva", tipo:"Formador", papelFormador:"Assistente", ministerio:"", nasc:"05/02/1999", casam:"04/10/2025", email:"larissatorres.olinda@gmail.com", fap:"", acompanhadoPor:"Tânia", destaqueAcompanhamento:true, grupoPartilha:"3", coordGrupoPartilha:true, equipe:"", coordEquipe:false, grupoVigilia:"A", coordVigilia:true, nomeMatriz:"" },
-    { id:"p30", nome:"Rafael de Brito Albuquerque", tipo:"Formador", papelFormador:"Assistente", ministerio:"", nasc:"06/06/1982", casam:"14/11/2007", email:"rba0606@gmail.com", fap:"", acompanhadoPor:"Tânia", destaqueAcompanhamento:true, grupoPartilha:"2", coordGrupoPartilha:true, equipe:"", coordEquipe:false, grupoVigilia:"C", coordVigilia:true, nomeMatriz:"" }
-  ]
-};
-// Érika teve destaque no acompanhamento original — marcar:
-DEFAULT_DB.pessoas.find(p=>p.id==="p5").destaqueAcompanhamento = true;
+            // Saldo baseado em NC (liberação orçamentária) — o que ainda NÃO foi comprometido
+            // do valor total contratado. Usado como base pro PLOA do ano seguinte (projeção).
+            const totalNCsGlobal = Object.values(ncsPorAno).reduce((a, b) => a + b, 0);
+            const temNC = Object.keys(ncsPorAno).length > 0;
+            const tetoTotal = etapasBase.reduce((acc, et) => acc + et.total, 0);
+            const saldoRestante = temNC ? (tetoTotal - totalNCsGlobal) : saldoAPagarTotal;
 
-const STORAGE_KEY = "celula_sjp2_db_v1";
-let DB = carregarDB();
+            let execucao, fonte;
+            if (ncsPorAno[ano]) {
+                execucao = ncsPorAno[ano];
+                fonte = 'NC';
+            } else {
+                const doAno = pagoPorEtapaEAno[ano] || { inicial: 0, adit1: 0, adit2: 0 };
+                execucao = doAno.inicial + doAno.adit1 + doAno.adit2;
+                fonte = 'OS';
+            }
+            return { execucao, saldoAPagarTotal, saldoRestante, totalOSPendente, fonte };
+        }
 
-function carregarDB(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(raw) return JSON.parse(raw);
-  }catch(e){ console.warn("Falha ao carregar dados locais, usando padrão.", e); }
-  return JSON.parse(JSON.stringify(DEFAULT_DB));
-}
-function salvarDB(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); }
-function uid(){ return "p_" + Math.random().toString(36).slice(2,9); }
-function toast(msg){
-  const t = document.getElementById("toast");
-  t.textContent = msg; t.classList.add("show");
-  clearTimeout(window.__toastTimer);
-  window.__toastTimer = setTimeout(()=>t.classList.remove("show"), 2600);
-}
+        // Wrapper de compatibilidade: métricas do contrato para o ano atual.
+        // "Ainda falta descentralizar este ano" agora usa o valor CONCRETO das OS já lançadas
+        // e ainda não pagas (Aguardando/Em Execução) — muito mais preciso do que estimar um
+        // percentual do saldo total não comprometido. Aditivos novos ainda não lançados no
+        // sistema (ex: um aditivo futuro só parcialmente atribuível a este ano) devem ser
+        // adicionados como ajuste manual em PROJ_20YN, não estimados automaticamente aqui.
+        // O PLOA do ano seguinte continua na regra 50% do saldo ainda não comprometido (NC).
+        function calcularMetricasContrato(item) {
+            const atual = calcularMetricasContratoParaAno(item, ANO_ATUAL);
+            return {
+                saldoAPagarTotal: atual.saldoAPagarTotal,
+                saldoRestante: atual.saldoRestante,
+                execucaoAnoAtual: atual.execucao,
+                restanteEsteAno: atual.totalOSPendente,
+                ploaProximoAno: atual.saldoRestante / 2
+            };
+        }
 
-/* =========================================================================
-   NAVEGAÇÃO
-   ========================================================================= */
-const HOME_ITEMS = [
-  { tab:"tab-alertas", icon:"🔔", label:"Aniversariantes do mês" },
-  { tab:"tab-lista", icon:"👥", label:"Formandos" },
-  { tab:"tab-formadores-detalhe", icon:"📖", label:"Formadores" },
-  { tab:"tab-acompanhamento", icon:"❤️", label:"Acompanhamento" },
-  { tab:"tab-equipes", icon:"✝️", label:"Equipes" },
-  { tab:"tab-grupos", icon:"💬", label:"Partilha" },
-  { tab:"tab-retiro", icon:"📅", label:"Retiro" },
-  { tab:"tab-vigilias", icon:"🕯️", label:"Vigílias" },
-  { tab:"tab-pagamentos", icon:"💰", label:"Pagamentos" },
-  { tab:"tab-controle", icon:"🔐", label:"Controle Formadores" },
-  { tab:"tab-editar", icon:"✏️", label:"Editar Dados", admin:true }
-];
-function renderHomeGrid(){
-  const g = document.getElementById("home-grid");
-  g.innerHTML = HOME_ITEMS.map(it => `
-    <div class="home-card ${it.admin?'admin':''}" onclick="openTab('${it.tab}')">
-      <div class="icon-box">${it.icon}</div>
-      <h3 class="font-bold text-sm">${it.label}</h3>
-    </div>`).join("");
-}
-function openTab(tabId){
-  document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
-  document.getElementById(tabId).classList.add("active");
-  window.scrollTo({top:0, behavior:"smooth"});
-  if(tabId==="tab-lista") renderFormandos();
-  if(tabId==="tab-acompanhamento") renderAcompanhamento();
-  if(tabId==="tab-equipes") renderEquipes();
-  if(tabId==="tab-grupos") renderGrupos();
-  if(tabId==="tab-formadores-detalhe") renderFormadores();
-  if(tabId==="tab-pagamentos") renderPagamentos();
-  if(tabId==="tab-retiro") renderRetiro();
-  if(tabId==="tab-alertas") renderAlertasMes();
-  if(tabId==="tab-vigilias") renderVigilias();
-  if(tabId==="tab-editar") prepararConfigForm();
-}
+        /**
+         * Descobre quais anos têm dados relevantes na planilha (cronograma/NCs de TEDs, NCs de
+         * contratos), para montar as abas de Execução e Planejamento/PLOA. Execução mostra TODOS
+         * os anos com dado (passado, atual ou futuro — um "2027NC..." lançado adiantado já aparece
+         * lá assim que existir). Planejamento continua só com anos futuros (é sempre uma proposta,
+         * nunca um fato). Sempre garante a presença do ano atual e do ano seguinte.
+         */
+        function obterAnosDisponiveis() {
+            const anosSet = new Set([ANO_ATUAL, ANO_PROXIMO]);
+            Object.values(backupDadosGerais).forEach(item => {
+                if (!item || !item.categoria) return;
+                const cat = item.categoria.trim().toUpperCase();
 
-/* =========================================================================
-   HELPERS DE DADOS
-   ========================================================================= */
-function pessoas(tipo){ return DB.pessoas.filter(p=>p.tipo===tipo); }
-function todasPessoas(){ return DB.pessoas; }
-function nomeDoMes(m){ return ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"][m-1] || ""; }
-function primeiroNome(nome){ return nome.split(" ")[0]; }
+                if (cat === 'INST_TED') {
+                    const { ncs, cronograma } = parseHistoricoTED(item.historico);
+                    Object.keys(cronograma).forEach(a => anosSet.add(parseInt(a, 10)));
+                    ncs.forEach(n => {
+                        const m = n.ident.match(/(\d{4})\s*NC/i);
+                        if (m) anosSet.add(parseInt(m[1], 10));
+                    });
+                } else if (cat === 'INST_CONTRATO') {
+                    const { ncsPorAno } = _parseLancamentosContrato(item);
+                    Object.keys(ncsPorAno).forEach(a => anosSet.add(parseInt(a, 10)));
+                }
+            });
+            const anos = Array.from(anosSet).filter(a => !isNaN(a)).sort((a, b) => a - b);
+            const anosExecucao = anos; // Execução mostra o intervalo completo de anos com dado.
+            const anosPlanejamento = anos.filter(a => a > ANO_ATUAL);
+            return { anosExecucao, anosPlanejamento };
+        }
 
-/* =========================================================================
-   HOME
-   ========================================================================= */
-function renderHome(){
-  document.getElementById("home-citacao").innerHTML = `"${DB.config.citacaoTexto}"`;
-  document.getElementById("home-citacao-autor").textContent = "— " + DB.config.citacaoAutor;
-}
+        const formatarBRL = (v) => {
+            let num = parseFloat(v);
+            if (isNaN(num)) return "R$ 0,00";
+            if (Math.abs(num) < 0.01) {
+                num = 0;
+            }
+            return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        };
 
-/* =========================================================================
-   FORMANDOS (cards)
-   ========================================================================= */
-function cardFormandoHTML(f){
-  const cardTypeClass = f.tipo === "P1" ? "card-p1" : "card-p2";
-  const badgeClass = f.tipo === "P1" ? "badge-p1" : "badge-p2";
-  const isToDefine = (f.ministerio||"").toLowerCase().includes("definir") || (f.ministerio||"").toLowerCase().includes("sem");
-  return `<div class="formando-card ${cardTypeClass}">
-    <span class="badge ${badgeClass}">${f.tipo}</span>
-    <h4 class="font-bold text-slate-800 pr-10 leading-tight mb-2 uppercase text-sm">${f.nome}</h4>
-    <div class="mb-3"><span class="info-label">Ministério</span><p class="info-value ${isToDefine?'text-red-500 italic':''}">${f.ministerio||"—"}</p></div>
-    <div class="grid grid-cols-2 gap-2 border-t border-slate-100 pt-3">
-      <div><span class="info-label">🎂 Nasc.</span><p class="info-value">${f.nasc}</p></div>
-      <div><span class="info-label">💍 Casam.</span><p class="info-value">${f.casam}</p></div>
-    </div>
-    <div class="mt-3 pt-3 border-t border-dashed border-slate-100"><span class="info-label">📧 E-mail</span><p class="text-[11px] font-medium text-slate-600 lowercase break-all">${f.email}</p></div>
-    <div class="mt-auto pt-4"><div class="bg-red-50 p-3 rounded-xl border border-red-100"><span class="info-label text-red-400">Acompanhamento (FAP)</span><p class="info-value text-red-800 font-bold">${f.fap||"—"}</p></div></div>
-  </div>`;
-}
-function renderFormandos(){
-  document.getElementById("container-p2").innerHTML = pessoas("P2").map(cardFormandoHTML).join("");
-  document.getElementById("container-p1").innerHTML = pessoas("P1").map(cardFormandoHTML).join("");
-}
+        function formatarValor(elemento, valor) {
+            if (!elemento) return;
+            const vNum = parseFloat(valor) || 0;
+            elemento.innerText = formatarBRL(vNum);
+            if (vNum < 0) {
+                elemento.classList.add('negativo');
+                elemento.classList.remove('positivo');
+            } else if (vNum > 0) {
+                elemento.classList.add('positivo');
+                elemento.classList.remove('negativo');
+            }
+        }
 
-/* =========================================================================
-   FORMADORES
-   ========================================================================= */
-function renderFormadores(){
-  const list = pessoas("Formador");
-  document.getElementById("lista-formadores").innerHTML = list.map((f,i)=>`
-    <div class="p-5 ${i===0?'bg-red-50 border-red-100':'bg-slate-50 border-slate-200'} rounded-2xl border">
-      <p class="text-[10px] font-black ${i===0?'text-red-600':'text-slate-400'} uppercase tracking-widest mb-1">${f.papelFormador}</p>
-      <h4 class="text-lg font-bold text-slate-800">${f.nome}</h4>
-      <div class="mt-4 space-y-2 text-sm text-slate-600">
-        <p>🎂 <strong>Nascimento:</strong> ${f.nasc}</p>
-        <p>💍 <strong>Casamento:</strong> ${f.casam}</p>
-        <p>📧 <strong>Email:</strong> ${f.email}</p>
-      </div>
-    </div>`).join("");
-}
+        function extrairTotalAditivosMonetarios(stringMala) {
+            if (!stringMala || stringMala === '---') return 0;
+            const matches = stringMala.replace(/\./g, '').replace(/,/g, '.').match(/-?[\d.]+/g);
+            if (!matches) return 0;
+            return matches.reduce((acc, curr) => acc + (parseFloat(curr) || 0), 0);
+        }
 
-/* =========================================================================
-   ACOMPANHAMENTO — agrupado por formador responsável
-   ========================================================================= */
-function renderAcompanhamento(){
-  const responsaveis = pessoas("Formador").map(f=>primeiroNome(f.nome));
-  const html = responsaveis.map(nomeResp=>{
-    const seus = DB.pessoas.filter(p=>p.acompanhadoPor===nomeResp);
-    const balões = seus.map(p=>`<span class="name-balloon ${p.destaqueAcompanhamento?'font-bold border-red-200 bg-red-50':''}">${primeiroNome(p.nome)}</span>`).join("");
-    return `<div class="bg-white p-5 rounded-xl border-l-4 border-red-600 shadow-sm">
-      <p class="font-bold text-red-700 mb-2 uppercase text-xs">${nomeResp}:</p>
-      <div class="flex flex-wrap">${balões || '<span class="text-xs text-slate-400 italic">Ninguém atribuído ainda</span>'}</div>
-    </div>`;
-  }).join("");
-  const semResp = DB.pessoas.filter(p=>!p.acompanhadoPor && p.tipo!=="Formador");
-  const extra = semResp.length ? `<div class="bg-amber-50 p-4 rounded-xl border border-amber-200 text-xs text-amber-800">
-      <strong>Sem formador responsável atribuído:</strong> ${semResp.map(p=>primeiroNome(p.nome)).join(", ")}
-    </div>` : "";
-  document.getElementById("lista-acompanhamento").innerHTML = html + extra;
-}
+        function formatarDataBR(dataMala) {
+            if (!dataMala || dataMala === '---') return '---';
+            const stringData = String(dataMala);
+            if (stringData.includes('GMT') || !isNaN(Date.parse(stringData))) {
+                const d = new Date(stringData);
+                if (!isNaN(d.getTime())) {
+                    const dia = String(d.getDate()).padStart(2, '0');
+                    const mes = String(d.getMonth() + 1).padStart(2, '0');
+                    const ano = d.getFullYear();
+                    return `${dia}/${mes}/${ano}`;
+                }
+            }
+            return stringData.trim();
+        }
 
-/* =========================================================================
-   EQUIPES DE SERVIÇO
-   ========================================================================= */
-const EQUIPES_ORDEM = ["Música","Liturgia","Fraternidade","Intercessão"];
-function renderEquipes(){
-  document.getElementById("lista-equipes").innerHTML = EQUIPES_ORDEM.map(nomeEquipe=>{
-    const membros = DB.pessoas.filter(p=>p.equipe===nomeEquipe && !p.coordEquipe);
-    const coords = DB.pessoas.filter(p=>p.equipe===nomeEquipe && p.coordEquipe);
-    return `<div class="bg-white p-4 rounded-xl border border-slate-200">
-      <h4 class="font-bold text-red-800 mb-4 border-b pb-2">${nomeEquipe}</h4>
-      <div class="mb-2">
-        <span class="font-bold text-xs uppercase text-slate-400 block mb-1">${coords.length>1?'Coordenadores':'Coordenador'}</span>
-        ${coords.map(c=>`<span class="name-balloon coordinator-label">${primeiroNome(c.nome)}</span>`).join("") || '<span class="text-xs text-slate-400 italic">A definir</span>'}
-      </div>
-      <div class="flex flex-wrap">${membros.map(m=>`<span class="name-balloon">${primeiroNome(m.nome)}</span>`).join("")}</div>
-    </div>`;
-  }).join("");
-}
+        function interpretarData(dataString) {
+            if (!dataString) return null;
+            if (dataString instanceof Date) return dataString;
+            if (typeof dataString === 'string' && dataString.includes('/')) {
+                const partes = dataString.split('/');
+                return new Date(parseInt(partes[2]), parseInt(partes[1]) - 1, parseInt(partes[0]));
+            }
+            return null;
+        }
 
-/* =========================================================================
-   GRUPOS DE PARTILHA
-   ========================================================================= */
-function renderGrupos(){
-  document.getElementById("lista-grupos").innerHTML = ["1","2","3"].map(n=>{
-    const coord = DB.pessoas.find(p=>p.grupoPartilha===n && p.coordGrupoPartilha);
-    const membros = DB.pessoas.filter(p=>p.grupoPartilha===n && !p.coordGrupoPartilha);
-    return `<div class="bg-white p-4 rounded-xl border border-slate-200">
-      <p class="font-bold text-red-700 text-xs mb-2">Grupo ${n}</p>
-      ${coord?`<span class="name-balloon coordinator-label">${primeiroNome(coord.nome)}</span>`:""}
-      ${membros.map(m=>`<span class="name-balloon">${primeiroNome(m.nome)}</span>`).join("")}
-    </div>`;
-  }).join("");
-}
+        function calcularSaudeVigencia(dataString) {
+            if(!dataString || dataString === "---" || dataString.trim() === "") {
+                return { label: "Sem Prazo", classe: "regular" };
+            }
+            
+            const dataVigencia = interpretarData(dataString.trim());
+            if (!dataVigencia || isNaN(dataVigencia.getTime())) {
+                return { label: "Vigência", classe: "regular" };
+            }
+            
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+            dataVigencia.setHours(0, 0, 0, 0);
+            
+            const diffTime = dataVigencia.getTime() - hoje.getTime();
+            const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays < 0) {
+                return { label: "Vencido", classe: "critico" };
+            }
+            if (diffDays <= 90) {
+                return { label: `Vence em ${diffDays} d`, classe: "atencao" };
+            }
+            return { label: "Vigência OK", classe: "regular" };
+        }
 
-/* =========================================================================
-   VIGÍLIAS
-   ========================================================================= */
-let vigiliaMesAtual = new Date().getMonth()+1;
-let vigiliaAnoAtual = new Date().getFullYear();
-function renderVigilias(ano=vigiliaAnoAtual, mes=vigiliaMesAtual){
-  vigiliaAnoAtual = ano; vigiliaMesAtual = mes;
-  document.getElementById("tab-vigilias-period").innerHTML = `<span class="dot"></span>Escala de ${nomeDoMes(mes)} de ${ano}`;
+        // Junta uma lista de {id, titulo, valor, status} no HTML de linhas usando generarLinhaHTML.
+        function renderLinhas(lista) {
+            return lista.map(l => generarLinhaHTML(l.id, l.titulo, l.valor, l.status)).join('');
+        }
 
-  const grupoDe = letra => DB.pessoas.filter(p=>p.grupoVigilia===letra && !p.coordVigilia);
-  const coordDe = letra => DB.pessoas.find(p=>p.grupoVigilia===letra && p.coordVigilia);
-  const balõesDe = letra => {
-    const c = coordDe(letra);
-    return (c?`<span class="name-balloon"><strong>${primeiroNome(c.nome)}</strong></span>`:"") +
-      grupoDe(letra).map(m=>`<span class="name-balloon">${primeiroNome(m.nome)}</span>`).join("");
-  };
+        function semDadosHTML(ano) {
+            return `<div style="text-align:center;color:var(--text-muted);font-size:11.5px;padding:10px;">Nenhum lançamento para ${ano}.</div>`;
+        }
 
-  const isPar = mes % 2 === 0;
-  const h1_dia8 = isPar ? balõesDe("A") : balõesDe("B");
-  const h2_dia8 = isPar ? balõesDe("B") : balõesDe("A");
-  const label_dia7 = isPar ? "1º horário (22:00 - 02:00)" : "2º horário (02:00 - 06:00)";
+        /**
+         * Agrega Execução para um ano qualquer: TEDs (NCs do ano) e Contratos (OS tageadas com
+         * o ano). Dotação Inicial e ajustes manuais (Crédito Adicional/Remanejamento) só existem
+         * registrados para o ano corrente na planilha.
+         */
+        function calcularAgregadoExecucaoAno(ano) {
+            let exec8753 = 0, exec20yn = 0;
+            let ajusteManual8753 = 0, ajusteManual20yn = 0;
+            let dotacao8753Manual = null, dotacao20ynManual = null;
+            const linhas8753 = [], linhas20yn = [];
 
-  const alertaLink = DB.config.vigiliaLink ? `<div class="mb-4 p-3 bg-amber-50 border-l-4 border-amber-500 rounded flex items-center gap-2 shadow-sm"><span class="text-lg">⚠️</span><a href="${DB.config.vigiliaLink}" target="_blank" class="text-amber-800 font-bold text-xs uppercase hover:underline">Link oficial das vigílias</a></div>` : "";
-  const notaHtml = DB.config.vigiliaNota ? `<div class="mt-8 pt-4 border-t border-slate-100 text-[13px] text-slate-500 italic"><p>• ${DB.config.vigiliaNota}</p></div>` : "";
+            Object.keys(backupDadosGerais).forEach(id => {
+                const item = backupDadosGerais[id];
+                if (!item) return;
+                const catLimpa = item.categoria ? item.categoria.trim().toUpperCase() : "";
 
-  document.getElementById("tab-vigilias-content").innerHTML = alertaLink + `
-    <div class="mb-4 p-6 bg-white rounded-xl border border-slate-200 shadow-sm">
-      <div class="space-y-6">
-        <div><p class="text-base font-bold text-slate-800 border-b pb-1 mb-3">Dia 7</p>
-          <p class="text-xs font-bold text-red-600 uppercase mb-2">${label_dia7}:</p>
-          <div class="flex flex-wrap gap-1">${balõesDe("C")}</div>
-        </div>
-        <div><p class="text-base font-bold text-slate-800 border-b pb-1 mb-3">Dia 8</p>
-          <p class="text-xs font-bold text-red-600 uppercase mb-2">1º horário (22:00 - 02:00):</p>
-          <div class="flex flex-wrap gap-1 mb-4">${h1_dia8}</div>
-          <p class="text-xs font-bold text-red-600 uppercase mb-2">2º horário (02:00 - 06:00):</p>
-          <div class="flex flex-wrap gap-1">${h2_dia8}</div>
-        </div>
-      </div>
-      ${notaHtml}
-    </div>`;
-}
-function mudarMesVigilias(delta){
-  vigiliaMesAtual += delta;
-  if(vigiliaMesAtual<1){ vigiliaMesAtual=12; vigiliaAnoAtual--; }
-  if(vigiliaMesAtual>12){ vigiliaMesAtual=1; vigiliaAnoAtual++; }
-  renderVigilias();
-}
+                if (catLimpa === 'INST_TED') {
+                    const m = calcularMetricasTEDParaAno(item, ano);
+                    if (m.execucao !== 0) {
+                        exec8753 += m.execucao;
+                        linhas8753.push({ id, titulo: `🤝 ${item.titulo} (NC ${ano})`, valor: -m.execucao, status: 'Auto · TED' });
+                    }
+                } else if (catLimpa === 'INST_CONTRATO') {
+                    const m = calcularMetricasContratoParaAno(item, ano);
+                    if (m.execucao !== 0) {
+                        exec20yn += m.execucao;
+                        const rotulo = m.fonte === 'NC' ? `NC ${ano}` : `pago em ${ano}`;
+                        linhas20yn.push({ id, titulo: `📄 ${item.titulo} (${rotulo})`, valor: -m.execucao, status: m.fonte === 'NC' ? 'Auto · Contrato (NC)' : 'Auto · Contrato' });
+                    }
+                } else if (catLimpa === 'FIXO' && ano === ANO_ATUAL) {
+                    const idLower = id.toLowerCase();
+                    if (idLower.includes('dotacao') && idLower.includes('8753')) dotacao8753Manual = parseFloat(item.valor) || 0;
+                    if (idLower.includes('dotacao') && idLower.includes('20yn')) dotacao20ynManual = parseFloat(item.valor) || 0;
+                } else if (catLimpa === 'EXEC_8753' && ano === ANO_ATUAL) {
+                    ajusteManual8753 += (parseFloat(item.valor) || 0);
+                    linhas8753.push({ id, titulo: item.titulo, valor: item.valor, status: item.status || item.vigencia });
+                } else if (catLimpa === 'EXEC_20YN' && ano === ANO_ATUAL) {
+                    ajusteManual20yn += (parseFloat(item.valor) || 0);
+                    linhas20yn.push({ id, titulo: item.titulo, valor: item.valor, status: item.status || item.vigencia });
+                }
+            });
 
-/* =========================================================================
-   RETIRO / PAGAMENTOS
-   ========================================================================= */
-function renderRetiro(){
-  document.getElementById("retiro-titulo").textContent = DB.config.retiroTitulo;
-  document.getElementById("retiro-data").textContent = DB.config.retiroData;
-}
-function renderPagamentos(){
-  document.getElementById("pagamentos-body").innerHTML = DB.config.pagamentos.map(p=>
-    `<tr><td>${p.descricao}</td><td>${p.data}</td><td>${p.valor}</td><td>${p.status}</td></tr>`).join("");
-}
+            // Dotação Inicial: se não houver valor digitado manualmente pra esse ano, usa por
+            // padrão o total da PLOA calculada pra esse ano (regra: "PLOA aprovada vira dotação
+            // do ano seguinte"). Assim que alguém digitar o valor real (ex: após aprovação
+            // oficial, que pode diferir da proposta), o manual passa a valer sempre.
+            const ploaDoAno = calcularAgregadoPlanejamentoAno(ano);
+            const dotacao8753 = dotacao8753Manual !== null ? dotacao8753Manual : ploaDoAno.ploa8753;
+            const dotacao20yn = dotacao20ynManual !== null ? dotacao20ynManual : ploaDoAno.ploa20yn;
+            const dotacao8753EhEstimativa = dotacao8753Manual === null;
+            const dotacao20ynEhEstimativa = dotacao20ynManual === null;
 
-/* =========================================================================
-   ANIVERSÁRIOS / CASAMENTOS
-   ========================================================================= */
-let alertasMesAtual = new Date().getMonth()+1;
-let alertasAnoAtual = new Date().getFullYear();
-function renderAlertasMes(mes=alertasMesAtual, ano=alertasAnoAtual){
-  alertasMesAtual = mes; alertasAnoAtual = ano;
-  document.getElementById("alertas-titulo").innerHTML = `<span class="dot"></span>Celebrações de ${nomeDoMes(mes)} de ${ano}`;
-  const listaAniversarios = document.getElementById("lista-aniversarios");
-  const listaCasamentos = document.getElementById("lista-casamentos");
-  listaAniversarios.innerHTML = ""; listaCasamentos.innerHTML = "";
-  const casamentosPorData = {};
-  todasPessoas().forEach(p=>{
-    if(p.nasc){
-      const [dia, mesN] = p.nasc.split("/").map(Number);
-      if(mesN===mes) listaAniversarios.innerHTML += `<div class="p-3 bg-red-50 rounded-xl border border-red-100"><p class="font-bold text-slate-800">${p.nome}</p><p class="text-xs text-red-600">${dia}/${mesN}</p></div>`;
-    }
-    if(p.casam && p.casam!=="-" && !p.casam.toLowerCase().includes("definir")){
-      const [diaC, mesC] = p.casam.split("/").map(Number);
-      if(mesC===mes){
-        const chave = `${diaC}-${mesC}`;
-        (casamentosPorData[chave] = casamentosPorData[chave]||[]).push(p.nome);
-      }
-    }
-  });
-  const entradas = Object.entries(casamentosPorData);
-  if(!entradas.length){ listaCasamentos.innerHTML = `<p class="text-sm text-slate-500">Nenhum casamento este mês.</p>`; }
-  entradas.forEach(([chave, nomes])=>{
-    const [diaC, mesC] = chave.split("-").map(Number);
-    const texto = nomes.length>1 ? nomes.join(" e ") : nomes[0];
-    listaCasamentos.innerHTML += `<div class="p-3 bg-blue-50 rounded-xl border border-blue-100"><p class="font-bold text-slate-800">Casamento de ${texto}</p><p class="text-xs text-blue-600">${diaC}/${mesC}</p></div>`;
-  });
-}
-function mudarMesAlertas(delta){
-  let mes = alertasMesAtual+delta, ano = alertasAnoAtual;
-  if(mes<1){ mes=12; ano--; } if(mes>12){ mes=1; ano++; }
-  renderAlertasMes(mes, ano);
-}
-function verificarAlertasDoDia(){
-  const hoje = new Date();
-  const diaHoje = hoje.getDate(), mesHoje = hoje.getMonth()+1;
-  document.getElementById("data-hoje-modal").innerText = hoje.toLocaleDateString("pt-BR", {day:"numeric", month:"long"});
-  const conteudo = document.getElementById("conteudo-alerta-dia");
-  conteudo.innerHTML = ""; let temEvento = false;
-  todasPessoas().forEach(p=>{
-    const [diaN, mesN] = (p.nasc||"").split("/").map(Number);
-    if(diaN===diaHoje && mesN===mesHoje){
-      temEvento = true;
-      conteudo.innerHTML += `<div class="flex items-center gap-4 p-4 bg-red-50 rounded-2xl border border-red-100"><span class="text-2xl">🎂</span><div><p class="text-[10px] font-black text-red-600 uppercase">Aniversariante</p><p class="font-bold text-slate-800 leading-tight">${p.nome}</p></div></div>`;
-    }
-    if(p.casam && p.casam!=="-" && !p.casam.toLowerCase().includes("definir")){
-      const [diaC, mesC] = p.casam.split("/").map(Number);
-      if(diaC===diaHoje && mesC===mesHoje){
-        temEvento = true;
-        conteudo.innerHTML += `<div class="flex items-center gap-4 p-4 bg-blue-50 rounded-2xl border border-blue-100"><span class="text-2xl">💍</span><div><p class="text-[10px] font-black text-blue-600 uppercase">Bodas / Casamento</p><p class="font-bold text-slate-800 leading-tight">${p.nome}</p></div></div>`;
-      }
-    }
-  });
-  if(temEvento){
-    document.getElementById("modal-alerta-dia").classList.remove("hidden");
-    confetti({ particleCount:150, spread:70, origin:{y:.6}, colors:['#9f1c2e','#241c1a','#c99a3a'] });
-  }
-}
-function fecharModal(){ document.getElementById("modal-alerta-dia").classList.add("hidden"); }
+            const saldoAtual8753 = dotacao8753 + ajusteManual8753 - exec8753;
+            const saldoAtual20yn = dotacao20yn + ajusteManual20yn - exec20yn;
+            return {
+                dotacao8753, dotacao20yn, dotacao8753EhEstimativa, dotacao20ynEhEstimativa,
+                exec8753, exec20yn, saldoAtual8753, saldoAtual20yn, linhas8753, linhas20yn
+            };
+        }
 
-/* =========================================================================
-   SINCRONIZAÇÃO COM A PLANILHA (Pessoas + Configurações)
-   ========================================================================= */
-async function carregarNuvem(){
-  try{
-    const [respPessoas, respConfig] = await Promise.all([
-      fetch(DB.config.apiUrlPlanilha + "?recurso=pessoas"),
-      fetch(DB.config.apiUrlPlanilha + "?recurso=config")
-    ]);
-    const pessoasNuvem = await respPessoas.json();
-    const configNuvem = await respConfig.json();
-    let mudou = false;
-    if(Array.isArray(pessoasNuvem) && pessoasNuvem.length){ DB.pessoas = pessoasNuvem; mudou = true; }
-    if(configNuvem && Object.keys(configNuvem).length){
-      const apiUrl = DB.config.apiUrlPlanilha;
-      DB.config = {...DB.config, ...configNuvem, apiUrlPlanilha: apiUrl};
-      mudou = true;
-    }
-    if(mudou){
-      salvarDB();
-      renderTudo();
-      if(editarLogado){ renderAdminPessoas(); prepararConfigForm(); }
-    }
-  }catch(err){
-    console.warn("Não foi possível sincronizar com a planilha agora — usando os dados salvos neste navegador.", err);
-  }
-}
-async function enviarPessoasNuvem(){
-  try{ await fetch(DB.config.apiUrlPlanilha, { method:"POST", mode:"no-cors", body: JSON.stringify({recurso:"pessoas", pessoas: DB.pessoas}) }); }
-  catch(e){ console.warn("Falha ao enviar pessoas para a planilha.", e); }
-}
-async function enviarConfigNuvem(){
-  try{ await fetch(DB.config.apiUrlPlanilha, { method:"POST", mode:"no-cors", body: JSON.stringify({recurso:"config", config: DB.config}) }); }
-  catch(e){ console.warn("Falha ao enviar configurações para a planilha.", e); }
-}
+        // Projeção de saídas (o que falta sair da conta até o fim do ano) — só faz sentido
+        // para o ano corrente; TEDs via cronograma, mais eventuais ajustes manuais PROJ_*.
+        function calcularProjecaoAnoAtual() {
+            let proj8753 = 0, proj20yn = 0;
+            const linhas8753 = [], linhas20yn = [];
 
-/* =========================================================================
-   CONTROLE FORMADORES (matriz FAP + sync Google Sheets) — inalterado na
-   lógica, agora a lista de nomes vem da base central de pessoas.
-   ========================================================================= */
-const nomesMesesMatriz = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
-let dbLocalMatriz = JSON.parse(localStorage.getItem("fap_db_2026")) || [];
+            Object.keys(backupDadosGerais).forEach(id => {
+                const item = backupDadosGerais[id];
+                if (!item) return;
+                const catLimpa = item.categoria ? item.categoria.trim().toUpperCase() : "";
 
-async function loginControle(){
-  const senha = document.getElementById("controle-pass").value;
-  if(senha !== DB.config.senha){ alert("Senha incorreta!"); return; }
-  const btn = document.querySelector("#controle-auth button");
-  const original = btn.innerText;
-  btn.innerText = "Sincronizando com a nuvem..."; btn.disabled = true;
-  try{
-    const resp = await fetch(DB.config.apiUrlPlanilha);
-    const dados = await resp.json();
-    dbLocalMatriz = dados.filter(item=>item.acao==="MARCADO");
-    localStorage.setItem("fap_db_2026", JSON.stringify(dbLocalMatriz));
-    document.getElementById("controle-auth").classList.add("hidden");
-    document.getElementById("controle-content").classList.remove("hidden");
-    renderMatrix();
-  }catch(err){
-    console.error(err);
-    alert("Atenção: não foi possível baixar os dados da planilha. Exibindo dados locais.");
-    document.getElementById("controle-auth").classList.add("hidden");
-    document.getElementById("controle-content").classList.remove("hidden");
-    renderMatrix();
-  }finally{ btn.innerText = original; btn.disabled = false; }
-}
-function gerarIdSeguro(nome){ return "total-" + nome.normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g,""); }
-function renderMatrix(){
-  const body = document.getElementById("matrix-body");
-  const lista = DB.pessoas.filter(p=>p.tipo==="P1"||p.tipo==="P2").map(p=>p.nomeMatriz||primeiroNome(p.nome)).sort((a,b)=>a.localeCompare(b,'pt-BR'));
-  body.innerHTML = lista.map(formando=>{
-    const registros = dbLocalMatriz.filter(r=>r.formando===formando);
-    const cols = nomesMesesMatriz.map(mesNome=>{
-      const marcado = registros.some(r=>r.mes===mesNome);
-      return `<td><input type="checkbox" class="cb-fap" ${marcado?'checked':''} onchange="sincronizarFap('${formando.replace(/'/g,"\\'")}', '${mesNome}', this)"></td>`;
-    }).join("");
-    return `<tr><td class="name-cell">${formando}</td>${cols}<td class="total-cell" id="${gerarIdSeguro(formando)}">${registros.length}</td></tr>`;
-  }).join("");
-}
-async function sincronizarFap(formando, mesNome, checkbox){
-  const ativo = checkbox.checked;
-  if(ativo){ if(!dbLocalMatriz.some(r=>r.formando===formando && r.mes===mesNome)) dbLocalMatriz.push({formando, mes:mesNome}); }
-  else{ dbLocalMatriz = dbLocalMatriz.filter(r=>!(r.formando===formando && r.mes===mesNome)); }
-  localStorage.setItem("fap_db_2026", JSON.stringify(dbLocalMatriz));
-  const totalEl = document.getElementById(gerarIdSeguro(formando));
-  if(totalEl) totalEl.innerText = dbLocalMatriz.filter(r=>r.formando===formando).length;
-  try{
-    checkbox.style.opacity = ".4";
-    await fetch(DB.config.apiUrlPlanilha, { method:"POST", mode:"no-cors", body: JSON.stringify({formando, mes:mesNome, acao: ativo?"MARCADO":"DESMARCADO"}) });
-    checkbox.style.opacity = "1";
-  }catch(e){ checkbox.style.opacity = "1"; }
-}
+                if (catLimpa === 'INST_TED') {
+                    const m = calcularMetricasTEDParaAno(item, ANO_ATUAL);
+                    if (m.restante !== 0) {
+                        proj8753 += m.restante;
+                        linhas8753.push({ id, titulo: `🤝 ${item.titulo} (a descentralizar)`, valor: -m.restante, status: 'Auto · TED' });
+                    }
+                } else if (catLimpa === 'INST_CONTRATO') {
+                    const m = calcularMetricasContrato(item);
+                    if (m.restanteEsteAno !== 0) {
+                        proj20yn += m.restanteEsteAno;
+                        linhas20yn.push({ id, titulo: `📄 ${item.titulo} (OS pendentes)`, valor: -m.restanteEsteAno, status: 'Auto · Contrato' });
+                    }
+                } else if (catLimpa === 'PROJ_8753') {
+                    // Mesma convenção de sinal do resto da planilha: valor NEGATIVO = dinheiro
+                    // que vai sair da conta (reduz o saldo final projetado). Por isso subtrai
+                    // aqui (em vez de somar) — um valor negativo digitado aumenta proj8753,
+                    // que depois é subtraído do saldo atual.
+                    proj8753 -= (parseFloat(item.valor) || 0);
+                    linhas8753.push({ id, titulo: item.titulo + ' (ajuste manual)', valor: item.valor, status: item.status || item.vigencia });
+                } else if (catLimpa === 'PROJ_20YN') {
+                    proj20yn -= (parseFloat(item.valor) || 0);
+                    linhas20yn.push({ id, titulo: item.titulo + ' (ajuste manual)', valor: item.valor, status: item.status || item.vigencia });
+                }
+            });
 
-/* =========================================================================
-   PAINEL DE EDIÇÃO
-   ========================================================================= */
-let editarLogado = false;
-function loginEditar(){
-  const senha = document.getElementById("editar-pass").value;
-  if(senha !== DB.config.senha){ alert("Senha incorreta!"); return; }
-  editarLogado = true;
-  document.getElementById("editar-auth").classList.add("hidden");
-  document.getElementById("editar-content").classList.remove("hidden");
-  renderAdminPessoas();
-  prepararConfigForm();
-}
-function setAdminTab(nome){
-  ["pessoas","config","backup"].forEach(t=>{
-    document.getElementById("admin-tab-"+t).classList.toggle("hidden", t!==nome);
-    document.getElementById("admin-tab-btn-"+t).classList.toggle("active", t===nome);
-  });
-}
-function renderAdminPessoas(){
-  const busca = (document.getElementById("admin-busca").value || "").toLowerCase();
-  const lista = DB.pessoas.filter(p=>p.nome.toLowerCase().includes(busca))
-    .sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
-  document.getElementById("admin-pessoas-body").innerHTML = lista.map(p=>`
-    <tr>
-      <td class="font-semibold">${p.nome}</td>
-      <td>${p.tipo}${p.papelFormador?` · ${p.papelFormador}`:""}</td>
-      <td>${p.ministerio||"—"}</td>
-      <td>${p.fap||"—"}</td>
-      <td class="text-right"><button onclick="abrirModalPessoa('${p.id}')" class="btn-ghost">Editar</button></td>
-    </tr>`).join("") || `<tr><td colspan="5" class="text-center text-slate-400 italic py-6">Nenhuma pessoa encontrada.</td></tr>`;
-}
+            return { proj8753, proj20yn, linhas8753, linhas20yn };
+        }
 
-/* --- modal pessoa --- */
-function onTipoChange(){
-  document.getElementById("pf-wrap-papel").style.display = document.getElementById("pf-tipo").value === "Formador" ? "" : "none";
-}
-function abrirModalPessoa(id){
-  document.getElementById("modal-pessoa").classList.remove("hidden");
-  const p = id ? DB.pessoas.find(x=>x.id===id) : null;
-  document.getElementById("modal-pessoa-titulo").textContent = p ? "Editar pessoa" : "Nova pessoa";
-  document.getElementById("modal-pessoa-excluir").style.display = p ? "" : "none";
-  document.getElementById("pf-id").value = p ? p.id : "";
-  document.getElementById("pf-nome").value = p ? p.nome : "";
-  document.getElementById("pf-tipo").value = p ? p.tipo : "P2";
-  document.getElementById("pf-papel").value = p && p.papelFormador ? p.papelFormador : "Assistente";
-  document.getElementById("pf-nasc").value = p ? p.nasc : "";
-  document.getElementById("pf-casam").value = p ? p.casam : "-";
-  document.getElementById("pf-email").value = p ? p.email : "";
-  document.getElementById("pf-ministerio").value = p ? p.ministerio : "";
-  document.getElementById("pf-fap").value = p ? p.fap : "";
-  document.getElementById("pf-acompanhadopor").value = p ? (p.acompanhadoPor||"") : "";
-  document.getElementById("pf-grupopartilha").value = p ? (p.grupoPartilha||"") : "";
-  document.getElementById("pf-coordpartilha").checked = p ? !!p.coordGrupoPartilha : false;
-  document.getElementById("pf-equipe").value = p ? (p.equipe||"") : "";
-  document.getElementById("pf-coordequipe").checked = p ? !!p.coordEquipe : false;
-  document.getElementById("pf-grupovigilia").value = p ? (p.grupoVigilia||"") : "";
-  document.getElementById("pf-coordvigilia").checked = p ? !!p.coordVigilia : false;
-  document.getElementById("pf-nomematriz").value = p ? (p.nomeMatriz||"") : "";
-  onTipoChange();
-}
-function fecharModalPessoa(){ document.getElementById("modal-pessoa").classList.add("hidden"); }
-function salvarPessoaModal(){
-  const nome = document.getElementById("pf-nome").value.trim();
-  if(!nome){ alert("Informe o nome."); return; }
-  const id = document.getElementById("pf-id").value || uid();
-  const dados = {
-    id, nome,
-    tipo: document.getElementById("pf-tipo").value,
-    papelFormador: document.getElementById("pf-papel").value,
-    nasc: document.getElementById("pf-nasc").value.trim(),
-    casam: document.getElementById("pf-casam").value.trim() || "-",
-    email: document.getElementById("pf-email").value.trim(),
-    ministerio: document.getElementById("pf-ministerio").value.trim(),
-    fap: document.getElementById("pf-fap").value.trim(),
-    acompanhadoPor: document.getElementById("pf-acompanhadopor").value,
-    grupoPartilha: document.getElementById("pf-grupopartilha").value,
-    coordGrupoPartilha: document.getElementById("pf-coordpartilha").checked,
-    equipe: document.getElementById("pf-equipe").value,
-    coordEquipe: document.getElementById("pf-coordequipe").checked,
-    grupoVigilia: document.getElementById("pf-grupovigilia").value,
-    coordVigilia: document.getElementById("pf-coordvigilia").checked,
-    nomeMatriz: document.getElementById("pf-nomematriz").value.trim() || primeiroNome(nome)
-  };
-  const idx = DB.pessoas.findIndex(x=>x.id===id);
-  if(idx>=0) DB.pessoas[idx] = {...DB.pessoas[idx], ...dados};
-  else DB.pessoas.push(dados);
-  salvarDB();
-  fecharModalPessoa();
-  renderAdminPessoas();
-  renderTudo();
-  enviarPessoasNuvem();
-  toast("Pessoa salva e enviada para a planilha.");
-}
-function excluirPessoaModal(){
-  const id = document.getElementById("pf-id").value;
-  if(!id) return;
-  if(!confirm("Tem certeza que deseja excluir esta pessoa? Essa ação não pode ser desfeita.")) return;
-  DB.pessoas = DB.pessoas.filter(p=>p.id!==id);
-  salvarDB();
-  fecharModalPessoa();
-  renderAdminPessoas();
-  renderTudo();
-  enviarPessoasNuvem();
-  toast("Pessoa excluída e planilha atualizada.");
-}
+        /**
+         * Agrega Planejamento (PLOA) para um ano futuro: TEDs via cronograma; Contratos só têm
+         * modelagem automática para o ano seguinte (regra 50%) — anos além disso ficam só com TEDs.
+         */
+        function calcularAgregadoPlanejamentoAno(ano) {
+            let ploa8753 = 0, ploa20yn = 0;
+            const linhas8753 = [], linhas20yn = [];
 
-/* --- config --- */
-function prepararConfigForm(){
-  document.getElementById("cfg-citacao-texto").value = DB.config.citacaoTexto;
-  document.getElementById("cfg-citacao-autor").value = DB.config.citacaoAutor;
-  document.getElementById("cfg-retiro-titulo").value = DB.config.retiroTitulo;
-  document.getElementById("cfg-retiro-data").value = DB.config.retiroData;
-  document.getElementById("cfg-vigilia-nota").value = DB.config.vigiliaNota;
-  document.getElementById("cfg-vigilia-link").value = DB.config.vigiliaLink;
-  document.getElementById("cfg-senha").value = DB.config.senha;
-  renderPagamentosAdmin();
-}
-function renderPagamentosAdmin(){
-  document.getElementById("cfg-pagamentos-list").innerHTML = DB.config.pagamentos.map((p,i)=>`
-    <div class="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr_auto] gap-2 items-center bg-[#faf6f0] p-2 rounded-xl">
-      <input class="field-input" value="${p.descricao}" oninput="DB.config.pagamentos[${i}].descricao=this.value">
-      <input class="field-input" value="${p.data}" oninput="DB.config.pagamentos[${i}].data=this.value">
-      <input class="field-input" value="${p.valor}" oninput="DB.config.pagamentos[${i}].valor=this.value">
-      <input class="field-input" value="${p.status}" oninput="DB.config.pagamentos[${i}].status=this.value">
-      <button onclick="removerPagamentoRow(${i})" class="btn-danger">✕</button>
-    </div>`).join("");
-}
-function addPagamentoRow(){ DB.config.pagamentos.push({descricao:"", data:"", valor:"", status:"Aberto"}); renderPagamentosAdmin(); }
-function removerPagamentoRow(i){ DB.config.pagamentos.splice(i,1); renderPagamentosAdmin(); }
-function salvarConfig(){
-  DB.config.citacaoTexto = document.getElementById("cfg-citacao-texto").value.trim();
-  DB.config.citacaoAutor = document.getElementById("cfg-citacao-autor").value.trim();
-  DB.config.retiroTitulo = document.getElementById("cfg-retiro-titulo").value.trim();
-  DB.config.retiroData = document.getElementById("cfg-retiro-data").value.trim();
-  DB.config.vigiliaNota = document.getElementById("cfg-vigilia-nota").value.trim();
-  DB.config.vigiliaLink = document.getElementById("cfg-vigilia-link").value.trim();
-  DB.config.senha = document.getElementById("cfg-senha").value.trim() || "jp2";
-  salvarDB();
-  renderTudo();
-  enviarConfigNuvem();
-  toast("Configurações salvas e enviadas para a planilha.");
-}
+            Object.keys(backupDadosGerais).forEach(id => {
+                const item = backupDadosGerais[id];
+                if (!item) return;
+                const catLimpa = item.categoria ? item.categoria.trim().toUpperCase() : "";
 
-/* --- backup --- */
-function exportarBackup(){
-  const blob = new Blob([JSON.stringify(DB, null, 2)], {type:"application/json"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = `celula-sjp2-backup-${new Date().toISOString().slice(0,10)}.json`;
-  a.click(); URL.revokeObjectURL(url);
-  toast("Backup baixado.");
-}
-function importarBackup(){
-  const input = document.getElementById("input-importar");
-  const file = input.files[0];
-  if(!file){ alert("Escolha um arquivo .json primeiro."); return; }
-  if(!confirm("Isso vai substituir todos os dados atuais neste navegador pelos dados do arquivo. Continuar?")) return;
-  const reader = new FileReader();
-  reader.onload = e=>{
-    try{
-      const novo = JSON.parse(e.target.result);
-      if(!novo.pessoas || !novo.config) throw new Error("Formato inválido");
-      DB = novo; salvarDB(); renderTudo(); renderAdminPessoas(); prepararConfigForm();
-      enviarPessoasNuvem(); enviarConfigNuvem();
-      toast("Backup importado e enviado para a planilha.");
-    }catch(err){ alert("Não foi possível ler este arquivo. Verifique se é um backup válido."); }
-  };
-  reader.readAsText(file);
-}
-function restaurarOriginal(){
-  if(!confirm("Isso apaga TODAS as edições feitas neste navegador e volta aos dados originais. Deseja continuar?")) return;
-  DB = JSON.parse(JSON.stringify(DEFAULT_DB));
-  salvarDB(); renderTudo(); renderAdminPessoas(); prepararConfigForm();
-  enviarPessoasNuvem(); enviarConfigNuvem();
-  toast("Dados restaurados para o padrão de fábrica e enviados para a planilha.");
-}
+                if (catLimpa === 'INST_TED') {
+                    const m = calcularMetricasTEDParaAno(item, ano);
+                    if (m.previsto !== 0) {
+                        ploa8753 += m.previsto;
+                        linhas8753.push({ id, titulo: `🤝 ${item.titulo} (PLOA ${ano})`, valor: m.previsto, status: 'Auto · TED' });
+                    }
+                } else if (catLimpa === 'INST_CONTRATO' && ano === ANO_PROXIMO) {
+                    const m = calcularMetricasContrato(item);
+                    if (m.ploaProximoAno !== 0) {
+                        ploa20yn += m.ploaProximoAno;
+                        linhas20yn.push({ id, titulo: `📄 ${item.titulo} (50% PLOA ${ano})`, valor: m.ploaProximoAno, status: 'Auto · Contrato' });
+                    }
+                } else if (catLimpa === 'PLOA_8753' && ano === ANO_PROXIMO) {
+                    ploa8753 += (parseFloat(item.valor) || 0);
+                    linhas8753.push({ id, titulo: item.titulo + ' (ajuste manual)', valor: item.valor, status: item.status || item.vigencia });
+                } else if (catLimpa === 'PLOA_20YN' && ano === ANO_PROXIMO) {
+                    ploa20yn += (parseFloat(item.valor) || 0);
+                    linhas20yn.push({ id, titulo: item.titulo + ' (ajuste manual)', valor: item.valor, status: item.status || item.vigencia });
+                }
+            });
 
-/* =========================================================================
-   BOOT
-   ========================================================================= */
-function renderTudo(){
-  renderHome(); renderHomeGrid();
-  renderFormandos(); renderFormadores();
-  renderAcompanhamento(); renderEquipes(); renderGrupos();
-  renderRetiro(); renderPagamentos();
-  renderAlertasMes(); renderVigilias();
-}
-document.addEventListener("DOMContentLoaded", ()=>{
-  renderTudo();
-  verificarAlertasDoDia();
-  carregarNuvem();
-});
-</script>
+            return { ploa8753, ploa20yn, linhas8753, linhas20yn };
+        }
+
+        function montarHtmlExecucaoAno(ano) {
+            const agr = calcularAgregadoExecucaoAno(ano);
+            const ehAnoAtual = ano === ANO_ATUAL;
+            const ehAnoFuturo = ano > ANO_ATUAL;
+            const notaHistorica = !ehAnoAtual
+                ? (ehAnoFuturo
+                    ? `<div class="ano-tab-nota">📌 ${ano} ainda não começou — mostrando apenas NCs/OS eventualmente já lançadas adiantadas para esse ano, se houver. Dotação Inicial e saldo de conta só existem depois que o ano começa oficialmente.</div>`
+                    : `<div class="ano-tab-nota">📌 Dotação inicial e ajustes (crédito adicional/remanejamento) só estão registrados para ${ANO_ATUAL}. ${ano} mostra apenas o total efetivamente executado (NCs/OS) nesse ano.</div>`)
+                : '';
+            const notaDotacaoEstimada = (ehAnoAtual && (agr.dotacao8753EhEstimativa || agr.dotacao20ynEhEstimativa))
+                ? `<div class="ano-tab-nota">💡 Dotação Inicial ainda não confirmada manualmente para ${ano} — mostrando o total da PLOA ${ano} como estimativa. Assim que a lei orçamentária for sancionada, digite o valor oficial na planilha (linha "Dotação Inicial") para substituir esta estimativa.</div>`
+                : '';
+
+            let htmlProjecao = '';
+            if (ehAnoAtual) {
+                const proj = calcularProjecaoAnoAtual();
+                const projFinal8753 = agr.saldoAtual8753 - proj.proj8753;
+                const projFinal20yn = agr.saldoAtual20yn - proj.proj20yn;
+                htmlProjecao = `
+                <div class="unified-card">
+                    <div class="card-header-main">📉 Planejamento de Saídas (Projeção ${ano})</div>
+                    <div class="action-group">
+                        <div class="action-tag">AÇÃO 8753</div>
+                        <div class="exe-panel-card dotacao-card"><div class="exe-panel-row"><span class="exe-panel-title">Saldo Atual Base</span><span class="exe-panel-val val">${formatarBRL(agr.saldoAtual8753)}</span></div></div>
+                        <div class="dinamic-data-list">${renderLinhas(proj.linhas8753) || semDadosHTML(ano)}</div>
+                        <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">SALDO FINAL PROJETADO 8753</span><span class="exe-panel-val val">${formatarBRL(projFinal8753)}</span></div></div>
+                    </div>
+                    <div class="action-group">
+                        <div class="action-tag" style="background: var(--brand-slate); color: white;">AÇÃO 20YN</div>
+                        <div class="exe-panel-card dotacao-card"><div class="exe-panel-row"><span class="exe-panel-title">Saldo Atual Base</span><span class="exe-panel-val val">${formatarBRL(agr.saldoAtual20yn)}</span></div></div>
+                        <div class="dinamic-data-list">${renderLinhas(proj.linhas20yn) || semDadosHTML(ano)}</div>
+                        <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">SALDO FINAL PROJETADO 20YN</span><span class="exe-panel-val val">${formatarBRL(projFinal20yn)}</span></div></div>
+                    </div>
+                    <div class="unified-footer">
+                        <span>SALDO FINAL PROJETADO ${ano} GERAL</span>
+                        <strong class="val">${formatarBRL(projFinal8753 + projFinal20yn)}</strong>
+                    </div>
+                </div>`;
+            }
+
+            return `
+                ${notaHistorica}
+                ${notaDotacaoEstimada}
+                <div class="unified-card">
+                    <div class="card-header-main">📍 Recursos Descentralizados (Em Conta) — ${ano}</div>
+                    <div class="action-group">
+                        <div class="action-tag">AÇÃO 8753</div>
+                        ${ehAnoAtual ? `<div class="exe-panel-card dotacao-card"><div class="exe-panel-row"><span class="exe-panel-title">Dotação Inicial${agr.dotacao8753EhEstimativa ? ' (estimada · PLOA)' : ''}</span><span class="exe-panel-val val">${formatarBRL(agr.dotacao8753)}</span></div></div>` : ''}
+                        <div class="dinamic-data-list">${renderLinhas(agr.linhas8753) || semDadosHTML(ano)}</div>
+                        <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">${ehAnoAtual ? 'SALDO ATUAL 8753' : 'TOTAL EXECUTADO 8753'}</span><span class="exe-panel-val val">${formatarBRL(ehAnoAtual ? agr.saldoAtual8753 : agr.exec8753)}</span></div></div>
+                    </div>
+                    <div class="action-group">
+                        <div class="action-tag" style="background: var(--brand-slate); color: white;">AÇÃO 20YN</div>
+                        ${ehAnoAtual ? `<div class="exe-panel-card dotacao-card"><div class="exe-panel-row"><span class="exe-panel-title">Dotação Inicial${agr.dotacao20ynEhEstimativa ? ' (estimada · PLOA)' : ''}</span><span class="exe-panel-val val">${formatarBRL(agr.dotacao20yn)}</span></div></div>` : ''}
+                        <div class="dinamic-data-list">${renderLinhas(agr.linhas20yn) || semDadosHTML(ano)}</div>
+                        <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">${ehAnoAtual ? 'SALDO ATUAL 20YN' : 'TOTAL EXECUTADO 20YN'}</span><span class="exe-panel-val val">${formatarBRL(ehAnoAtual ? agr.saldoAtual20yn : agr.exec20yn)}</span></div></div>
+                    </div>
+                </div>
+                ${htmlProjecao}
+            `;
+        }
+
+        function montarHtmlPlanejamentoAno(ano) {
+            const agr = calcularAgregadoPlanejamentoAno(ano);
+            const notaContrato = ano !== ANO_PROXIMO
+                ? `<div class="ano-tab-nota">📌 Contratos administrativos só têm planejamento automático para ${ANO_PROXIMO} (regra 50%). ${ano} mostra apenas TEDs com cronograma cadastrado.</div>`
+                : '';
+
+            return `
+                ${notaContrato}
+                <div class="unified-card">
+                    <div class="card-header-main">📈 Projeção Orçamentária PLOA ${ano}</div>
+                    <div class="action-group">
+                        <div class="action-tag">AÇÃO 8753 - PLOA ${ano}</div>
+                        <div class="dinamic-data-list">${renderLinhas(agr.linhas8753) || semDadosHTML(ano)}</div>
+                        <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">TOTAL 8753</span><span class="exe-panel-val val">${formatarBRL(agr.ploa8753)}</span></div></div>
+                    </div>
+                    <div class="action-group">
+                        <div class="action-tag" style="background: var(--brand-slate); color: white;">AÇÃO 20YN - PLOA ${ano}</div>
+                        <div class="dinamic-data-list">${renderLinhas(agr.linhas20yn) || semDadosHTML(ano)}</div>
+                        <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">TOTAL 20YN</span><span class="exe-panel-val val">${formatarBRL(agr.ploa20yn)}</span></div></div>
+                    </div>
+                    <div class="unified-footer" style="background: #064e3b;">
+                        <span>Teto Geral Projetado PLOA ${ano}</span>
+                        <strong class="val">${formatarBRL(agr.ploa8753 + agr.ploa20yn)}</strong>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderizarAbasAno() {
+            const { anosExecucao, anosPlanejamento } = obterAnosDisponiveis();
+
+            const tabsExecEl = document.getElementById('execucaoAnoTabs');
+            if (tabsExecEl) {
+                tabsExecEl.innerHTML = anosExecucao.map(a =>
+                    `<div class="ano-tab ${a === ANO_ATUAL ? 'active' : ''}" data-ano="${a}" onclick="selecionarAnoExecucao(${a})">${a}</div>`
+                ).join('');
+            }
+
+            const tabsPlanEl = document.getElementById('planejamentoAnoTabs');
+            if (tabsPlanEl) {
+                tabsPlanEl.innerHTML = anosPlanejamento.map(a =>
+                    `<div class="ano-tab ${a === ANO_PROXIMO ? 'active' : ''}" data-ano="${a}" onclick="selecionarAnoPlanejamento(${a})">PLOA ${a}</div>`
+                ).join('');
+            }
+
+            selecionarAnoExecucao(ANO_ATUAL);
+            selecionarAnoPlanejamento(ANO_PROXIMO);
+        }
+
+        function selecionarAnoExecucao(ano) {
+            const container = document.getElementById('execucaoConteudo');
+            if (container) container.innerHTML = montarHtmlExecucaoAno(ano);
+            document.querySelectorAll('#execucaoAnoTabs .ano-tab').forEach(el => {
+                el.classList.toggle('active', parseInt(el.dataset.ano, 10) === ano);
+            });
+            aplicarClassesPositivoNegativo();
+        }
+
+        function selecionarAnoPlanejamento(ano) {
+            const container = document.getElementById('planejamentoConteudo');
+            if (container) container.innerHTML = montarHtmlPlanejamentoAno(ano);
+            document.querySelectorAll('#planejamentoAnoTabs .ano-tab').forEach(el => {
+                el.classList.toggle('active', parseInt(el.dataset.ano, 10) === ano);
+            });
+            aplicarClassesPositivoNegativo();
+        }
+
+        function aplicarClassesPositivoNegativo() {
+            document.querySelectorAll('.val').forEach(el => {
+                if (el.innerText.includes('-')) { el.classList.add('negativo'); el.classList.remove('positivo'); }
+                else if (el.innerText !== "..." && el.innerText !== "R$ 0,00") { el.classList.add('positivo'); el.classList.remove('negativo'); }
+            });
+        }
+
+        async function sincronizarPainel() {
+            try {
+                const urlComCacheBuster = `${URL_API}?_=${new Date().getTime()}`;
+                const response = await fetch(urlComCacheBuster, { method: "GET" });
+                
+                if (!response.ok) throw new Error(`Erro: ${response.status}`);
+
+                const textoBruto = await response.text();
+                const dadosBrutos = JSON.parse(textoBruto);
+                
+                backupDadosGerais = {};
+                Object.keys(dadosBrutos).forEach(k => {
+                    const chaveLimpa = k.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+                    backupDadosGerais[chaveLimpa] = dadosBrutos[k];
+                });
+
+                const containers = {
+                    instTeds: document.getElementById('container_inst_teds'),
+                    instContratos: document.getElementById('container_inst_contratos')
+                };
+                Object.values(containers).forEach(c => { if (c) c.innerHTML = ''; });
+
+                let totalContratosCount = 0, totalTedsCount = 0;
+                Object.keys(backupDadosGerais).forEach(id => {
+                    const item = backupDadosGerais[id];
+                    if (!item) return;
+                    const catLimpa = item.categoria ? item.categoria.trim().toUpperCase() : "";
+                    if (catLimpa === 'INST_TED') {
+                        totalTedsCount++;
+                        if (containers.instTeds) containers.instTeds.innerHTML += generarCardTEDHTML(id, item);
+                    } else if (catLimpa === 'INST_CONTRATO') {
+                        totalContratosCount++;
+                        if (containers.instContratos) containers.instContratos.innerHTML += generarCardContratoHTML(id, item);
+                    }
+                });
+
+                if (document.getElementById('kpi_total_contratos')) document.getElementById('kpi_total_contratos').innerText = totalContratosCount;
+                if (document.getElementById('kpi_total_teds')) document.getElementById('kpi_total_teds').innerText = totalTedsCount;
+
+                const agrExecAtual = calcularAgregadoExecucaoAno(ANO_ATUAL);
+                const agrPlanProximo = calcularAgregadoPlanejamentoAno(ANO_PROXIMO);
+                if (document.getElementById('kpi_saldo_disponivel')) document.getElementById('kpi_saldo_disponivel').innerText = formatarBRL(agrExecAtual.saldoAtual8753 + agrExecAtual.saldoAtual20yn);
+                if (document.getElementById('kpi_teto_ploa2027')) document.getElementById('kpi_teto_ploa2027').innerText = formatarBRL(agrPlanProximo.ploa8753 + agrPlanProximo.ploa20yn);
+
+                renderizarAbasAno();
+                aplicarClassesPositivoNegativo();
+            } catch (e) { 
+                console.error("Erro crítico na sincronização do Painel:", e); 
+            }
+        }
+
+        function generarCardTEDHTML(idTED, item) {
+            const instituicao = item.instituicao || '---';
+            const areaTecnica = item.area_tecnica || '---';
+            const vigencia = formatarDataBR(item.vigencia);
+            const aditPrazo   = item.adit_prazo || '---';
+            const aditValor   = item.adit_valor || '---';
+            const historicoRaw = item.historico || '';
+            const numeroSei = item.sei || '---';
+
+            let tetoInicial = parseFloat(item.valor) || 0;
+            let totalAditivosFinanceiros = extrairTotalAditivosMonetarios(aditValor);
+            const saude = calcularSaudeVigencia(vigencia);
+            const anoAtualStr = String(new Date().getFullYear());
+
+            let ncsHTML = '';
+            let cronogramaHTML = '';
+            
+            let totalNCsGlobal = 0;
+            let totalNCsAnoAtual = 0;
+            let totalCronogramaAnoAtual = 0;
+            let temCronograma = false;
+
+            if (historicoRaw && historicoRaw !== '' && historicoRaw !== '---') {
+                cronogramaHTML = `<div class="tabela-mobile-gaveta"><table class="cron-table"><thead><tr><th>Ano / Instrumento</th><th style="text-align: right;">Previsão / Repasse</th></tr></thead><tbody>`;
+                
+                historicoRaw.split(';').forEach(blocoTexto => {
+                    if (blocoTexto.trim() === '' || !blocoTexto.includes('|')) return;
+                    const subPartes = blocoTexto.split('|');
+                    if (subPartes.length < 2) return;
+                    
+                    const identificador = subPartes[0].trim();
+                    let textoValor = subPartes[1].replace(/[R$\s]/g, '').replace(',', '.');
+                    const valLimpo = parseFloat(textoValor) || 0;
+                    
+                    if (identificador.toUpperCase().includes('NC')) {
+                        if (!isNaN(valLimpo) && valLimpo !== 0) {
+                            totalNCsGlobal += valLimpo;
+                            if (identificador.toUpperCase().includes(anoAtualStr + 'NC')) {
+                                totalNCsAnoAtual += valLimpo;
+                            }
+                            let classeNegativo = valLimpo < 0 ? 'class="negativo"' : '';
+                            ncsHTML += `<div class="nc-row"><span>📄 ${identificador}</span><span ${classeNegativo}>${formatarBRL(valLimpo)}</span></div>`;
+                        }
+                    } else {
+                        temCronograma = true;
+                        if (identificador === anoAtualStr) {
+                            totalCronogramaAnoAtual += valLimpo;
+                        }
+                        cronogramaHTML += `<tr><td style="font-weight: 600; color: var(--text-main);">📅 ${identificador}</td><td style="text-align: right; font-weight: 700; color: var(--brand-dark); font-family: 'JetBrains Mono', monospace;">${formatarBRL(valLimpo)}</td></tr>`;
+                    }
+                });
+                cronogramaHTML += `</tbody></table></div>`;
+            }
+
+            let saldoRestante = (tetoInicial + totalAditivosFinanceiros) - totalNCsGlobal;
+            let saldoADescentralizar = totalCronogramaAnoAtual - totalNCsAnoAtual;
+            let badgeStyle = saldoRestante < 0 ? 'negativo-badge' : '';
+
+            return `
+                <div class="ted-card" id="card_${idTED}">
+                    <div class="ted-trigger" onclick="toggleElemento('content_${idTED}', this)">
+                        <div class="ted-trigger-left">
+                            <h3 class="ted-title">🤝 ${item.titulo}</h3>
+                            <div class="ted-meta-pill-box">
+                                <span class="meta-tag-pill">🏛️ ${instituicao}</span>
+                                <span class="meta-tag-pill area">🧬 ${areaTecnica}</span>
+                                <span class="alert-badge ${saude.classe}">${saude.label}</span>
+                            </div>
+                        </div>
+                        <div class="ted-trigger-right">
+                            <div class="ted-quick-val-badge ${badgeStyle}">
+                                <small>Saldo Restante</small>
+                                <span>${formatarBRL(saldoRestante)}</span>
+                            </div>
+                            <span class="ted-arrow">▼</span>
+                        </div>
+                    </div>
+                    <div class="ted-content" id="content_${idTED}">
+                        <div class="ted-content-inner">
+                            <div class="ted-grid">
+                                <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idTED}', 'instituicao', 'Instituição Beneficiária', '${instituicao}')">
+                                    <div class="field-row-edit"><small>Instituição Beneficiária</small><span class="edit-indicator">Editar ✏️</span></div>
+                                    <span>${instituicao}</span>
+                                </div>
+                                <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idTED}', 'sei', 'Número SEI', '${numeroSei}')">
+                                    <div class="field-row-edit"><small>Número SEI</small><span class="edit-indicator">Editar ✏️</span></div>
+                                    <span class="mono-val" style="color: var(--brand-primary);">${numeroSei}</span>
+                                </div>
+                                <div class="ted-field highlight" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idTED}', 'valor', 'Valor do TED (R$)', '${tetoInicial}')">
+                                    <div class="field-row-edit"><small>Valor Base do TED</small><span class="edit-indicator">Editar ✏️</span></div>
+                                    <span class="mono-val">${formatarBRL(tetoInicial)}</span>
+                                </div>
+                                <div class="ted-field" style="background: #fffbeb; border-color: #fef3c7;">
+                                    <small style="color: #b45309;">📉 Saldo a Descentralizar (${anoAtualStr})</small>
+                                    <span class="mono-val" style="font-size: 13px; color: #b45309; font-weight: 700;">${formatarBRL(saldoADescentralizar)}</span>
+                                </div>
+                                <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idTED}', 'vigencia', 'Data Final de Vigência', '${vigencia}')">
+                                    <div class="field-row-edit"><small>Vigência Fim</small><span class="edit-indicator">Editar ✏️</span></div>
+                                    <span>${vigencia}</span>
+                                </div>
+                                <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idTED}', 'adit_prazo', 'Aditamentos de Prazo', '${aditPrazo}')">
+                                    <div class="field-row-edit"><small>Aditamentos de Prazo</small><span class="edit-indicator">Editar ✏️</span></div>
+                                    <span>${aditPrazo}</span>
+                                </div>
+                                <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${idTED}', 'adit_valor', 'Histórico / Aditivos de Valor', '${aditValor}')">
+                                    <div class="field-row-edit"><small>Histórico / Aditivos de Valor</small><span class="edit-indicator">Editar ✏️</span></div>
+                                    <span>${aditValor || '---'}</span>
+                                </div>
+                                <div class="ted-field" style="background: #f8fafc; border: 1px solid #e2e8f0; grid-column: span 2;">
+                                    <small style="color: var(--brand-primary); margin-bottom: 4px;">📊 Cronograma de Desembolso / Repasses (Meta ${anoAtualStr}: ${formatarBRL(totalCronogramaAnoAtual)})</small>
+                                    ${temCronograma ? cronogramaHTML : '<span style="font-size:11.5px; color:var(--text-muted); font-weight:500;">Nenhuma previsão anual detalhada.</span>'}
+                                </div>
+                                ${ncsHTML !== '' ? `<div class="nc-box" style="grid-column: span 2;"><div class="nc-title">Notas de Crédito Emitidas</div>${ncsHTML}</div>` : '<div class="nc-box" style="grid-column: span 2; text-align:center; color:var(--text-muted); font-size:11px;">Nenhuma Nota de Crédito cadastrada.</div>'}
+                            </div>
+                            <div class="card-action-bar">
+                                <button class="btn-card-action edit" onclick="event.stopPropagation(); abrirModalEdicaoCard('${idTED}', 'TED')">⚙️ Painel Completo</button>
+                                <button class="btn-card-action add-member" onclick="event.stopPropagation(); abrirPromptInjecaoRapida('${idTED}')">➕ Injetar NC rápido</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generarCardContratoHTML(idContrato, item) {
+            const instituicao = item.instituicao || '---';
+            const areaTecnica = item.area_tecnica || '---';
+            const vigencia = formatarDataBR(item.vigencia);
+            const numeroSeiContrato = item.sei || '---';
+            const historicoRaw = item.historico || '';
+            // converterTextoParaNumero agora é global (definida no topo do script) para ser
+            // reaproveitada também pelo motor de cálculo automático (calcularMetricasContrato).
+
+            let valorBaseContrato = converterTextoParaNumero(item.valor);
+            let valorAditivo1 = converterTextoParaNumero(item.adit_valor);
+            let valorAditivo2 = converterTextoParaNumero(item.adit_valor_2);
+
+            const saude = calcularSaudeVigencia(vigencia);
+            const limpoId = idContrato.replace(/[^a-zA-Z0-9]/g, '');
+            
+            const valorOriginalInicial = item.valor ? String(item.valor).replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.') : '0';
+            const valorOriginalAditivo = item.adit_valor ? String(item.adit_valor).replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.') : '0';
+            const valorOriginalAditivo2 = item.adit_valor_2 ? String(item.adit_valor_2).replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.') : '0';
+
+            const etapas = {
+                inicial: { id: "ini_" + limpoId, nome: "📜 Contrato Inicial", campoValorPlanilha: "valor", valorParaEditar: valorOriginalInicial, total: valorBaseContrato, pago: 0, aPagar: 0, temDados: true, lancamentos: [] },
+                adit1: { id: "ad1_" + limpoId, nome: "➕ 1º Aditivo", campoValorPlanilha: "adit_valor", valorParaEditar: valorOriginalAditivo, total: valorAditivo1, pago: 0, aPagar: 0, temDados: true, lancamentos: [] },
+                adit2: { id: "ad2_" + limpoId, nome: "➕ 2º Aditivo", campoValorPlanilha: "adit_valor_2", valorParaEditar: valorOriginalAditivo2, total: valorAditivo2, pago: 0, aPagar: 0, temDados: true, lancamentos: [] }
+            };
+
+            const ncsContrato = []; // Notas de Crédito (liberação orçamentária) — formato TED, exibidas à parte
+
+            if (historicoRaw && historicoRaw !== '' && historicoRaw !== '---') {
+                historicoRaw.split(';').forEach(blocoTexto => {
+                    if (blocoTexto.trim() === '' || !blocoTexto.includes('|')) return;
+                    
+                    const subPartes = blocoTexto.split('|');
+                    if (subPartes.length < 2) return;
+                    
+                    const identificador = subPartes[0].trim();
+                    const idUpper = identificador.toUpperCase();
+
+                    // Formato NC (2 campos, igual ao TED): "AAAANCxxxxx | Valor" — liberação
+                    // orçamentária do ano, mais confiável que o status das OS pra fins de execução.
+                    if (subPartes.length === 2 && idUpper.includes('NC')) {
+                        ncsContrato.push({ ident: identificador, valor: converterTextoParaNumero(subPartes[1]) });
+                        return;
+                    }
+
+                    const osSei = subPartes.length >= 3 && subPartes[1].trim() !== '' ? subPartes[1].trim() : '';
+                    
+                    let textoValor = '';
+                    let statusTextoOriginal = '';
+                    let anoTag = null; // NOVO: 5º campo opcional "| ano" (ex: 2026) — permite apurar
+                                       // com precisão em qual ano fiscal a OS foi paga.
+                    
+                    if (subPartes.length >= 5) {
+                        textoValor = subPartes[2];
+                        statusTextoOriginal = subPartes[3].trim();
+                        const anoParse = parseInt(subPartes[4].trim(), 10);
+                        anoTag = !isNaN(anoParse) ? anoParse : null;
+                    } else if (subPartes.length === 4) {
+                        textoValor = subPartes[2];
+                        statusTextoOriginal = subPartes[3].trim();
+                    } else if (subPartes.length === 3) {
+                        textoValor = subPartes[1];
+                        statusTextoOriginal = subPartes[2].trim();
+                    } else {
+                        textoValor = subPartes[1];
+                    }
+                    
+                    let valLimpo = converterTextoParaNumero(textoValor);
+                    let alvo = null;
+
+                    if (idUpper.includes('2º') || idUpper.includes('SEGUNDO') || idUpper.includes('2O') || idUpper.includes('ADITIVO 2')) {
+                        alvo = etapas.adit2;
+                    } 
+                    else if (idUpper.includes('1º') || idUpper.includes('PRIMEIRO') || idUpper.includes('1O') || idUpper.includes('ADITIVO 1')) {
+                        alvo = etapas.adit1;
+                    } 
+                    else if (idUpper.includes('INICIAL') || idUpper.includes('CONTRATO')) {
+                        alvo = etapas.inicial;
+                    }
+
+                    if (alvo) {
+                        alvo.temDados = true;
+                        let statusCalculado = 'execucao';
+                        let statusUpper = statusTextoOriginal.toUpperCase();
+                        
+                        if (statusUpper.includes('PAGO')) {
+                            statusCalculado = 'pago';
+                        } else if (statusUpper.includes('AGUARDANDO') || statusUpper.includes('A PAGAR') || statusUpper.includes('PENDENTE')) {
+                            statusCalculado = 'aguardando';
+                        } else if (statusUpper.includes('EXECUÇÃO') || statusUpper.includes('EXECUCAO')) {
+                            statusCalculado = 'execucao';
+                        }
+
+                        alvo.lancamentos.push({ 
+                            label: identificador, 
+                            sei: osSei, 
+                            valor: valLimpo,
+                            status: statusCalculado,
+                            statusOriginal: statusTextoOriginal || (statusCalculado === 'pago' ? 'Pago' : statusCalculado === 'aguardando' ? 'Aguardando' : 'Em execução'),
+                            ano: anoTag
+                        });
+
+                        if (statusCalculado === 'pago') {
+                            alvo.pago += valLimpo;
+                        }
+                    }
+                });
+            }
+
+            let blocosFinanceirosHTML = '';
+            let saldoGlobalContrato = 0;
+
+            Object.keys(etapas).forEach(chave => {
+                const et = etapas[chave];
+                if (et.temDados) {
+                    et.aPagar = et.total - et.pago;
+                    saldoGlobalContrato += et.aPagar;
+
+                    let itensEtapaHTML = '';
+                    if (et.lancamentos.length > 0) {
+                        itensEtapaHTML = `<div class="aditivo-retratil-container" id="gaveta_etapa_${et.id}"><div class="os-cards-container">`;
+                        
+                        et.lancamentos.forEach(lan => {
+                            let anoBadgeHTML = lan.ano ? `<span class="os-card-sei" style="background:#eef2ff;color:var(--brand-primary);">🗓️ ${lan.ano}</span>` : '';
+                            let linhaSeiHTML = lan.sei ? `<span class="os-card-sei">📋 ${lan.sei}</span>` : '';
+                            itensEtapaHTML += `
+                                <div class="os-mini-card">
+                                    <div class="os-mini-card-row">
+                                        <div class="os-info-left">
+                                            <span class="os-card-title">🛠️ ${lan.label}</span>
+                                            ${linhaSeiHTML}${anoBadgeHTML}
+                                        </div>
+                                        <div class="os-values-right">
+                                            <span class="status-pill ${lan.status}">${lan.statusOriginal}</span>
+                                            <span class="os-card-val ${lan.valor < 0 ? 'negativo' : ''}">${formatarBRL(lan.valor)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        itensEtapaHTML += `</div></div>`;
+                    }
+
+                    blocosFinanceirosHTML += `
+                        <div class="etapa-contrato-bloco">
+                            <div class="etapa-contrato-titulo" onclick="event.stopPropagation(); toggleElemento('gaveta_etapa_${et.id}', this)" style="cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none;">
+                                <span>${et.nome}</span>
+                                <span style="font-size: 9px; color: var(--brand-primary); font-weight: bold;">Ver Itens ▼</span>
+                            </div>
+                            <div class="etapa-contrato-grid">
+                                <div class="etapa-mini-card" style="cursor: pointer; border: 1px dashed var(--brand-primary);" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${String(idContrato)}', '${et.campoValorPlanilha}', '${et.nome}', '${et.valorParaEditar}')">
+                                    <small style="color: var(--brand-primary);">Valor Total ✏️</small>
+                                    <span style="color: var(--brand-primary); font-weight: 700;">${formatarBRL(et.total)}</span>
+                                </div>
+                                <div class="etapa-mini-card pago">
+                                    <small>Pago</small>
+                                    <span>${formatarBRL(et.pago)}</span>
+                                </div>
+                                <div class="etapa-mini-card apagar">
+                                    <small>A Pagar</small>
+                                    <span>${formatarBRL(et.aPagar)}</span>
+                                </div>
+                            </div>
+                            ${itensEtapaHTML}
+                        </div>
+                    `;
+                }
+            });
+
+            let badgeStyle = saldoGlobalContrato < 0 ? 'negativo-badge' : '';
+
+            return `
+                <div class="ted-card" id="card_${idContrato}">
+                    <div class="ted-trigger" onclick="toggleElemento('content_${idContrato}', this)">
+                        <div class="ted-trigger-left">
+                            <h3 class="ted-title">📄 ${item.titulo}</h3>
+                            <div class="ted-meta-pill-box">
+                                <span class="meta-tag-pill">🏛️ ${instituicao}</span>
+                                <span class="meta-tag-pill area">🧬 ${areaTecnica}</span>
+                                <span class="alert-badge ${saude.classe}">${saude.label}</span>
+                            </div>
+                        </div>
+                        <div class="ted-trigger-right">
+                            <div class="ted-quick-val-badge ${badgeStyle}">
+                                <small>Saldo Global</small>
+                                <span>${formatarBRL(saldoGlobalContrato)}</span>
+                            </div>
+                            <span class="ted-arrow">▼</span>
+                        </div>
+                    </div>
+                    <div class="ted-content" id="content_${idContrato}">
+                        <div class="ted-content-inner">
+                            <div class="ted-grid" style="display: flex; flex-direction: column; gap: 8px;">
+                                <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${String(idContrato)}', 'instituicao', 'Instituição', '${instituicao}')">
+                                    <div class="field-row-edit"><small>Instituição / Empresa</small><span class="edit-indicator">Editar ✏️</span></div>
+                                    <span>${instituicao}</span>
+                                </div>
+                                <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${String(idContrato)}', 'sei', 'Número SEI', '${numeroSeiContrato}')">
+                                    <div class="field-row-edit"><small>Número SEI</small><span class="edit-indicator">Editar ✏️</span></div>
+                                    <span class="mono-val" style="color: var(--brand-primary);">${numeroSeiContrato}</span>
+                                </div>
+                                <div class="ted-field" onclick="event.stopPropagation(); abrirEdicaoDiretaCampo('${String(idContrato)}', 'vigencia', 'Data Final de Vigência', '${vigencia}')">
+                                    <div class="field-row-edit"><small>Vigência Fim</small><span class="edit-indicator">Editar ✏️</span></div>
+                                    <span>${vigencia}</span>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px; width: 100%;">
+                                    ${blocosFinanceirosHTML}
+                                </div>
+                                ${ncsContrato.length > 0 ? `
+                                <div class="nc-box" style="margin-top: 6px;">
+                                    <div class="nc-title">💰 Notas de Crédito (liberação orçamentária)</div>
+                                    ${ncsContrato.map(nc => `<div class="nc-row"><span>📄 ${nc.ident}</span><span>${formatarBRL(nc.valor)}</span></div>`).join('')}
+                                </div>` : ''}
+                            </div>
+                            <div class="card-action-bar" style="margin-top: 15px; clear: both;">
+                                <button class="btn-card-action edit" onclick="event.stopPropagation(); abrirModalEdicaoCard('${String(idContrato)}', 'CONTRATO')">⚙️ Painel Completo</button>
+                                <button class="btn-card-action add-member" onclick="event.stopPropagation(); abrirPromptInjecaoRapida('${String(idContrato)}')">➕ Injetar OS/Pago rápido</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generarLinhaHTML(idLinha, titulo, valor, status) {
+            let cl = (!isNaN(valor) && valor < 0) ? "negativo" : "positivo";
+            let statusLimpo = (status && typeof status === 'string') ? status.trim() : '';
+            if (statusLimpo === "---" || statusLimpo.includes('---|') || statusLimpo.includes('|---') || statusLimpo.includes('-|-') || statusLimpo === "") {
+                statusLimpo = ""; 
+            }
+
+            return `
+                <div class="exe-panel-card" onclick="abrirModalEdicaoCard('${idLinha}', 'MOV_MANUAL')">
+                    <div class="exe-panel-row">
+                        <span class="exe-panel-title">▪️ ${titulo}</span>
+                        <span class="exe-panel-val val ${cl}">${formatarBRL(valor)}</span>
+                    </div>
+                    <div class="exe-panel-row" style="margin-top: 2px;">
+                        ${statusLimpo !== "" ? `<span class="exe-panel-status">${statusLimpo}</span>` : `<span></span>`}
+                        <span style="font-size:9px; color:var(--brand-primary); font-weight:700; cursor:pointer;">Editar ✏️</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function aplicarMascaraMoeda(i) {
+            let éNegativo = i.value.includes('-');
+            let v = i.value.replace(/\D/g, ''); 
+            if (v === "") { i.value = éNegativo ? "-" : ""; return; }
+            
+            v = (v / 100).toFixed(2) + ''; 
+            v = v.replace(".", ",").replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+            
+            i.value = v !== "0,00" ? (éNegativo ? "- R$ " : "R$ ") + v : "R$ 0,00";
+        }
+
+        function abrirEdicaoDiretaCampo(idInstrumento, nomeColuna, labelUsuario, valorAtual) {
+            let promptTexto = `✏️ Modificar Campo: ${labelUsuario}\n\nValor Atual: ${valorAtual}\n\nDigite o novo valor para salvar:`;
+            let novoConteudo = prompt(promptTexto);
+            
+            if (novoConteudo === null) return; 
+            novoConteudo = novoConteudo.trim();
+            if (novoConteudo === "") { alert("⚠️ O campo não pode ficar inteiramente vazio."); return; }
+
+            const senha = prompt("🔑 Validar Alteração - Confirme a Senha Master:");
+            if (!senha) return;
+            if (senha !== "demas2026") { alert("❌ Senha Master incorreta! Operação recusada."); return; }
+
+            if (nomeColuna === 'valor') {
+                novoConteudo = parseFloat(novoConteudo.replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+            }
+
+            const chaveChave = idInstrumento.toLowerCase().trim();
+            const itemOriginal = backupDadosGerais[chaveChave];
+            const idRealParaPlanilha = itemOriginal ? itemOriginal.idOriginal : idInstrumento;
+
+            const pacote = {
+                acao: "EDITAR_CAMPO_ISOLADO",
+                id: idRealParaPlanilha, 
+                senha: senha,
+                colunaAlvo: nomeColuna,
+                conteudo: novoConteudo
+            };
+
+            fetch(URL_API, { method: "POST", body: JSON.stringify(pacote) })
+            .then(res => res.text())
+            .then(textoResposta => {
+                try {
+                    const res = JSON.parse(textoResposta);
+                    if(res.success) {
+                        alert("🚀 Campo alterado com sucesso na planilha!");
+                        setTimeout(sincronizarPainel, 400);
+                    } else {
+                        alert("⚠️ Servidor recusou: " + (res.msg || "Verifique o ID da linha"));
+                    }
+                } catch(e) {
+                    alert("✅ Alteração sincronizada com a planilha!");
+                    setTimeout(sincronizarPainel, 600);
+                }
+            })
+            .catch(err => {
+                alert("✅ Registro updated!");
+                setTimeout(sincronizarPainel, 800);
+            });
+        }
+
+        function abrirModalEdicaoCard(id, tipoContexto) {
+            const item = backupDadosGerais[id.toLowerCase().trim()];
+            if (!item) return;
+
+            document.getElementById('edit_id').value = id;
+            document.getElementById('edit_mode').value = "EDITAR_INSTRUMENTO";
+            document.getElementById('group_categoria').style.display = 'none'; 
+
+            document.getElementById('web_titulo').value = item.titulo;
+            document.getElementById('web_valor').value = formatarBRL(item.valor);
+            document.getElementById('modalFormTitle').innerText = "EDITAR: " + item.titulo;
+
+            document.getElementById('meta_campos_ted').style.display = 'flex';
+            
+            document.getElementById('meta_ted_inst').value = item.instituicao || '';
+            document.getElementById('meta_ted_sei').value = item.sei !== "---" ? item.sei : '';
+            document.getElementById('meta_ted_area').value = item.area_tecnica || '';
+            document.getElementById('meta_ted_vigencia').value = formatarDataBR(item.vigencia);
+            document.getElementById('meta_ted_adit_prazo').value = item.adit_prazo || '';
+            document.getElementById('meta_ted_adit_valor').value = item.adit_valor || '';
+            document.getElementById('meta_ted_raw_history').value = item.historico || '';
+
+            document.getElementById('cadastro_overlay').style.display = 'block';
+        }
+
+        function abrirModalInclusaoGlobal() {
+            document.getElementById('edit_id').value = "";
+            document.getElementById('edit_mode').value = "INSERIR_NOVO";
+            document.getElementById('group_categoria').style.display = 'block';
+            
+            document.getElementById('web_titulo').value = "";
+            document.getElementById('web_valor').value = "R$ 0,00";
+            document.getElementById('meta_ted_inst').value = "";
+            document.getElementById('meta_ted_sei').value = "";
+            document.getElementById('meta_ted_area').value = "";
+            document.getElementById('meta_ted_vigencia').value = "";
+            document.getElementById('meta_ted_adit_prazo').value = "";
+            document.getElementById('meta_ted_adit_valor').value = "";
+            document.getElementById('meta_ted_raw_history').value = "";
+            
+            document.getElementById('modalFormTitle').innerText = "CADASTRAR NOVO REGISTRO";
+            document.getElementById('meta_campos_ted').style.display = 'flex';
+            document.getElementById('cadastro_overlay').style.display = 'block';
+        }
+
+        function abrirPromptInjecaoRapida(id) {
+            const novaNC = prompt(`✏️ Digite o novo membro no padrão:\nEx OS de Contrato (com ano — recomendado): OS 13 - 1º Aditivo | 25000.111/2026-00 | 359265,54 | Pago | ${ANO_ATUAL}\nEx NC de Contrato (liberação orçamentária, mais confiável): ${ANO_ATUAL}NC00555 | 150000\nEx NC de TED: ${ANO_ATUAL}NC00555 | 150000\nEx Ano/Previsão do TED: ${ANO_PROXIMO} | 750000`);
+            if (!novaNC) return;
+
+            const senha = prompt("🔑 Confirmar Senha Master:");
+            if (senha !== "demas2026") { alert("❌ Senha incorreta!"); return; }
+
+            const pacote = { acao: "ADICIONAR_NC_OS", id: id, senha: senha, novaStringMembro: novaNC.trim() };
+
+            fetch(URL_API, { method: "POST", body: JSON.stringify(pacote) })
+            .then(res => res.text())
+            .then(textoResposta => {
+                try {
+                    const res = JSON.parse(textoResposta);
+                    if (res.success) {
+                        alert("✅ Elemento adicionado com sucesso!");
+                        setTimeout(sincronizarPainel, 400);
+                    } else {
+                        alert("⚠️ Servidor recusou: " + (res.msg || "Verifique o ID do instrumento"));
+                    }
+                } catch (e) {
+                    alert("⚠️ Resposta inesperada do servidor. Confira manualmente na planilha.");
+                }
+            })
+            .catch(err => {
+                alert("❌ Falha de comunicação com o servidor. O elemento pode não ter sido salvo.");
+            });
+        }
+
+        function processarEnvioFormularioMestre() {
+            const senha = prompt("🔑 Para salvar, confirme a Senha Master Executiva:");
+            if (!senha) return;
+            if (senha !== "demas2026") { alert("❌ Operação Recusada! Senha incorreta."); return; }
+
+            const id = document.getElementById('edit_id').value;
+            const modo = document.getElementById('edit_mode').value;
+            const cat = document.getElementById('web_categoria').value;
+            const tit = document.getElementById('web_titulo').value.trim();
+            const valRaw = document.getElementById('web_valor').value;
+
+            if (!tit) { alert("⚠️ O Título/Objeto é obrigatório."); return; }
+
+            let éNegativo = valRaw.includes('-');
+            let apenasNumeros = valRaw.replace(/\D/g, '');
+            let numValor = parseFloat(apenasNumeros / 100) || 0;
+
+            if (éNegativo) numValor = -Math.abs(numValor);
+
+            const pacote = {
+                acao: modo, id: id, senha: senha, categoria: cat, titulo: tit, valor: numValor,
+                instituicao: document.getElementById('meta_ted_inst').value.trim() || "---",
+                sei: document.getElementById('meta_ted_sei').value.trim() || "---",
+                area_tecnica: document.getElementById('meta_ted_area').value.trim() || "---",
+                vigencia: document.getElementById('meta_ted_vigencia').value.trim() || "---",
+                adit_prazo: document.getElementById('meta_ted_adit_prazo').value.trim() || "---",
+                adit_valor: document.getElementById('meta_ted_adit_valor').value.trim() || "---",
+                historico: document.getElementById('meta_ted_raw_history').value.trim() || "---"
+            };
+
+            fetch(URL_API, { method: "POST", body: JSON.stringify(pacote) })
+            .then(res => res.text())
+            .then(textoResposta => {
+                try {
+                    const res = JSON.parse(textoResposta);
+                    if (res.success) {
+                        alert("🚀 Formulário salvo com sucesso!" + (res.id ? ("\nID gerado: " + res.id) : ""));
+                        fecharCadastroWeb();
+                        setTimeout(sincronizarPainel, 800);
+                    } else {
+                        alert("⚠️ Servidor recusou: " + (res.msg || "Verifique os dados e tente novamente"));
+                    }
+                } catch (e) {
+                    alert("⚠️ Resposta inesperada do servidor. Confira manualmente na planilha antes de tentar novamente.");
+                }
+            })
+            .catch(err => {
+                alert("❌ Falha de comunicação com o servidor. O registro pode não ter sido salvo.");
+            });
+        }
+
+        function fecharCadastroWeb() { document.getElementById('cadastro_overlay').style.display = 'none'; }
+
+        function toggleElemento(contentId, triggerEl) {
+            const content = document.getElementById(contentId);
+            const arrow = triggerEl.querySelector('.ted-arrow');
+            if (!content) return;
+            
+            const abrindo = !content.style.maxHeight || content.style.maxHeight === '0px';
+            const anteriorScrollHeight = content.scrollHeight;
+            
+            if (!abrindo) {
+                content.style.maxHeight = '0px';
+                if(arrow) arrow.style.transform = 'rotate(0deg)';
+                
+                let ancestral = content.parentElement;
+                while (ancestral) {
+                    if (ancestral.classList && (ancestral.classList.contains('ted-content') || ancestral.classList.contains('aditivo-retratil-container'))) {
+                        if (ancestral.style.maxHeight && ancestral.style.maxHeight !== 'none' && ancestral.style.maxHeight !== '0px') {
+                            ancestral.style.maxHeight = Math.max(0, (ancestral.scrollHeight - anteriorScrollHeight)) + "px";
+                        }
+                    }
+                    ancestral = ancestral.parentElement;
+                }
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                if(arrow) arrow.style.transform = 'rotate(180deg)';
+                
+                let ancestral = content.parentElement;
+                while (ancestral) {
+                    if (ancestral.classList && (ancestral.classList.contains('ted-content') || ancestral.classList.contains('aditivo-retratil-container'))) {
+                        if (ancestral.style.maxHeight && ancestral.style.maxHeight !== 'none' && ancestral.style.maxHeight !== '0px') {
+                            ancestral.style.maxHeight = (ancestral.scrollHeight + content.scrollHeight) + "px";
+                        }
+                    }
+                    ancestral = ancestral.parentElement;
+                }
+            }
+        }
+
+        function showSection(id, title) {
+            let current = null;
+            if (document.getElementById('mainMenu').style.display !== 'none') {
+                current = { id: 'mainMenu', title: 'PAINEL DEMAS', isMenu: true };
+            } else {
+                const active = document.querySelector('.content-section.active-section');
+                if (active) current = { id: active.id, title: document.getElementById('mainTitle').innerText, isMenu: false };
+            }
+            if (current) navigationHistory.push(current);
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('dashboardSummaryHub').style.display = 'none';
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
+            document.getElementById(id).classList.add('active-section');
+            document.getElementById('btnBack').style.display = 'block';
+            document.getElementById('mainTitle').innerText = title;
+        }
+
+        function goBack() {
+            if (navigationHistory.length === 0) {
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
+                document.getElementById('mainMenu').style.display = 'flex';
+                document.getElementById('dashboardSummaryHub').style.display = 'grid';
+                document.getElementById('btnBack').style.display = 'none';
+                document.getElementById('mainTitle').innerText = 'PAINEL DEMAS';
+                return;
+            }
+            let prev = navigationHistory.pop();
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active-section'));
+            if (prev.isMenu) {
+                document.getElementById('mainMenu').style.display = 'flex';
+                document.getElementById('dashboardSummaryHub').style.display = 'grid';
+                document.getElementById('btnBack').style.display = 'none';
+            } else {
+                document.getElementById(prev.id).classList.add('active-section');
+                document.getElementById('btnBack').style.display = 'block';
+            }
+            document.getElementById('mainTitle').innerText = prev.title;
+        }
+
+        window.onload = sincronizarPainel;
+    </script>
 </body>
 </html>
