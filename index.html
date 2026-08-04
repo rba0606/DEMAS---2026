@@ -751,15 +751,26 @@
                 execucao = doAno.inicial + doAno.adit1 + doAno.adit2;
                 fonte = 'OS';
             }
-            return { execucao, saldoAPagarTotal, saldoRestante, totalOSPendente, fonte };
+
+            // As OS pendentes (status != Pago) ficam "presas" nesse status até alguém atualizar
+            // manualmente — mas uma NC nova pode já ter liberado o crédito pra cobrir essa OS
+            // (ou parte dela) sem que o status tenha sido atualizado ainda. Sem esse abatimento,
+            // o valor sairia contado duas vezes: uma no Saldo Atual (via NC) e outra de novo na
+            // Projeção (via OS pendente). Abate o que já foi liberado via NC neste ano, sem
+            // deixar ficar negativo.
+            const ncsDoAno = ncsPorAno[ano] || 0;
+            const osPendenteAposNC = Math.max(0, totalOSPendente - ncsDoAno);
+
+            return { execucao, saldoAPagarTotal, saldoRestante, totalOSPendente: osPendenteAposNC, fonte };
         }
 
         // Wrapper de compatibilidade: métricas do contrato para o ano atual.
         // "Ainda falta descentralizar este ano" agora usa o valor CONCRETO das OS já lançadas
-        // e ainda não pagas (Aguardando/Em Execução) — muito mais preciso do que estimar um
-        // percentual do saldo total não comprometido. Aditivos novos ainda não lançados no
-        // sistema (ex: um aditivo futuro só parcialmente atribuível a este ano) devem ser
-        // adicionados como ajuste manual em PROJ_20YN, não estimados automaticamente aqui.
+        // e ainda não pagas (Aguardando/Em Execução), já descontando NCs deste ano que possam
+        // já ter coberto essas OS. Aditivos novos ainda não lançados no sistema (ex: um aditivo
+        // futuro só parcialmente atribuível a este ano) devem continuar como ajuste manual em
+        // PROJ_20YN — esses o sistema não abate sozinho, porque não sabe se uma NC nova cobriu
+        // um item manual ou uma OS real; revise essas linhas manualmente quando emitir uma NC.
         // O PLOA do ano seguinte continua na regra 50% do saldo ainda não comprometido (NC).
         function calcularMetricasContrato(item) {
             const atual = calcularMetricasContratoParaAno(item, ANO_ATUAL);
