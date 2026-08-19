@@ -188,6 +188,7 @@
         .btn-card-action.add-member { background: rgba(16, 185, 129, 0.08); color: var(--ms-green); }
 
         .alert-badge { display: inline-flex; align-items: center; padding: 2px 6px; border-radius: 5px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1px; border: 1px solid transparent; }
+        .tag-nota { display: inline-flex; align-items: center; padding: 1px 6px; border-radius: 5px; font-size: 8.5px; font-weight: 700; background: #fffbeb; color: #b45309; border: 1px solid #fde68a; white-space: nowrap; }
         .alert-badge.regular { background: var(--ms-blue-light); color: var(--ms-blue); border-color: #bfdbfe; }
         .alert-badge.atencao { background: var(--ms-amber-light); color: var(--ms-amber); border-color: #fde68a; }
         .alert-badge.critico { background: var(--ms-red-light); color: var(--ms-red); border-color: #fecaca; }
@@ -652,6 +653,7 @@
             const pagoPorEtapa = { inicial: 0, adit1: 0, adit2: 0 };
             const pagoPorEtapaEAno = {}; // { ano: { inicial, adit1, adit2 } }
             const ncsPorAno = {}; // { ano: valorTotal } — liberações orçamentárias (formato TED)
+            const listaNCs = []; // [{ident, valor, ano, nota}] — pra exibição no card do contrato
             let totalOSPendente = 0; // soma das OS já lançadas com status != Pago (Aguardando/Em Execução)
             const historicoRaw = item.historico || '';
 
@@ -663,13 +665,17 @@
                     const identificadorBruto = subPartes[0].trim();
                     const idUpper = identificadorBruto.toUpperCase();
 
-                    // Formato NC (2 campos, igual ao TED): "AAAANCxxxxx | Valor"
-                    if (subPartes.length === 2 && idUpper.includes('NC')) {
+                    // Formato NC (2 ou 3 campos, igual ao TED): "AAAANCxxxxx | Valor" ou
+                    // "AAAANCxxxxx | Valor | Nota" (nota livre, ex: "ANTECIPADO DE 2027" — só
+                    // exibida, não entra em nenhuma conta).
+                    if (subPartes.length <= 3 && idUpper.includes('NC')) {
                         const m = identificadorBruto.match(/(\d{4})\s*NC/i);
                         const anoNc = m ? parseInt(m[1], 10) : null;
                         const valorNc = converterTextoParaNumero(subPartes[1]);
+                        const notaNc = subPartes.length === 3 ? subPartes[2].trim() : '';
                         if (anoNc) {
                             ncsPorAno[anoNc] = (ncsPorAno[anoNc] || 0) + valorNc;
+                            listaNCs.push({ ident: identificadorBruto, valor: valorNc, ano: anoNc, nota: notaNc });
                         }
                         return;
                     }
@@ -713,7 +719,7 @@
                 });
             }
 
-            return { etapasBase, pagoPorEtapa, pagoPorEtapaEAno, ncsPorAno, totalOSPendente };
+            return { etapasBase, pagoPorEtapa, pagoPorEtapaEAno, ncsPorAno, listaNCs, totalOSPendente };
         }
 
         /**
@@ -1259,6 +1265,11 @@
                     const identificador = subPartes[0].trim();
                     let textoValor = subPartes[1].replace(/[R$\s]/g, '').replace(',', '.');
                     const valLimpo = parseFloat(textoValor) || 0;
+                    // 3º campo opcional: nota livre (ex: "ANTECIPADO DE 2027") — só exibida,
+                    // não entra em nenhuma conta. Serve pra rastrear origem de um valor movido
+                    // entre anos sem precisar de outro mecanismo além de editar o próprio texto.
+                    const nota = subPartes.length >= 3 ? subPartes[2].trim() : '';
+                    const notaHTML = nota ? ` <span class="tag-nota">⚡ ${nota}</span>` : '';
                     
                     if (identificador.toUpperCase().includes('NC')) {
                         if (!isNaN(valLimpo) && valLimpo !== 0) {
@@ -1267,14 +1278,14 @@
                                 totalNCsAnoAtual += valLimpo;
                             }
                             let classeNegativo = valLimpo < 0 ? 'class="negativo"' : '';
-                            ncsHTML += `<div class="nc-row"><span>📄 ${identificador}</span><span ${classeNegativo}>${formatarBRL(valLimpo)}</span></div>`;
+                            ncsHTML += `<div class="nc-row"><span>📄 ${identificador}${notaHTML}</span><span ${classeNegativo}>${formatarBRL(valLimpo)}</span></div>`;
                         }
                     } else {
                         temCronograma = true;
                         if (identificador === anoAtualStr) {
                             totalCronogramaAnoAtual += valLimpo;
                         }
-                        cronogramaHTML += `<tr><td style="font-weight: 600; color: var(--text-main);">📅 ${identificador}</td><td style="text-align: right; font-weight: 700; color: var(--brand-dark); font-family: 'JetBrains Mono', monospace;">${formatarBRL(valLimpo)}</td></tr>`;
+                        cronogramaHTML += `<tr><td style="font-weight: 600; color: var(--text-main);">📅 ${identificador}${notaHTML}</td><td style="text-align: right; font-weight: 700; color: var(--brand-dark); font-family: 'JetBrains Mono', monospace;">${formatarBRL(valLimpo)}</td></tr>`;
                     }
                 });
                 cronogramaHTML += `</tbody></table></div>`;
@@ -1388,10 +1399,13 @@
                     const identificador = subPartes[0].trim();
                     const idUpper = identificador.toUpperCase();
 
-                    // Formato NC (2 campos, igual ao TED): "AAAANCxxxxx | Valor" — liberação
-                    // orçamentária do ano, mais confiável que o status das OS pra fins de execução.
-                    if (subPartes.length === 2 && idUpper.includes('NC')) {
-                        ncsContrato.push({ ident: identificador, valor: converterTextoParaNumero(subPartes[1]) });
+                    // Formato NC (2 ou 3 campos, igual ao TED): "AAAANCxxxxx | Valor" ou
+                    // "AAAANCxxxxx | Valor | Nota" — liberação orçamentária do ano, mais
+                    // confiável que o status das OS pra fins de execução. A nota (3º campo,
+                    // opcional) é só exibida, não entra em nenhuma conta.
+                    if (subPartes.length <= 3 && idUpper.includes('NC')) {
+                        const notaNc = subPartes.length === 3 ? subPartes[2].trim() : '';
+                        ncsContrato.push({ ident: identificador, valor: converterTextoParaNumero(subPartes[1]), nota: notaNc });
                         return;
                     }
 
@@ -1561,7 +1575,7 @@
                                 ${ncsContrato.length > 0 ? `
                                 <div class="nc-box" style="margin-top: 6px;">
                                     <div class="nc-title">💰 Notas de Crédito (liberação orçamentária)</div>
-                                    ${ncsContrato.map(nc => `<div class="nc-row"><span>📄 ${nc.ident}</span><span>${formatarBRL(nc.valor)}</span></div>`).join('')}
+                                    ${ncsContrato.map(nc => `<div class="nc-row"><span>📄 ${nc.ident}${nc.nota ? ` <span class="tag-nota">⚡ ${nc.nota}</span>` : ''}</span><span>${formatarBRL(nc.valor)}</span></div>`).join('')}
                                 </div>` : ''}
                             </div>
                             <div class="card-action-bar" style="margin-top: 15px; clear: both;">
@@ -1702,7 +1716,7 @@
         }
 
         function abrirPromptInjecaoRapida(id) {
-            const novaNC = prompt(`✏️ Digite o novo membro no padrão:\nEx OS de Contrato (com ano — recomendado): OS 13 - 1º Aditivo | 25000.111/2026-00 | 359265,54 | Pago | ${ANO_ATUAL}\nEx NC de Contrato (liberação orçamentária, mais confiável): ${ANO_ATUAL}NC00555 | 150000\nEx NC de TED: ${ANO_ATUAL}NC00555 | 150000\nEx Ano/Previsão do TED: ${ANO_PROXIMO} | 750000`);
+            const novaNC = prompt(`✏️ Digite o novo membro no padrão:\nEx OS de Contrato (com ano — recomendado): OS 13 - 1º Aditivo | 25000.111/2026-00 | 359265,54 | Pago | ${ANO_ATUAL}\nEx NC de Contrato (liberação orçamentária, mais confiável): ${ANO_ATUAL}NC00555 | 150000\nEx NC de TED: ${ANO_ATUAL}NC00555 | 150000\nEx Ano/Previsão do TED: ${ANO_PROXIMO} | 750000\n\nPra marcar que um valor foi ANTECIPADO de outro ano, adicione um 3º campo opcional (só aparece como anotação, não muda nenhuma conta):\nEx: ${ANO_ATUAL}NC00555 | 150000 | ANTECIPADO DE ${ANO_PROXIMO}\nEx: ${ANO_ATUAL} | 2802779,96 | R$500.000 ANTECIPADO DE ${ANO_PROXIMO}`);
             if (!novaNC) return;
 
             const senha = prompt("🔑 Confirmar Senha Master:");
