@@ -914,6 +914,15 @@
          * o ano). Dotação Inicial e ajustes manuais (Crédito Adicional/Remanejamento) só existem
          * registrados para o ano corrente na planilha.
          */
+        // Extrai o ano do final de um ID de linha (ex: "exe_8753_dotacao_2025" -> 2025).
+        // Exige "_20xx" no final (ano plausível) para não confundir com IDs que só têm números
+        // no nome por outro motivo (ex: "exe_8753", onde 8753 é o código da ação, não um ano).
+        // Sem esse padrão, assume o ano corrente (compatibilidade com o que já existia).
+        function extrairAnoDoId(idLower, anoPadrao) {
+            const m = idLower.match(/_?(20\d{2})$/);
+            return m ? parseInt(m[1], 10) : anoPadrao;
+        }
+
         function calcularAgregadoExecucaoAno(ano) {
             let exec8753 = 0, exec20yn = 0;
             let ajusteManual8753 = 0, ajusteManual20yn = 0;
@@ -924,6 +933,7 @@
                 const item = backupDadosGerais[id];
                 if (!item) return;
                 const catLimpa = item.categoria ? item.categoria.trim().toUpperCase() : "";
+                const idLower = id.toLowerCase();
 
                 if (catLimpa === 'INST_TED') {
                     const m = calcularMetricasTEDParaAno(item, ano);
@@ -938,33 +948,43 @@
                         const rotulo = m.fonte === 'NC' ? `NC ${ano}` : `pago em ${ano}`;
                         linhas20yn.push({ id, titulo: `📄 ${item.titulo} (${rotulo})`, valor: -m.execucao, status: m.fonte === 'NC' ? 'Auto · Contrato (NC)' : 'Auto · Contrato' });
                     }
-                } else if (catLimpa === 'FIXO' && ano === ANO_ATUAL) {
-                    const idLower = id.toLowerCase();
-                    if (idLower.includes('dotacao') && idLower.includes('8753')) dotacao8753Manual = parseFloat(item.valor) || 0;
-                    if (idLower.includes('dotacao') && idLower.includes('20yn')) dotacao20ynManual = parseFloat(item.valor) || 0;
-                } else if (catLimpa === 'EXEC_8753' && ano === ANO_ATUAL) {
-                    ajusteManual8753 += (parseFloat(item.valor) || 0);
-                    linhas8753.push({ id, titulo: item.titulo, valor: item.valor, status: item.status || item.vigencia });
-                } else if (catLimpa === 'EXEC_20YN' && ano === ANO_ATUAL) {
-                    ajusteManual20yn += (parseFloat(item.valor) || 0);
-                    linhas20yn.push({ id, titulo: item.titulo, valor: item.valor, status: item.status || item.vigencia });
+                } else if (catLimpa === 'FIXO' && idLower.includes('dotacao')) {
+                    // Dotação Inicial de anos anteriores/futuros: adicione o ano no final do ID,
+                    // ex: "exe_8753_dotacao_2025" ou "exe_20yn_dotacao_2024". Sem sufixo, a linha
+                    // vale pro ano corrente (mantém compatibilidade com o que já existia).
+                    if (extrairAnoDoId(idLower, ANO_ATUAL) === ano) {
+                        if (idLower.includes('8753')) dotacao8753Manual = parseFloat(item.valor) || 0;
+                        if (idLower.includes('20yn')) dotacao20ynManual = parseFloat(item.valor) || 0;
+                    }
+                } else if (catLimpa === 'EXEC_8753') {
+                    if (extrairAnoDoId(idLower, ANO_ATUAL) === ano) {
+                        ajusteManual8753 += (parseFloat(item.valor) || 0);
+                        linhas8753.push({ id, titulo: item.titulo, valor: item.valor, status: item.status || item.vigencia });
+                    }
+                } else if (catLimpa === 'EXEC_20YN') {
+                    if (extrairAnoDoId(idLower, ANO_ATUAL) === ano) {
+                        ajusteManual20yn += (parseFloat(item.valor) || 0);
+                        linhas20yn.push({ id, titulo: item.titulo, valor: item.valor, status: item.status || item.vigencia });
+                    }
                 }
             });
 
             // Dotação Inicial: se não houver valor digitado manualmente pra esse ano, usa por
             // padrão o total da PLOA calculada pra esse ano (regra: "PLOA aprovada vira dotação
-            // do ano seguinte"). Assim que alguém digitar o valor real (ex: após aprovação
-            // oficial, que pode diferir da proposta), o manual passa a valer sempre.
+            // do ano seguinte") — só faz sentido pra ano atual/futuro, nunca pra anos já fechados.
+            // Assim que alguém digitar o valor real, o manual passa a valer sempre.
             const ploaDoAno = calcularAgregadoPlanejamentoAno(ano);
-            const dotacao8753 = dotacao8753Manual !== null ? dotacao8753Manual : ploaDoAno.ploa8753;
-            const dotacao20yn = dotacao20ynManual !== null ? dotacao20ynManual : ploaDoAno.ploa20yn;
-            const dotacao8753EhEstimativa = dotacao8753Manual === null;
-            const dotacao20ynEhEstimativa = dotacao20ynManual === null;
+            const podeEstimarPorPloa = ano >= ANO_ATUAL;
+            const dotacao8753 = dotacao8753Manual !== null ? dotacao8753Manual : (podeEstimarPorPloa ? ploaDoAno.ploa8753 : 0);
+            const dotacao20yn = dotacao20ynManual !== null ? dotacao20ynManual : (podeEstimarPorPloa ? ploaDoAno.ploa20yn : 0);
+            const dotacao8753EhEstimativa = dotacao8753Manual === null && podeEstimarPorPloa;
+            const dotacao20ynEhEstimativa = dotacao20ynManual === null && podeEstimarPorPloa;
+            const temDotacaoRegistrada = dotacao8753Manual !== null || dotacao20ynManual !== null;
 
             const saldoAtual8753 = dotacao8753 + ajusteManual8753 - exec8753;
             const saldoAtual20yn = dotacao20yn + ajusteManual20yn - exec20yn;
             return {
-                dotacao8753, dotacao20yn, dotacao8753EhEstimativa, dotacao20ynEhEstimativa,
+                dotacao8753, dotacao20yn, dotacao8753EhEstimativa, dotacao20ynEhEstimativa, temDotacaoRegistrada,
                 exec8753, exec20yn, saldoAtual8753, saldoAtual20yn, linhas8753, linhas20yn
             };
         }
@@ -1049,10 +1069,14 @@
             const agr = calcularAgregadoExecucaoAno(ano);
             const ehAnoAtual = ano === ANO_ATUAL;
             const ehAnoFuturo = ano > ANO_ATUAL;
-            const notaHistorica = !ehAnoAtual
+            // Mostra Dotação Inicial + Saldo completo sempre que for o ano corrente OU quando o
+            // usuário já tiver registrado manualmente a dotação daquele ano (ex: anos anteriores
+            // com "exe_8753_dotacao_2025"). Sem isso, mostra só o total executado (visão simples).
+            const mostrarSaldoCompleto = ehAnoAtual || agr.temDotacaoRegistrada;
+            const notaHistorica = (!ehAnoAtual && !agr.temDotacaoRegistrada)
                 ? (ehAnoFuturo
-                    ? `<div class="ano-tab-nota">📌 ${ano} ainda não começou — mostrando apenas NCs/OS eventualmente já lançadas adiantadas para esse ano, se houver. Dotação Inicial e saldo de conta só existem depois que o ano começa oficialmente.</div>`
-                    : `<div class="ano-tab-nota">📌 Dotação inicial e ajustes (crédito adicional/remanejamento) só estão registrados para ${ANO_ATUAL}. ${ano} mostra apenas o total efetivamente executado (NCs/OS) nesse ano.</div>`)
+                    ? `<div class="ano-tab-nota">📌 ${ano} ainda não começou — mostrando apenas NCs/OS eventualmente já lançadas adiantadas para esse ano, se houver.</div>`
+                    : `<div class="ano-tab-nota">📌 Nenhuma Dotação Inicial registrada para ${ano} — mostrando apenas o total efetivamente executado (NCs/OS) nesse ano. Pra ver o saldo completo desse ano, adicione uma linha FIXO com ID terminando em "_${ano}" (ex: "exe_8753_dotacao_${ano}").</div>`)
                 : '';
             const notaDotacaoEstimada = (ehAnoAtual && (agr.dotacao8753EhEstimativa || agr.dotacao20ynEhEstimativa))
                 ? `<div class="ano-tab-nota">💡 Dotação Inicial ainda não confirmada manualmente para ${ano} — mostrando o total da PLOA ${ano} como estimativa. Assim que a lei orçamentária for sancionada, digite o valor oficial na planilha (linha "Dotação Inicial") para substituir esta estimativa.</div>`
@@ -1092,15 +1116,15 @@
                     <div class="card-header-main">📍 Recursos Descentralizados (Em Conta) — ${ano}</div>
                     <div class="action-group">
                         <div class="action-tag">AÇÃO 8753</div>
-                        ${ehAnoAtual ? `<div class="exe-panel-card dotacao-card"><div class="exe-panel-row"><span class="exe-panel-title">Dotação Inicial${agr.dotacao8753EhEstimativa ? ' (estimada · PLOA)' : ''}</span><span class="exe-panel-val val">${formatarBRL(agr.dotacao8753)}</span></div></div>` : ''}
+                        ${mostrarSaldoCompleto ? `<div class="exe-panel-card dotacao-card"><div class="exe-panel-row"><span class="exe-panel-title">Dotação Inicial${agr.dotacao8753EhEstimativa ? ' (estimada · PLOA)' : ''}</span><span class="exe-panel-val val">${formatarBRL(agr.dotacao8753)}</span></div></div>` : ''}
                         <div class="dinamic-data-list">${renderLinhas(agr.linhas8753) || semDadosHTML(ano)}</div>
-                        <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">${ehAnoAtual ? 'SALDO ATUAL 8753' : 'TOTAL EXECUTADO 8753'}</span><span class="exe-panel-val val">${formatarBRL(ehAnoAtual ? agr.saldoAtual8753 : agr.exec8753)}</span></div></div>
+                        <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">${mostrarSaldoCompleto ? 'SALDO ATUAL 8753' : 'TOTAL EXECUTADO 8753'}</span><span class="exe-panel-val val">${formatarBRL(mostrarSaldoCompleto ? agr.saldoAtual8753 : agr.exec8753)}</span></div></div>
                     </div>
                     <div class="action-group">
                         <div class="action-tag" style="background: var(--brand-slate); color: white;">AÇÃO 20YN</div>
-                        ${ehAnoAtual ? `<div class="exe-panel-card dotacao-card"><div class="exe-panel-row"><span class="exe-panel-title">Dotação Inicial${agr.dotacao20ynEhEstimativa ? ' (estimada · PLOA)' : ''}</span><span class="exe-panel-val val">${formatarBRL(agr.dotacao20yn)}</span></div></div>` : ''}
+                        ${mostrarSaldoCompleto ? `<div class="exe-panel-card dotacao-card"><div class="exe-panel-row"><span class="exe-panel-title">Dotação Inicial${agr.dotacao20ynEhEstimativa ? ' (estimada · PLOA)' : ''}</span><span class="exe-panel-val val">${formatarBRL(agr.dotacao20yn)}</span></div></div>` : ''}
                         <div class="dinamic-data-list">${renderLinhas(agr.linhas20yn) || semDadosHTML(ano)}</div>
-                        <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">${ehAnoAtual ? 'SALDO ATUAL 20YN' : 'TOTAL EXECUTADO 20YN'}</span><span class="exe-panel-val val">${formatarBRL(ehAnoAtual ? agr.saldoAtual20yn : agr.exec20yn)}</span></div></div>
+                        <div class="exe-panel-card saldo-card"><div class="exe-panel-row"><span class="exe-panel-title">${mostrarSaldoCompleto ? 'SALDO ATUAL 20YN' : 'TOTAL EXECUTADO 20YN'}</span><span class="exe-panel-val val">${formatarBRL(mostrarSaldoCompleto ? agr.saldoAtual20yn : agr.exec20yn)}</span></div></div>
                     </div>
                 </div>
                 ${htmlProjecao}
